@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jaya Sai Kishore | Portfolio</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="topbar">
+    <div class="container nav-container">
+      <div class="brand">Jaya Sai Kishore</div>
+
+      <button class="menu-toggle" id="menu-btn">☰</button>
+
+      <nav id="nav-wrapper">
+        <ul class="nav-links" id="nav-menu">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#resume">Resume</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="section hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="hola">HOLA!</p>
+        <h1>
+          I'm <span class="highlight">Jaya Sai<br/>Kishore</span>
+        </h1>
+        <h2><span id="typing-text"></span></h2>
+        <p class="hero-sub">
+          I focus on transforming data and models into useful, deployable solutions.
+          I’m particularly interested in model development, evaluation and scaling techniques
+          that improve performance and reliability.
+        </p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn primary">View Projects</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About</h2>
+      <p class="section-text">
+        I’m pursuing a Master’s in Data Science & AI and have experience working across machine learning, deep learning, model evaluation, and scalable ML workflow design. My work spans Python, TensorFlow, PyTorch, CI/CD automation, containerized deployments, MLOps practices, and modern LLM/RAG tools.
+I am particularly interested in structured experimentation improving models through validation, tracking results over iterations, and developing reliable pipelines that support real decision-making.
+      </p>
+
+      <div class="two-cols">
+        <ul>
+          <li><span>Profile:</span> Data Science & AI</li>
+          <li><span>Interests:</span> ML systems, automation, MLOps</li>
+          <li><span>Location:</span> Nice, France</li>
+        </ul>
+        <ul>
+          <li><span>Languages:</span> English, French</li>
+          <li><span>Skills:</span> Python, SQL, TensorFlow, PyTorch, CI/CD, Docker</li>
+          <li><span>Web:</span> FastAPI, Flask, Streamlit</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume" class="section">
+    <div class="container">
+      <h2 class="section-title">Resume</h2>
+
+      <h3 class="sub-heading">Experience</h3>
+
+      <div class="timeline">
+
+        <article class="timeline-item fade-up">
+          <span class="dot"></span>
+          <div class="timeline-content">
+            <h4>Sr. Software Engineer — Capgemini Technologies</h4>
+            <p class="date">Dec 2021 – Dec 2022</p>
+            <ul>
+              <li>Worked on ML and data workflows with focus on efficiency and automation.</li>
+              <li>Supported container-based deployments and CI/CD style rollouts.</li>
+              <li>Improved reliability through monitoring and model behavior checks.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="timeline-item fade-up">
+          <span class="dot"></span>
+          <div class="timeline-content">
+            <h4>Data Science Intern — Digital Lync</h4>
+            <p class="date">Jun 2019 – Apr 2020</p>
+            <ul>
+              <li>Assisted with ML experiments from data preparation to evaluation.</li>
+              <li>Worked on tuning models to improve predictive performance.</li>
+              <li>Analyzed model outputs and patterns to propose improvements.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-text">
+        A few projects that reflect my interest in forecasting, emotion-aware systems and
+        document understanding.
+      </p>
+
+      <div class="projects-grid">
+
+        <article class="project-card fade-up">
+          <h3>Air Quality Forecasting Platform</h3>
+          <p>
+            Forecasting workflow for air quality in the Côte d’Azur region using public
+            environmental data. Compares time-series models and neural baselines and
+            presents predictions through a dashboard for station-wise analysis.
+          </p>
+          <a href="https://github.com/JayaSaiKishore7" target="_blank">GitHub ↗</a>
+        </article>
+
+        <article class="project-card fade-up">
+          <h3>Emotion-Aware Insight Generator</h3>
+          <p>
+            Prototype that interprets facial emotion and links it with relevant review content,
+            producing short, emotion-aware summaries using a combination of vision and language models.
+          </p>
+          <a href="https://github.com/JayaSaiKishore7" target="_blank">GitHub ↗</a>
+        </article>
+
+        <article class="project-card fade-up">
+          <h3>PDF Understanding & AI Summarization</h3>
+          <p>
+            Retrieval-assisted summarization system that breaks long PDFs into chunks,
+            retrieves useful context and generates concise interpretations using a language model.
+          </p>
+          <a href="https://github.com/JayaSaiKishore7" target="_blank">GitHub ↗</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-text">
+        Reach out if you’d like to talk about projects, collaboration or opportunities.
+      </p>
+
+      <div class="contact-grid">
+        <div>
+          <h4>Email</h4>
+          <p><a href="mailto:jayasaikishoren@gmail.com">jayasaikishoren@gmail.com</a></p>
+        </div>
+        <div>
+          <h4>GitHub</h4>
+          <p><a href="https://github.com/JayaSaiKishore7" target="_blank">@JayaSaiKishore7</a></p>
+        </div>
+        <div>
+          <h4>Location</h4>
+          <p>Nice, France</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© <span id="year"></span> Jaya Sai Kishore</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
