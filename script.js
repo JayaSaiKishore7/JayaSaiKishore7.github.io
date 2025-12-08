@@ -80,7 +80,7 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// Scroll reveal for elements with .fade-up
+// Scroll reveal for elements with .fade-up//
 const fadeEls = document.querySelectorAll(".fade-up");
 
 const observer = new IntersectionObserver(
