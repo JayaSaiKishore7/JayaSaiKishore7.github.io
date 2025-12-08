@@ -34,8 +34,9 @@ function type() {
 
 function erase() {
   const el = document.getElementById("typing-text");
-  const text = roles[roleIndex];
+  if (!el) return;
 
+  const text = roles[roleIndex];
   if (charIndex > 0) {
     el.textContent = text.substring(0, charIndex - 1);
     charIndex--;
@@ -46,6 +47,7 @@ function erase() {
   }
 }
 
+// start typing after small delay
 setTimeout(type, 600);
 
 // Mobile menu toggle
@@ -80,7 +82,7 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// Scroll reveal for elements with .fade-up//
+// Scroll reveal for elements with .fade-up
 const fadeEls = document.querySelectorAll(".fade-up");
 
 const observer = new IntersectionObserver(
