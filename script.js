@@ -80,8 +80,8 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// Scroll reveal for project cards & timeline items
-const cards = document.querySelectorAll(".fade-up");
+// Scroll reveal for elements with .fade-up
+const fadeEls = document.querySelectorAll(".fade-up");
 
 const observer = new IntersectionObserver(
   entries => {
@@ -95,4 +95,4 @@ const observer = new IntersectionObserver(
   { threshold: 0.2 }
 );
 
-cards.forEach(card => observer.observe(card));
+fadeEls.forEach(el => observer.observe(el));

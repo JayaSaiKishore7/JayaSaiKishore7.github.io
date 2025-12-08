@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -44,11 +45,12 @@
         <h2><span id="typing-text"></span></h2>
         <p class="hero-sub">
           I focus on transforming data and models into useful, deployable solutions.
-          I’m particularly interested in model development, evaluation and scaling techniques
-          that improve performance and reliability.
+          I’m particularly interested in model development, evaluation and scaling
+          techniques that improve performance and reliability.
         </p>
         <div class="hero-buttons">
           <a href="#projects" class="btn primary">View Projects</a>
+          <a href="files/JayaSaiKishore_CV.pdf" class="btn outline" download>Download CV</a>
         </div>
       </div>
     </div>
@@ -58,31 +60,51 @@
   <section id="about" class="section">
     <div class="container">
       <h2 class="section-title">About</h2>
+
       <p class="section-text">
-        I’m pursuing a Master’s in Data Science & AI and have experience working across machine learning, deep learning, model evaluation, and scalable ML workflow design. My work spans Python, TensorFlow, PyTorch, CI/CD automation, containerized deployments, MLOps practices, and modern LLM/RAG tools.
-I am particularly interested in structured experimentation improving models through validation, tracking results over iterations, and developing reliable pipelines that support real decision-making.
+        I’m pursuing a Master’s in Data Science &amp; AI and have experience working across
+        machine learning, deep learning, model evaluation and scalable ML workflow design.
+        My work spans Python, TensorFlow, PyTorch, CI/CD automation, containerized deployments,
+        MLOps practices and modern LLM/RAG tools. I’m particularly interested in structured
+        experimentation — improving models through validation, tracking results over iterations
+        and developing reliable pipelines that support real decision-making.
       </p>
 
       <div class="two-cols">
         <ul>
-          <li><span>Profile:</span> Data Science & AI</li>
+          <li><span>Profile:</span> Data Science &amp; AI</li>
           <li><span>Interests:</span> ML systems, automation, MLOps</li>
           <li><span>Location:</span> Nice, France</li>
         </ul>
         <ul>
           <li><span>Languages:</span> English, French</li>
-          <li><span>Skills:</span> Python, SQL, TensorFlow, PyTorch, CI/CD, Docker</li>
+          <li><span>Skills:</span> Python, SQL, Machine Learning, TensorFlow, PyTorch, CI/CD, Docker</li>
           <li><span>Web:</span> FastAPI, Flask, Streamlit</li>
         </ul>
+      </div>
+
+      <!-- LinkedIn + GitHub buttons -->
+      <div class="about-btn-wrapper">
+        <a href="https://www.linkedin.com/in/JayaSaiKishore7" target="_blank" class="btn linked-btn">
+          LinkedIn
+        </a>
+        <a href="https://github.com/JayaSaiKishore7" target="_blank" class="btn github-btn">
+          GitHub
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- RESUME -->
+  <!-- RESUME (Experience + Education) -->
   <section id="resume" class="section">
     <div class="container">
       <h2 class="section-title">Resume</h2>
+      <p class="section-text resume-intro">
+        I’ve worked across software engineering and data science, contributing to ML workflows,
+        automation, and experimentation. Below is a quick overview of my experience and education.
+      </p>
 
+      <!-- EXPERIENCE -->
       <h3 class="sub-heading">Experience</h3>
 
       <div class="timeline">
@@ -92,10 +114,14 @@ I am particularly interested in structured experimentation improving models thro
           <div class="timeline-content">
             <h4>Sr. Software Engineer — Capgemini Technologies</h4>
             <p class="date">Dec 2021 – Dec 2022</p>
+            <p class="role-summary">
+              Supported ML-driven and data-intensive features within production-grade systems.
+            </p>
             <ul>
-              <li>Worked on ML and data workflows with focus on efficiency and automation.</li>
-              <li>Supported container-based deployments and CI/CD style rollouts.</li>
-              <li>Improved reliability through monitoring and model behavior checks.</li>
+              <li>Collaborated on ML and data workflows with a focus on efficiency and automation.</li>
+              <li>Helped streamline ingestion, preprocessing and feature pipelines used by models.</li>
+              <li>Contributed to containerized deployments and CI/CD flows for reliable releases.</li>
+              <li>Worked with monitoring and logging to observe pipeline and model behaviour.</li>
             </ul>
           </div>
         </article>
@@ -105,12 +131,46 @@ I am particularly interested in structured experimentation improving models thro
           <div class="timeline-content">
             <h4>Data Science Intern — Digital Lync</h4>
             <p class="date">Jun 2019 – Apr 2020</p>
+            <p class="role-summary">
+              Supported end-to-end ML experiments from datasets to model evaluation.
+            </p>
             <ul>
-              <li>Assisted with ML experiments from data preparation to evaluation.</li>
-              <li>Worked on tuning models to improve predictive performance.</li>
-              <li>Analyzed model outputs and patterns to propose improvements.</li>
+              <li>Assisted with data preparation, feature extraction and experiment setup.</li>
+              <li>Tested different algorithms and hyperparameters to improve predictive performance.</li>
+              <li>Analysed errors and metrics to understand model behaviour and guide refinement.</li>
             </ul>
           </div>
+        </article>
+
+      </div>
+
+      <!-- EDUCATION -->
+      <h3 class="sub-heading sub-heading-edu">Education</h3>
+
+      <div class="edu-list">
+
+        <article class="edu-card fade-up">
+          <h4>Master's in Data Science &amp; Artificial Intelligence</h4>
+          <p class="edu-meta">
+            DataScienceTech Institute • 2024 – 2026 • Sophia Antipolis, France
+          </p>
+          <ul>
+            <li>Advanced coursework in machine learning, deep learning, data engineering and MLOps.</li>
+            <li>Hands-on projects in forecasting, computer vision and LLM/RAG-based applications.</li>
+            <li>Focus on designing end-to-end ML workflows, from experimentation to reliable delivery.</li>
+          </ul>
+        </article>
+
+        <article class="edu-card fade-up">
+          <h4>Bachelor's in Electronics and Communication Engineering</h4>
+          <p class="edu-meta">
+            Gudlavalleru Engineering College • 2015 – 2019 • Andhra Pradesh, India
+          </p>
+          <ul>
+            <li>Built strong foundations in mathematics, signal processing and communication systems.</li>
+            <li>Developed core programming, problem-solving and engineering skills.</li>
+            <li>Academic projects that sparked interest in data-driven systems and ML.</li>
+          </ul>
         </article>
 
       </div>
@@ -148,7 +208,7 @@ I am particularly interested in structured experimentation improving models thro
         </article>
 
         <article class="project-card fade-up">
-          <h3>PDF Understanding & AI Summarization</h3>
+          <h3>PDF Understanding &amp; AI Summarization</h3>
           <p>
             Retrieval-assisted summarization system that breaks long PDFs into chunks,
             retrieves useful context and generates concise interpretations using a language model.
