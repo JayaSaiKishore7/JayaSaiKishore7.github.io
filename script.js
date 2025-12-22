@@ -47,7 +47,7 @@ function erase() {
   }
 }
 
-// start typing after small delay
+// start typing after small delay with settimeout
 setTimeout(type, 600);
 
 // Mobile menu toggle
