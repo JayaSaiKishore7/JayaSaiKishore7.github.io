@@ -647,7 +647,7 @@ a {
   overflow: hidden;
 }
 
-/* FADE-UP ANIMATION */
+/* FADE-UP ANIMATIONS */
 .fade-up {
   opacity: 0;
   transform: translateY(24px);
