@@ -7,7 +7,7 @@ if (yearSpan) {
 // Typing effect text
 const roles = [
   "a Data Science Student",
-  "a Machine Learning Learner",
+  "a Machine Learning Engineer",
   "interested in model development",
   "exploring evaluation & scaling"
 ];
