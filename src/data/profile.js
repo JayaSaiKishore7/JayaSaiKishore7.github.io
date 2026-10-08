@@ -16,6 +16,13 @@ export const roles = [
   "exploring evaluation & scaling",
 ];
 
+export const heroInfo = [
+  { label: "focus", value: "computer vision, LLMs/RAG, MLOps." },
+  { label: "latest", value: "data science intern, STMicroelectronics." },
+  { label: "stack", value: "Python, PyTorch, TensorFlow, Computer Vision, MLflow, Docker." },
+  { label: "based", value: "Nice, France." },
+];
+
 export const aboutInfo = {
   paragraph:
     "I am a Machine Learning Engineer with hands-on experience in developing, evaluating, and deploying machine learning and deep learning models in production environments. My work focuses on transforming data into scalable, reliable solutions that support real-world decision-making. I'm currently pursuing a Master's in Data Science & AI and have worked across applied machine learning, NLP, computer vision, and production-grade data systems. My experience spans Python, TensorFlow, PyTorch, CI/CD automation, containerized deployments, MLOps practices, and modern LLM/RAG workflows. I'm particularly interested in structured experimentation, model evaluation, and building end-to-end ML pipelines that scale.",

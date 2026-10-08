@@ -1,11 +1,16 @@
-.xp-list {
-  display: flex;
-  flex-direction: column;
+.edu-list {
+  display: grid;
   gap: 1.2rem;
   margin-top: 1rem;
 }
 
-.xp-card {
+@media (min-width: 800px) {
+  .edu-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.edu-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.8rem;
@@ -15,64 +20,45 @@
     background 0.3s var(--ease);
 }
 
-.xp-card:hover {
+.edu-card:hover {
   border-color: var(--border-strong);
   background: var(--surface-hover);
 }
 
-.xp-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.6rem;
-  margin-bottom: 0.7rem;
-}
-
-.xp-head h3 {
+.edu-card h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--text);
+  margin-bottom: 0.5rem;
 }
 
-.xp-at {
-  color: var(--accent);
-  font-weight: 400;
-}
-
-.xp-date {
+.edu-meta {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--muted-soft);
-  white-space: nowrap;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
 }
 
-.xp-summary {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 0.8rem;
-}
-
-.xp-points {
+.edu-card ul {
   list-style: none;
   font-size: 0.88rem;
   color: var(--muted);
   line-height: 1.7;
 }
 
-.xp-points li {
+.edu-card li {
   position: relative;
   padding-left: 1.1rem;
 }
 
-.xp-points li::before {
+.edu-card li::before {
   content: "—";
   position: absolute;
   left: 0;
   color: var(--muted-soft);
 }
 
-.xp-points li + li {
+.edu-card li + li {
   margin-top: 0.25rem;
 }

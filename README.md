@@ -24,6 +24,7 @@ it to GitHub Pages. In the repo settings, **Settings → Pages → Source** must
 
 ## Structure
 
-- `src/components/` — one folder per section (Navbar, Hero, About, Resume, Projects, Contact, Footer)
+- `src/components/` — one class component per section (Navbar, Hero, About, Resume, Projects, Contact, Footer)
 - `src/data/` — content (experience, education, projects, profile info) kept separate from markup
-- `src/hooks/` — typing effect, scroll-spy active nav section, scroll-reveal animation
+- `src/theme/theme.js` — the single source of truth for every color, font, radius, shadow, and spacing value. `ThemeInjector.js` writes it onto `:root` as CSS custom properties at startup; no component or `.css` file hardcodes a style value.
+- `src/utils/` — framework-agnostic OOP helper classes (`TypingAnimator`, `ScrollSpy`) owned by component lifecycle methods instead of hooks

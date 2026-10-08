@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(6, 6, 7, 0.75);
+  background: rgba(17, 13, 11, 0.8);
   backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--border);
 }
@@ -11,31 +11,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 0;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
 }
 
 .brand {
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  background: var(--accent-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--text);
 }
 
 .nav-links {
   display: flex;
-  gap: 1.5rem;
-  font-size: 0.9rem;
+  gap: 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
 }
 
 .nav-links a {
   color: var(--muted);
   text-decoration: none;
-  position: relative;
-  padding-bottom: 6px;
   transition: color 0.25s var(--ease);
+}
+
+.nav-index {
+  color: var(--muted-soft);
+  margin-right: 0.35rem;
 }
 
 .nav-links a.active,
@@ -43,43 +47,65 @@
   color: var(--text);
 }
 
-.nav-links a.active::after,
-.nav-links a:hover::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background: var(--accent-grad);
-  border-radius: 2px;
+.nav-links a.active .nav-index,
+.nav-links a:hover .nav-index {
+  color: var(--accent);
+}
+
+.nav-clock {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.nav-clock-remark {
+  color: var(--muted);
 }
 
 .menu-toggle {
   display: none;
   background: none;
-  border: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
   color: var(--text);
-  font-size: 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.8rem;
   cursor: pointer;
 }
 
 @media (max-width: 768px) {
+  .nav-clock {
+    display: none;
+  }
+
   .nav-links {
     position: absolute;
     right: 1.2rem;
     top: 64px;
     flex-direction: column;
+    gap: 0.9rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    padding: 0.9rem 1.2rem;
+    padding: 1.1rem 1.3rem;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-strong);
-    display: none;
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    pointer-events: none;
+    visibility: hidden;
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease),
+      visibility 0.25s;
   }
 
   .nav-wrapper.active .nav-links {
-    display: flex;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    visibility: visible;
   }
 
   .menu-toggle {

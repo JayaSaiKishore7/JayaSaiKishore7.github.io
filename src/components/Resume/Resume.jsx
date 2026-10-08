@@ -1,57 +1,40 @@
-import { education, experience } from "../../data/experience";
+import { Component } from "react";
+import { experience } from "../../data/experience";
 import { Reveal } from "../Reveal";
 import "./Resume.css";
 
-export function Resume() {
-  return (
-    <section id="resume" className="section">
-      <div className="container">
-        <p className="section-eyebrow">Where I've been</p>
-        <h2 className="section-title">Resume</h2>
-        <p className="section-text resume-intro">
-          I've worked across software engineering and data science, contributing to ML
-          workflows, automation, and experimentation. Below is a quick overview of my experience
-          and education.
-        </p>
+export class Resume extends Component {
+  render() {
+    return (
+      <section id="experience" className="section">
+        <div className="container">
+          <p className="section-label">02 — experience</p>
+          <h2 className="section-heading">where i've worked</h2>
+          <p className="section-sub">
+            software engineering and data science roles, contributing to ML workflows,
+            automation, and production inference.
+          </p>
 
-        <h3 className="sub-heading">Experience</h3>
-
-        <div className="timeline">
-          {experience.map((item) => (
-            <Reveal as="article" className="timeline-item" key={item.company + item.date}>
-              <span className="dot" />
-              <div className="timeline-content">
-                <h4>
-                  {item.role} — {item.company}
-                </h4>
-                <p className="date">{item.date}</p>
-                <p className="role-summary">{item.summary}</p>
-                <ul>
+          <div className="xp-list">
+            {experience.map((item) => (
+              <Reveal as="article" className="xp-card" key={item.company + item.date}>
+                <div className="xp-head">
+                  <h3>
+                    {item.role} <span className="xp-at">@</span> {item.company}
+                  </h3>
+                  <span className="xp-date">{item.date}</span>
+                </div>
+                <p className="xp-summary">{item.summary}</p>
+                <ul className="xp-points">
                   {item.points.map((point, i) => (
                     <li key={i}>{point}</li>
                   ))}
                 </ul>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            ))}
+          </div>
         </div>
-
-        <h3 className="sub-heading sub-heading-edu">Education</h3>
-
-        <div className="edu-list">
-          {education.map((item) => (
-            <Reveal as="article" className="edu-card" key={item.degree}>
-              <h4>{item.degree}</h4>
-              <p className="edu-meta">{item.meta}</p>
-              <ul>
-                {item.points.map((point, i) => (
-                  <li key={i}>{point}</li>
-                ))}
-              </ul>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
 }

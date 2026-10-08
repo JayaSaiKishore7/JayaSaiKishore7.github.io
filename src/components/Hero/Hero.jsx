@@ -1,47 +1,71 @@
-import { useTypingEffect } from "../../hooks/useTypingEffect";
-import { profile, roles } from "../../data/profile";
-import profileImg from "../../assets/profile.jpg";
+import { Component } from "react";
+import { profile, heroInfo } from "../../data/profile";
+import { navLinks } from "../../data/nav";
 import "./Hero.css";
 
-export function Hero() {
-  const typingText = useTypingEffect(roles);
+export class Hero extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { mounted: false };
+  }
 
-  return (
-    <section id="home" className="section hero">
-      <div className="container hero-inner">
-        <div className="hero-text">
-          <p className="hola">HOLA!</p>
-          <h1>
-            I'm{" "}
-            <span className="highlight">
-              Jaya Sai
+  componentDidMount() {
+    requestAnimationFrame(() => this.setState({ mounted: true }));
+  }
+
+  render() {
+    const { mounted } = this.state;
+
+    return (
+      <section id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
+        <div className="container hero-inner">
+          <div className="hero-main">
+            <p className="hero-meta stagger" style={{ "--stagger": 0 }}>
+              jaya sai kishore &middot; nice, france
+            </p>
+
+            <h1 className="hero-name stagger" style={{ "--stagger": 1 }}>
+              jaya
+            </h1>
+
+            <h2 className="hero-tagline stagger" style={{ "--stagger": 2 }}>
+              machine learning &amp; data.
               <br />
-              Kishore
-            </span>
-          </h1>
-          <h2>
-            <span>{typingText}</span>
-            <span className="caret" aria-hidden="true" />
-          </h2>
-          <p className="hero-sub">
-            I focus on transforming data and models into useful, deployable solutions. I'm
-            particularly interested in model development, evaluation and scaling techniques
-            that improve performance and reliability.
-          </p>
-          <div className="hero-buttons">
-            <a href="#projects" className="btn primary">
-              View Projects
-            </a>
-            <a href={profile.resume} className="btn outline" download>
-              Download CV
-            </a>
-          </div>
-        </div>
+              lately pretty deep in <em className="hero-accent">retrieval</em>.
+            </h2>
 
-        <div className="hero-photo">
-          <img src={profileImg} alt={profile.fullName} />
+            <p className="hero-note stagger" style={{ "--stagger": 3 }}>
+              (more interested in how models behave in production than how they're trained.)
+            </p>
+
+            <div className="hero-foot stagger" style={{ "--stagger": 4 }}>
+              <span className="hero-scroll">
+                scroll <span className="hero-rule" />
+              </span>
+              <span className="hero-breadcrumb">
+                {navLinks.map((link) => link.label).join(", ")}
+              </span>
+            </div>
+          </div>
+
+          <aside className="hero-panel stagger" style={{ "--stagger": 1 }}>
+            {heroInfo.map((row) => (
+              <div className="hero-panel-row" key={row.label}>
+                <span className="hero-panel-label">{row.label}</span>
+                <span className="hero-panel-value">{row.value}</span>
+              </div>
+            ))}
+            <div className="hero-panel-row">
+              <span className="hero-panel-label">resume</span>
+              <span className="hero-panel-value">
+                <a href={profile.resume} download>
+                  download ↗
+                </a>
+              </span>
+            </div>
+          </aside>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
 }

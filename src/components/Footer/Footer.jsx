@@ -1,12 +1,14 @@
-import { profile } from "../../data/profile";
+import { Component } from "react";
 import "./Footer.css";
 
-export function Footer() {
-  return (
-    <footer className="footer">
-      <p>
-        © {new Date().getFullYear()} {profile.fullName}
-      </p>
-    </footer>
-  );
+export class Footer extends Component {
+  render() {
+    return (
+      <footer className="footer">
+        <p>
+          © {new Date().getFullYear()} jaya sai kishore neerukonda &middot; built in nice, france
+        </p>
+      </footer>
+    );
+  }
 }
