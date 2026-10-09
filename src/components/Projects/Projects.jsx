@@ -1,9 +1,25 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 import { projects } from "../../data/projects";
 import { Reveal } from "../Reveal";
+import { PointerGlow } from "../../utils/PointerGlow";
 import "./Projects.css";
 
 export class Projects extends Component {
+  constructor(props) {
+    super(props);
+    this.spreadsRef = createRef();
+    this.glow = null;
+  }
+
+  componentDidMount() {
+    this.glow = new PointerGlow({ container: this.spreadsRef.current, itemSelector: ".spread" });
+    this.glow.start();
+  }
+
+  componentWillUnmount() {
+    this.glow?.stop();
+  }
+
   render() {
     return (
       <section id="work" className="section">
@@ -15,7 +31,7 @@ export class Projects extends Component {
             </h2>
           </Reveal>
 
-          <div className="spreads">
+          <div className="spreads" ref={this.spreadsRef}>
             {projects.map((project, i) => (
               <Reveal
                 as="article"

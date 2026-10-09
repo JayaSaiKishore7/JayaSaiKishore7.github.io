@@ -11,6 +11,8 @@
 }
 
 .edu-card {
+  position: relative;
+  isolation: isolate;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.8rem;
@@ -22,11 +24,31 @@
     box-shadow 0.3s var(--ease);
 }
 
+.edu-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  content: "";
+  pointer-events: none;
+}
+
 .edu-card:hover {
   border-color: var(--border-strong);
   background: var(--surface-hover);
   transform: translateY(-4px);
   box-shadow: var(--shadow-soft);
+}
+
+.edu-card:hover::before {
+  opacity: 1;
 }
 
 .edu-card h3 {

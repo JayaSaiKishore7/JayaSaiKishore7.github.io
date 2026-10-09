@@ -1,9 +1,25 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 import { experience } from "../../data/experience";
 import { Reveal } from "../Reveal";
+import { PointerGlow } from "../../utils/PointerGlow";
 import "./Resume.css";
 
 export class Resume extends Component {
+  constructor(props) {
+    super(props);
+    this.xpsRef = createRef();
+    this.glow = null;
+  }
+
+  componentDidMount() {
+    this.glow = new PointerGlow({ container: this.xpsRef.current, itemSelector: ".xp" });
+    this.glow.start();
+  }
+
+  componentWillUnmount() {
+    this.glow?.stop();
+  }
+
   render() {
     return (
       <section id="experience" className="section">
@@ -17,7 +33,7 @@ export class Resume extends Component {
             </p>
           </Reveal>
 
-          <div className="xps">
+          <div className="xps" ref={this.xpsRef}>
             {experience.map((item, i) => (
               <Reveal as="article" className="xp" key={item.company + item.date} style={{ "--i": i }}>
                 <div className="xp-when">
