@@ -49,7 +49,7 @@ export class Navbar extends Component {
       <header className="topbar">
         <div className="container nav-container">
           <a href="#home" className="brand">
-            jaya.
+            jaya sai kishore.
           </a>
 
           <button

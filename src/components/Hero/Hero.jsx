@@ -25,7 +25,7 @@ export class Hero extends Component {
             </p>
 
             <h1 className="hero-name stagger" style={{ "--stagger": 1 }}>
-              jaya
+              jaya sai kishore
             </h1>
 
             <h2 className="hero-tagline stagger" style={{ "--stagger": 2 }}>
