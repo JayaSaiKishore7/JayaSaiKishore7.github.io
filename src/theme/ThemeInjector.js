@@ -17,6 +17,7 @@ export class ThemeInjector {
       "--border": t.colors.border,
       "--border-strong": t.colors.borderStrong,
       "--text": t.colors.text,
+      "--soft": t.colors.soft,
       "--muted": t.colors.muted,
       "--muted-soft": t.colors.mutedSoft,
       "--accent": t.colors.accent,
@@ -24,6 +25,7 @@ export class ThemeInjector {
       "--accent-2": t.colors.accent2,
       "--on-accent": t.colors.onAccent,
       "--status": t.colors.status,
+      "--highlight": t.colors.highlight,
       "--accent-grad": t.gradients.accent,
       "--font-display": t.typography.fontDisplay,
       "--font-mono": t.typography.fontMono,
@@ -39,6 +41,7 @@ export class ThemeInjector {
       "--space-lg": t.spacing.lg,
       "--space-xl": t.spacing.xl,
       "--space-section": t.spacing.section,
+      "--gut": t.spacing.gutter,
       "--ease": t.easing.standard,
       "--max-width": t.layout.maxWidth,
     };

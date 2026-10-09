@@ -8,28 +8,38 @@ export class Resume extends Component {
     return (
       <section id="experience" className="section">
         <div className="container">
-          <p className="section-label">02 — experience</p>
-          <h2 className="section-heading">where i've worked</h2>
-          <p className="section-sub">
-            software engineering and data science roles, contributing to ML workflows,
-            automation, and production inference.
-          </p>
+          <Reveal as="div">
+            <p className="section-label">03 · experience</p>
+            <h2 className="section-heading">where i've worked</h2>
+            <p className="section-sub">
+              software engineering and data science roles, contributing to ML workflows,
+              automation, and production inference.
+            </p>
+          </Reveal>
 
-          <div className="xp-list">
-            {experience.map((item) => (
-              <Reveal as="article" className="xp-card" key={item.company + item.date}>
-                <div className="xp-head">
-                  <h3>
-                    {item.role} <span className="xp-at">@</span> {item.company}
-                  </h3>
-                  <span className="xp-date">{item.date}</span>
+          <div className="xps">
+            {experience.map((item, i) => (
+              <Reveal as="article" className="xp" key={item.company + item.date} style={{ "--i": i }}>
+                <div className="xp-when">
+                  <time>{item.date}</time>
+                  <p className="k">{item.role}</p>
                 </div>
-                <p className="xp-summary">{item.summary}</p>
-                <ul className="xp-points">
-                  {item.points.map((point, i) => (
-                    <li key={i}>{point}</li>
+
+                <div className="xp-main">
+                  <h3>
+                    {item.company}
+                    {item.location ? <span className="xp-location">, {item.location}</span> : null}
+                  </h3>
+                  <p className="xp-what">{item.summary}</p>
+                </div>
+
+                <ul className="xp-list">
+                  {item.points.map((point, idx) => (
+                    <li key={idx}>{point}</li>
                   ))}
                 </ul>
+
+                {item.stack ? <p className="xp-stack">{item.stack.join(" · ")}</p> : null}
               </Reveal>
             ))}
           </div>

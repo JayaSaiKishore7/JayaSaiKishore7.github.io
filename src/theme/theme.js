@@ -1,29 +1,31 @@
 export const theme = {
   colors: {
-    bg: "#110d0b",
-    bgSoft: "#171210",
-    surface: "rgba(255, 246, 237, 0.035)",
-    surfaceHover: "rgba(255, 246, 237, 0.065)",
-    border: "rgba(255, 246, 237, 0.09)",
-    borderStrong: "rgba(255, 246, 237, 0.18)",
-    text: "#f2ece2",
-    muted: "#8d8277",
-    mutedSoft: "#5f574e",
-    accent: "#e39a63",
-    accentSoft: "#f0bd93",
-    accent2: "#e8995c",
-    onAccent: "#1a1209",
-    status: "#6fcf7a",
+    bg: "#080808",
+    bgSoft: "#111111",
+    surface: "rgba(239, 238, 233, 0.035)",
+    surfaceHover: "rgba(239, 238, 233, 0.065)",
+    border: "#222224",
+    borderStrong: "#353537",
+    text: "#efeee9",
+    soft: "#c2c1bb",
+    muted: "#86857f",
+    mutedSoft: "#5c5b56",
+    accent: "#f2a65a",
+    accentSoft: "#f7c48c",
+    accent2: "#e8914a",
+    onAccent: "#080808",
+    status: "#6fd88f",
+    highlight: "#f2c94c",
   },
 
   gradients: {
-    accent: "linear-gradient(135deg, #e39a63 0%, #e8995c 100%)",
+    accent: "linear-gradient(135deg, #f2a65a 0%, #e8914a 100%)",
   },
 
   typography: {
-    fontDisplay: '"Inter", system-ui, -apple-system, "Segoe UI", sans-serif',
-    fontMono: '"JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, monospace',
-    fontSerif: '"Instrument Serif", Georgia, "Times New Roman", serif',
+    fontDisplay: '"IBM Plex Sans", Arial, system-ui, sans-serif',
+    fontMono: '"IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+    fontSerif: '"Fraunces", Georgia, "Times New Roman", serif',
   },
 
   radii: {
@@ -43,14 +45,15 @@ export const theme = {
     md: "1.5rem",
     lg: "2.5rem",
     xl: "4rem",
-    section: "6rem",
+    section: "clamp(20px, 2.6vw, 36px)",
+    gutter: "24px",
   },
 
   easing: {
-    standard: "cubic-bezier(0.22, 1, 0.36, 1)",
+    standard: "cubic-bezier(0.16, 1, 0.3, 1)",
   },
 
   layout: {
-    maxWidth: "1240px",
+    maxWidth: "1200px",
   },
 };

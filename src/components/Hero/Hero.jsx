@@ -21,11 +21,20 @@ export class Hero extends Component {
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>
-              jaya sai kishore &middot; nice, france
+              Hola
             </p>
 
-            <h1 className="hero-name stagger" style={{ "--stagger": 1 }}>
-              jaya sai kishore
+            <h1 className="hero-name" aria-label={profile.name.toLowerCase()}>
+              {profile.name.toLowerCase().split("").map((char, i) => (
+                <span
+                  key={i}
+                  className="hero-letter"
+                  aria-hidden="true"
+                  style={{ "--li": i }}
+                >
+                  {char === " " ? " " : char}
+                </span>
+              ))}
             </h1>
 
             <h2 className="hero-tagline stagger" style={{ "--stagger": 2 }}>
@@ -39,9 +48,8 @@ export class Hero extends Component {
             </p>
 
             <div className="hero-foot stagger" style={{ "--stagger": 4 }}>
-              <span className="hero-scroll">
-                scroll <span className="hero-rule" />
-              </span>
+              <span>scroll</span>
+              <span className="hero-rule" aria-hidden="true" />
               <span className="hero-breadcrumb">
                 {navLinks.map((link) => link.label).join(", ")}
               </span>
@@ -52,7 +60,10 @@ export class Hero extends Component {
             {heroInfo.map((row) => (
               <div className="hero-panel-row" key={row.label}>
                 <span className="hero-panel-label">{row.label}</span>
-                <span className="hero-panel-value">{row.value}</span>
+                <span className="hero-panel-value">
+                  {row.status ? <span className="hero-status-dot" /> : null}
+                  {row.value}
+                </span>
               </div>
             ))}
             <div className="hero-panel-row">

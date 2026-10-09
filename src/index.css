@@ -13,6 +13,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 72px;
 }
 
 body {
@@ -69,9 +70,8 @@ img {
 
 /* SHARED LAYOUT UTILITIES */
 .container {
-  width: 90%;
-  max-width: var(--max-width);
-  margin: 0 auto;
+  width: min(100% - var(--gut) * 2, var(--max-width));
+  margin-inline: auto;
 }
 
 .section {
@@ -106,15 +106,19 @@ img {
 /* SCROLL REVEAL */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(32px) scale(0.985);
+  filter: blur(4px);
   transition:
-    opacity 0.6s var(--ease),
-    transform 0.6s var(--ease);
+    opacity 0.85s var(--ease),
+    transform 0.85s var(--ease),
+    filter 0.85s var(--ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
 }
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,6 +129,12 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .container {
+    width: min(100% - 36px, var(--max-width));
   }
 }
 

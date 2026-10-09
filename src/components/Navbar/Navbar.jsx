@@ -11,7 +11,6 @@ export class Navbar extends Component {
     super(props);
     this.state = {
       active: sectionIds[0],
-      menuOpen: false,
       clock: Clock.format(),
     };
     this.scrollSpy = null;
@@ -34,54 +33,35 @@ export class Navbar extends Component {
     this.clock?.stop();
   }
 
-  toggleMenu() {
-    this.setState((state) => ({ menuOpen: !state.menuOpen }));
-  }
-
-  closeMenu() {
-    this.setState({ menuOpen: false });
-  }
-
   render() {
-    const { active, menuOpen, clock } = this.state;
+    const { active, clock } = this.state;
 
     return (
-      <header className="topbar">
-        <div className="container nav-container">
+      <header className="bar">
+        <div className="bar-in">
           <a href="#home" className="brand">
-            jaya sai kishore.
+            jaya sai kishore<span>.</span>
           </a>
 
-          <button
-            className="menu-toggle"
-            aria-label="Toggle navigation menu"
-            aria-expanded={menuOpen}
-            onClick={() => this.toggleMenu()}
-          >
-            {menuOpen ? "close" : "menu"}
-          </button>
-
-          <nav className={`nav-wrapper ${menuOpen ? "active" : ""}`}>
-            <ul className="nav-links">
-              {navLinks.map((link, i) => (
-                <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
-                    className={active === link.id ? "active" : ""}
-                    onClick={() => this.closeMenu()}
-                  >
-                    <span className="nav-index">{String(i + 1).padStart(2, "0")}</span>
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <nav className="bar-nav" aria-label="Sections">
+            {navLinks.map((link, i) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                data-section={link.id}
+                className={active === link.id ? "is-active" : ""}
+              >
+                <span className="n">{String(i + 1).padStart(2, "0")}</span>
+                {link.label}
+              </a>
+            ))}
           </nav>
 
-          <div className="nav-clock">
-            {clock.time} <span className="nav-clock-remark">· {clock.remark}</span>
-          </div>
+          <p className="bar-time">
+            <span data-clock>{clock.time}</span> · {clock.remark}
+          </p>
         </div>
+        <div className="prog" aria-hidden="true" />
       </header>
     );
   }

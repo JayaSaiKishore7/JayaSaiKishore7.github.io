@@ -6,7 +6,7 @@ export class Footer extends Component {
     return (
       <footer className="footer">
         <p>
-          © {new Date().getFullYear()} jaya sai kishore neerukonda &middot; built in nice, france
+          © {new Date().getFullYear()} jaya sai kishore neerukonda &middot; written, built and debugged in france
         </p>
       </footer>
     );

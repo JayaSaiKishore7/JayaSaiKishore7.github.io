@@ -8,12 +8,13 @@ export class Education extends Component {
     return (
       <section id="education" className="section">
         <div className="container">
-          <p className="section-label">03 — education</p>
-          <h2 className="section-heading">how i got here</h2>
+          <Reveal as="div">
+            <p className="section-label">04 · education</p>
+          </Reveal>
 
           <div className="edu-list">
-            {education.map((item) => (
-              <Reveal as="article" className="edu-card" key={item.degree}>
+            {education.map((item, i) => (
+              <Reveal as="article" className="edu-card" key={item.degree} style={{ "--i": i }}>
                 <h3>{item.degree}</h3>
                 <p className="edu-meta">{item.meta}</p>
                 <ul>
