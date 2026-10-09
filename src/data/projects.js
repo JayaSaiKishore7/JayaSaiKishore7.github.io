@@ -1,5 +1,12 @@
 export const projects = [
   {
+    title: "Brain Tumor MRI Classifier",
+    description:
+      "Basic CNN trained from scratch to classify brain MRI scans into glioma, meningioma, pituitary tumor, or no tumor. Tuned data augmentation specifically for MRI (small rotation/zoom/brightness rather than natural-photo-strength settings) after an aggressive first pass hurt accuracy, lifting test accuracy to 97.15% and meningioma F1 to 94.3%. Ships with a Flask site showing the full training report and a live upload-and-predict page.",
+    tags: ["TensorFlow", "Keras", "CNN", "Flask", "Computer Vision"],
+    link: "https://github.com/JayaSaiKishore7/brain-tumor-classifier",
+  },
+  {
     title: "Air Quality Forecasting Platform",
     description:
       "Forecasting workflow for air quality in the Côte d'Azur region using public environmental data. Compares time-series models and neural baselines and presents predictions through a dashboard for station-wise analysis.",
