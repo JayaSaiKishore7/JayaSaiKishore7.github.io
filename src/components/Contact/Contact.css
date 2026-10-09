@@ -21,6 +21,16 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.75rem;
+  transition:
+    color 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+.hello-skill:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .hello-email {
@@ -57,13 +67,29 @@
 }
 
 .hello-links a {
+  position: relative;
   color: var(--accent);
   text-decoration: none;
   transition: color 0.25s var(--ease);
 }
 
+.hello-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background: var(--accent-soft);
+  transition: width 0.3s var(--ease);
+}
+
 .hello-links a:hover {
   color: var(--accent-soft);
+}
+
+.hello-links a:hover::after {
+  width: 100%;
 }
 
 @media (max-width: 600px) {

@@ -22,6 +22,11 @@
   letter-spacing: -0.01em;
   text-decoration: none;
   color: var(--text);
+  transition: color 0.25s var(--ease);
+}
+
+.brand:hover {
+  color: var(--accent);
 }
 
 .nav-links {
@@ -73,6 +78,14 @@
   font-size: 0.78rem;
   padding: 0.3rem 0.8rem;
   cursor: pointer;
+  transition:
+    border-color 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+
+.menu-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 @media (max-width: 768px) {

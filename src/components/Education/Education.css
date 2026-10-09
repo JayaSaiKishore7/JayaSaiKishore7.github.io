@@ -17,12 +17,16 @@
   background: var(--surface);
   transition:
     border-color 0.3s var(--ease),
-    background 0.3s var(--ease);
+    background 0.3s var(--ease),
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
 }
 
 .edu-card:hover {
   border-color: var(--border-strong);
   background: var(--surface-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
 }
 
 .edu-card h3 {

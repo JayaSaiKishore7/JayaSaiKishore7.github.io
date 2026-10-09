@@ -8,13 +8,18 @@
   grid-template-columns: 56px 1fr auto;
   align-items: start;
   gap: 1.5rem;
-  padding: 2rem 0;
+  padding: 2rem 1.2rem;
+  margin: 0 -1.2rem;
   border-bottom: 1px solid var(--border);
-  transition: background 0.3s var(--ease);
+  border-radius: var(--radius-md);
+  transition:
+    background 0.35s var(--ease),
+    transform 0.35s var(--ease);
 }
 
 .work-card:hover {
   background: var(--surface);
+  transform: translateX(4px);
 }
 
 .work-index {
@@ -47,6 +52,7 @@
 }
 
 .work-link {
+  position: relative;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   color: var(--accent);
@@ -56,8 +62,23 @@
   transition: color 0.25s var(--ease);
 }
 
+.work-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--accent-soft);
+  transition: width 0.3s var(--ease);
+}
+
 .work-link:hover {
   color: var(--accent-soft);
+}
+
+.work-link:hover::after {
+  width: 100%;
 }
 
 @media (max-width: 700px) {
