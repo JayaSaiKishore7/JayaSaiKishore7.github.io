@@ -22,12 +22,12 @@ export class Education extends Component {
 
   render() {
     return (
-      <section id="education" className="section">
+      <section id="education" className="section" aria-label="Education">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
 
-          <Reveal as="div">
-            <p className="section-label">03 · education</p>
+          <Reveal as="p" className="section-label">
+            03 · education
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>

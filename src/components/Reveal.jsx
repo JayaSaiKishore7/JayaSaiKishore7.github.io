@@ -30,8 +30,21 @@ export class Reveal extends Component {
   }
 
   render() {
-    const { as: Tag = "div", className = "", threshold, children, ...rest } = this.props;
-    const classes = ["reveal", this.state.visible ? "is-visible" : "", className]
+    const {
+      as: Tag = "div",
+      className = "",
+      threshold,
+      variant,
+      children,
+      ...rest
+    } = this.props;
+
+    const classes = [
+      "reveal",
+      variant ? `reveal--${variant}` : "",
+      this.state.visible ? "is-visible" : "",
+      className,
+    ]
       .filter(Boolean)
       .join(" ");
 

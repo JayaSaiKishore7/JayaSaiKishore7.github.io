@@ -3,7 +3,9 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 8px var(--gut);
-  align-items: baseline;
+  /* not baseline: the masked heading is overflow:hidden, which synthesizes
+     its baseline from the bottom edge and throws the label out of line. */
+  align-items: start;
 }
 
 .work-head .section-label {
@@ -126,14 +128,6 @@
 .p-aside {
   grid-column: 6 / 13;
   grid-row: 2;
-}
-
-.idx {
-  margin-bottom: 4px;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  transition: color 0.4s var(--ease);
 }
 
 .p-head h3 {

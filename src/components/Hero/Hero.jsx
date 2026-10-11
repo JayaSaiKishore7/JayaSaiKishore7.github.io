@@ -17,7 +17,11 @@ export class Hero extends Component {
     const { mounted } = this.state;
 
     return (
-      <section id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
+      <section
+        id="home"
+        className={`section hero ${mounted ? "is-mounted" : ""}`}
+        aria-label="Introduction"
+      >
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>

@@ -22,17 +22,19 @@ export class Resume extends Component {
 
   render() {
     return (
-      <section id="experience" className="section">
+      <section id="experience" className="section" aria-label="Experience">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
 
-          <Reveal as="div">
-            <p className="section-label">02 · experience</p>
-            <h2 className="section-heading">where i've worked</h2>
-            <p className="section-sub">
-              software engineering and data science roles, contributing to ML workflows,
-              automation, and production inference.
-            </p>
+          <Reveal as="p" className="section-label">
+            02 · experience
+          </Reveal>
+          <Reveal as="h2" className="section-heading" variant="mask">
+            <span>where i've worked</span>
+          </Reveal>
+          <Reveal as="p" className="section-sub" style={{ "--i": 1 }}>
+            software engineering and data science roles, contributing to ML workflows,
+            automation, and production inference.
           </Reveal>
 
           <div className="xps" ref={this.xpsRef}>

@@ -9,13 +9,6 @@ export const profile = {
   resume: "/resume/JayaSaiKishoreN_Resume.pdf",
 };
 
-export const roles = [
-  "a Data Science Student",
-  "a Machine Learning Engineer",
-  "interested in model development",
-  "exploring evaluation & scaling",
-];
-
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
   { label: "latest", value: "data science intern, STMicroelectronics." },

@@ -22,16 +22,18 @@ export class Projects extends Component {
 
   render() {
     return (
-      <section id="work" className="section">
+      <section id="work" className="section" aria-label="Work">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
 
-          <Reveal as="header" className="work-head">
-            <span className="section-label">01 · work</span>
-            <h2 className="work-statement">
-              what does a model need to survive contact with real data?
-            </h2>
-          </Reveal>
+          <header className="work-head">
+            <Reveal as="span" className="section-label">
+              01 · work
+            </Reveal>
+            <Reveal as="h2" className="work-statement" variant="mask">
+              <span>what does a model need to survive contact with real data?</span>
+            </Reveal>
+          </header>
 
           <div className="spreads" ref={this.spreadsRef}>
             {projects.map((project, i) => (

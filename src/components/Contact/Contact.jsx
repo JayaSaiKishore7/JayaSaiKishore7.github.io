@@ -6,13 +6,15 @@ import "./Contact.css";
 export class Contact extends Component {
   render() {
     return (
-      <section id="hello" className="section">
+      <section id="hello" className="section" aria-label="About">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
 
-          <Reveal as="div">
-            <p className="section-label">04 · hello</p>
-            <h2 className="hello-statement">{aboutInfo.statement}</h2>
+          <Reveal as="p" className="section-label">
+            04 · hello
+          </Reveal>
+          <Reveal as="h2" className="hello-statement" variant="mask">
+            <span>{aboutInfo.statement}</span>
           </Reveal>
 
           <Reveal as="div" className="hello-about" style={{ "--i": 1 }}>
@@ -25,9 +27,9 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
-            {aboutInfo.skills.map((skill) => (
-              <span className="hello-skill" key={skill}>
+          <Reveal as="div" className="hello-skills" variant="stagger">
+            {aboutInfo.skills.map((skill, i) => (
+              <span className="hello-skill" key={skill} style={{ "--pi": i }}>
                 {skill}
               </span>
             ))}

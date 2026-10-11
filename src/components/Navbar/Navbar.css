@@ -26,10 +26,21 @@
   letter-spacing: -0.03em;
   text-decoration: none;
   color: var(--text);
+  transition: color 0.4s var(--ease);
 }
 
 .brand span {
   color: var(--accent);
+  display: inline-block;
+  transition: transform 0.5s var(--ease);
+}
+
+.brand:hover {
+  color: var(--accent-soft);
+}
+
+.brand:hover span {
+  transform: translateY(-2px);
 }
 
 .bar-nav {

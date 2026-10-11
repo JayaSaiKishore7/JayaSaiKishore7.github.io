@@ -1,6 +1,6 @@
 .edu-list {
   display: grid;
-  gap: 1.2rem;
+  gap: 14px;
   margin-top: 1rem;
 }
 
@@ -14,7 +14,7 @@
   position: relative;
   isolation: isolate;
   border: 1px solid var(--border);
-  padding: 1.8rem;
+  padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 55%), var(--bg-soft);
   transition:
     border-color 0.4s var(--ease),
@@ -46,6 +46,10 @@
 
 .edu-card:hover::before {
   opacity: 1;
+}
+
+.edu-card:hover .idx {
+  color: var(--accent);
 }
 
 .edu-card h3 {
