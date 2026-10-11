@@ -1,23 +1,40 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 import { profile, heroInfo } from "../../data/profile";
 import { navLinks } from "../../data/nav";
+import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import "./Hero.css";
 
 export class Hero extends Component {
   constructor(props) {
     super(props);
     this.state = { mounted: false };
+    this.heroRef = createRef();
+    this.boxes = null;
   }
 
   componentDidMount() {
     requestAnimationFrame(() => this.setState({ mounted: true }));
+
+    this.boxes = new DetectionBoxes({
+      container: this.heroRef.current,
+      targets: [
+        { selector: ".hero-name", label: "name 0.99", tight: true },
+        { selector: ".hero-tagline", label: "role 0.97", tight: true, labelInside: true },
+        { selector: ".hero-panel", label: "info 0.95" },
+      ],
+    });
+    this.boxes.start();
+  }
+
+  componentWillUnmount() {
+    this.boxes?.stop();
   }
 
   render() {
     const { mounted } = this.state;
 
     return (
-      <section id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
+      <section ref={this.heroRef} id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>

@@ -1,4 +1,5 @@
 .hero {
+  position: relative;
   padding-top: clamp(24px, 3vw, 44px);
   padding-bottom: clamp(24px, 3vw, 44px);
 }
@@ -211,5 +212,53 @@
 @media (max-width: 680px) {
   .hero-breadcrumb {
     display: none;
+  }
+}
+
+/* Detection boxes */
+.detect-box {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid var(--accent);
+  pointer-events: none;
+  animation: detect-box 2.4s var(--ease) forwards;
+}
+
+.detect-label {
+  position: absolute;
+  bottom: 100%;
+  left: -1px;
+  padding: 2px 6px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.detect-label--inside {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+}
+
+@keyframes detect-box {
+  0% {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
   }
 }
