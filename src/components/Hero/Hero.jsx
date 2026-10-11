@@ -2,6 +2,7 @@ import { Component, createRef } from "react";
 import { profile, heroInfo } from "../../data/profile";
 import { navLinks } from "../../data/nav";
 import { DetectionBoxes } from "../../utils/DetectionBoxes";
+import { BootSequence } from "../../utils/BootSequence";
 import "./Hero.css";
 
 export class Hero extends Component {
@@ -10,11 +11,10 @@ export class Hero extends Component {
     this.state = { mounted: false };
     this.heroRef = createRef();
     this.boxes = null;
+    this.boot = null;
   }
 
   componentDidMount() {
-    requestAnimationFrame(() => this.setState({ mounted: true }));
-
     this.boxes = new DetectionBoxes({
       container: this.heroRef.current,
       targets: [
@@ -23,10 +23,25 @@ export class Hero extends Component {
         { selector: ".hero-panel", label: "info 0.95" },
       ],
     });
-    this.boxes.start();
+
+    this.boot = new BootSequence({
+      container: this.heroRef.current.querySelector(".hero-inner"),
+      lines: [
+        "$ python portfolio.py",
+        'loading weights ........ <span class="boot-ok">ok</span>',
+        'warming up inference ... <span class="boot-ok">ok</span>',
+        '<span class="boot-ready">ready.</span>',
+      ],
+      onDone: () => {
+        requestAnimationFrame(() => this.setState({ mounted: true }));
+        this.boxes.start();
+      },
+    });
+    this.boot.start();
   }
 
   componentWillUnmount() {
+    this.boot?.stop();
     this.boxes?.stop();
   }
 

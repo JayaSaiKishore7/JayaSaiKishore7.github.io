@@ -262,3 +262,46 @@
     transform: scale(1);
   }
 }
+
+/* Model boot intro */
+.boot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  pointer-events: none;
+  transition: opacity 300ms var(--ease);
+}
+
+.boot.is-leaving {
+  opacity: 0;
+}
+
+.boot-ok {
+  color: var(--status);
+}
+
+.boot-ready {
+  color: var(--accent);
+}
+
+.boot-line:last-child::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  margin-left: 6px;
+  vertical-align: -0.2em;
+  background: var(--accent);
+  animation: boot-blink 0.8s steps(1) infinite;
+}
+
+@keyframes boot-blink {
+  50% {
+    opacity: 0;
+  }
+}
