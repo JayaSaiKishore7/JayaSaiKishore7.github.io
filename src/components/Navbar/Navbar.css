@@ -26,13 +26,13 @@
   letter-spacing: -0.03em;
   text-decoration: none;
   color: var(--text);
-  transition: color 0.4s var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 
 .brand span {
   color: var(--accent);
   display: inline-block;
-  transition: transform 0.5s var(--ease);
+  transition: transform var(--dur) var(--ease);
 }
 
 .brand:hover {
@@ -64,7 +64,7 @@
   padding: 8px 0;
   color: var(--muted);
   text-decoration: none;
-  transition: color 400ms var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 
 .bar-nav a::after {
@@ -76,7 +76,7 @@
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: 100% 50%;
-  transition: transform 700ms var(--ease);
+  transition: transform var(--dur-slow) var(--ease);
   content: "";
 }
 
@@ -84,7 +84,7 @@
   margin-right: 7px;
   color: var(--border-strong);
   font-size: 10px;
-  transition: color 400ms var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 
 .bar-nav a:hover,

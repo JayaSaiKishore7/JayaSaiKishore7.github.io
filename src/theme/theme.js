@@ -37,6 +37,9 @@ export const theme = {
   shadows: {
     soft: "0 10px 30px rgba(0, 0, 0, 0.5)",
     strong: "0 25px 60px rgba(0, 0, 0, 0.65)",
+    // Cards sit on a near-black page, where a black shadow is invisible.
+    // Lift reads as a warm bloom plus a faint light rim instead.
+    lift: "0 14px 34px rgba(0, 0, 0, 0.55), 0 0 22px rgba(242, 166, 90, 0.07)",
   },
 
   spacing: {
@@ -51,6 +54,20 @@ export const theme = {
 
   easing: {
     standard: "cubic-bezier(0.16, 1, 0.3, 1)",
+  },
+
+  /*
+   * One tempo for the whole site. A single duration would be wrong (an
+   * ambient glow and a text colour change should not take equally long),
+   * so this is a three-step scale every transition snaps onto:
+   *   fast  - micro feedback: colour, small hovers
+   *   base  - the default: transforms, borders, lifts
+   *   slow  - large moves: scroll reveals, ambient fades
+   */
+  durations: {
+    fast: "250ms",
+    base: "400ms",
+    slow: "600ms",
   },
 
   layout: {

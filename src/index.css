@@ -54,7 +54,7 @@ a {
   opacity: 0;
   pointer-events: none;
   transform: translateY(-150%);
-  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 
 .skip-link:focus-visible {
@@ -156,7 +156,7 @@ img {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 11.5px;
-  transition: color 0.4s var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 
 /* SCROLL REVEAL */
@@ -165,9 +165,9 @@ img {
   transform: translateY(24px) scale(0.99);
   filter: blur(3px);
   transition:
-    opacity 0.55s var(--ease),
-    transform 0.55s var(--ease),
-    filter 0.55s var(--ease);
+    opacity var(--dur-slow) var(--ease),
+    transform var(--dur-slow) var(--ease),
+    filter var(--dur-slow) var(--ease);
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 
@@ -188,7 +188,7 @@ img {
   filter: none;
   transform: scaleX(0);
   transform-origin: 0 50%;
-  transition: transform 0.9s var(--ease);
+  transition: transform var(--dur-slow) var(--ease);
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 
@@ -208,7 +208,7 @@ img {
 .reveal--mask > span {
   display: block;
   transform: translateY(105%);
-  transition: transform 0.75s var(--ease);
+  transition: transform var(--dur-slow) var(--ease);
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 

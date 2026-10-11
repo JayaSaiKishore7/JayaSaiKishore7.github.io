@@ -35,6 +35,7 @@ export class ThemeInjector {
       "--radius-pill": t.radii.pill,
       "--shadow-soft": t.shadows.soft,
       "--shadow-strong": t.shadows.strong,
+      "--shadow-lift": t.shadows.lift,
       "--space-xs": t.spacing.xs,
       "--space-sm": t.spacing.sm,
       "--space-md": t.spacing.md,
@@ -43,6 +44,9 @@ export class ThemeInjector {
       "--space-section": t.spacing.section,
       "--gut": t.spacing.gutter,
       "--ease": t.easing.standard,
+      "--dur-fast": t.durations.fast,
+      "--dur": t.durations.base,
+      "--dur-slow": t.durations.slow,
       "--max-width": t.layout.maxWidth,
     };
   }
