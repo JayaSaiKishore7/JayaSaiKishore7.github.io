@@ -34,6 +34,30 @@ a {
   color: inherit;
 }
 
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 9px 14px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-150%);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.skip-link:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
 ul {
   list-style: none;
 }

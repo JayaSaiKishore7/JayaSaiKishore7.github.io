@@ -12,13 +12,18 @@ class App extends Component {
   render() {
     return (
       <>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <Navbar />
-        <Hero />
-        <Projects />
-        <Resume />
-        <Education />
-        <Contact />
-        <Connect />
+        <main id="main-content">
+          <Hero />
+          <Projects />
+          <Resume />
+          <Education />
+          <Contact />
+          <Connect />
+        </main>
         <Footer />
       </>
     );

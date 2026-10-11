@@ -33,6 +33,7 @@ export class Education extends Component {
           <div className="edu-list" ref={this.listRef}>
             {education.map((item, i) => (
               <Reveal as="article" className="edu-card" key={item.degree} style={{ "--i": i }}>
+                <p className="idx">{String(i + 1).padStart(2, "0")}</p>
                 <h3>{item.degree}</h3>
                 <p className="edu-meta">{item.meta}</p>
                 <ul>
