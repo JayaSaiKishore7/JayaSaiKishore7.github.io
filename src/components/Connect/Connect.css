@@ -52,7 +52,7 @@
   letter-spacing: -0.03em;
   text-decoration: none;
   overflow-wrap: anywhere;
-  transition: border-color 0.4s ease, color 0.4s ease;
+  transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
 }
 
 .email-link:hover {
@@ -68,7 +68,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s var(--ease);
 }
 
 .copy:hover {
@@ -90,7 +90,7 @@
   gap: 8px;
   color: var(--soft);
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.5s var(--ease);
+  transition: color 0.3s var(--ease), transform 0.5s var(--ease);
 }
 
 .social-icon {

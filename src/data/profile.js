@@ -24,19 +24,11 @@ export const heroInfo = [
 ];
 
 export const aboutInfo = {
-  paragraph:
-    "I'm a Data Scientist and Machine Learning Engineer who builds and deploys ML/DL systems across computer vision, NLP, and LLM/RAG workflows. Currently pursuing a Master's in Data Science & AI, with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale. Most recently, I took an AI-based inspection system at STMicroelectronics from prototype to production deployment.",
-  columns: [
-    [
-      { label: "Profile", value: "Data Science & AI" },
-      { label: "Interests", value: "ML systems, automation, MLOps" },
-      { label: "Location", value: "Nice, France" },
-    ],
-    [
-      { label: "Languages", value: "English, French" },
-      { label: "Skills", value: "Python, SQL, Machine Learning, Deep Learning, TensorFlow, PyTorch, CI/CD, Docker" },
-      { label: "Web", value: "FastAPI, Flask, Streamlit" },
-    ],
+  statement: "i build things that have to survive the real world, not just the demo.",
+  lead: "a data scientist and machine learning engineer working across computer vision, nlp, and llm/rag.",
+  sub: [
+    "currently pursuing a master's in data science & ai, with a focus on rigorous experimentation, model evaluation, and production-grade mlops pipelines that scale.",
+    "most recently, i took an ai-based inspection system at stmicroelectronics from prototype to production deployment.",
   ],
   skills: [
     "Python",

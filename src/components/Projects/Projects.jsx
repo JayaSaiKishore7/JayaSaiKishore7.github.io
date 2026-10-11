@@ -24,8 +24,10 @@ export class Projects extends Component {
     return (
       <section id="work" className="section">
         <div className="container">
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
+
           <Reveal as="header" className="work-head">
-            <span className="section-label">02 · work</span>
+            <span className="section-label">01 · work</span>
             <h2 className="work-statement">
               what does a model need to survive contact with real data?
             </h2>

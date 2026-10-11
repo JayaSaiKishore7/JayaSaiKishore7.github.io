@@ -24,8 +24,10 @@ export class Education extends Component {
     return (
       <section id="education" className="section">
         <div className="container">
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
+
           <Reveal as="div">
-            <p className="section-label">04 · education</p>
+            <p className="section-label">03 · education</p>
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>

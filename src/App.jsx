@@ -14,10 +14,10 @@ class App extends Component {
       <>
         <Navbar />
         <Hero />
-        <Contact />
         <Projects />
         <Resume />
         <Education />
+        <Contact />
         <Connect />
         <Footer />
       </>

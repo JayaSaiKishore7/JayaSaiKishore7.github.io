@@ -19,7 +19,7 @@ export class Reveal extends Component {
           this.observer.unobserve(entry.target);
         }
       },
-      { threshold: this.props.threshold ?? 0.2 }
+      { threshold: this.props.threshold ?? 0.1 }
     );
 
     this.observer.observe(el);

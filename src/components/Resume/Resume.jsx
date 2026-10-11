@@ -24,8 +24,10 @@ export class Resume extends Component {
     return (
       <section id="experience" className="section">
         <div className="container">
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
+
           <Reveal as="div">
-            <p className="section-label">03 · experience</p>
+            <p className="section-label">02 · experience</p>
             <h2 className="section-heading">where i've worked</h2>
             <p className="section-sub">
               software engineering and data science roles, contributing to ML workflows,

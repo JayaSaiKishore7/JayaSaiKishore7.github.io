@@ -16,7 +16,7 @@
   border: 1px solid var(--border);
   border-left: 2px solid var(--accent);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 55%), var(--bg-soft);
-  transition: border-color 0.7s ease, background 0.7s ease;
+  transition: border-color 0.7s var(--ease), background 0.7s var(--ease);
 }
 
 .xp::before {
@@ -29,7 +29,10 @@
     transparent 70%
   );
   opacity: 0;
-  transition: opacity 0.9s ease;
+  transition:
+    opacity 0.9s var(--ease),
+    --mx 0.3s var(--ease),
+    --my 0.3s var(--ease);
   content: "";
   pointer-events: none;
 }

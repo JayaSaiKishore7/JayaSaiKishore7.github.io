@@ -103,16 +103,34 @@ img {
   margin-bottom: 1.5rem;
 }
 
+@property --mx {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --my {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.section-rule {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+
 /* SCROLL REVEAL */
 .reveal {
   opacity: 0;
-  transform: translateY(32px) scale(0.985);
-  filter: blur(4px);
+  transform: translateY(24px) scale(0.99);
+  filter: blur(3px);
   transition:
-    opacity 0.85s var(--ease),
-    transform 0.85s var(--ease),
-    filter 0.85s var(--ease);
-  transition-delay: calc(var(--i, 0) * 90ms);
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease),
+    filter 0.55s var(--ease);
+  transition-delay: calc(var(--i, 0) * 60ms);
 }
 
 .reveal.is-visible {
@@ -135,11 +153,5 @@ img {
 @media (max-width: 680px) {
   .container {
     width: min(100% - 36px, var(--max-width));
-  }
-}
-
-@media (max-width: 480px) {
-  .section {
-    padding: var(--space-xl) 0;
   }
 }

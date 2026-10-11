@@ -40,6 +40,8 @@ export class Connect extends Component {
     return (
       <section id="contact" className="section">
         <div className="container">
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
+
           <Reveal as="div">
             <p className="section-label">05 · contact</p>
             <h2 className="section-heading">let's connect.</h2>
