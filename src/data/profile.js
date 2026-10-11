@@ -1,13 +1,17 @@
 export const profile = {
   name: "Jaya Sai Kishore",
   fullName: "Jaya Sai Kishore Neerukonda",
-  location: "Nice, France",
+  location: "Marseille, France",
   phone: "+33 07 45 32 40 32",
   email: "jayasaikishoren@gmail.com",
   linkedin: "https://www.linkedin.com/in/jaya-sai-kishore/",
   github: "https://github.com/JayaSaiKishore7",
   resume: "/resume/JayaSaiKishoreN_Resume.pdf",
 };
+
+/* Cycled in the hero tagline. Ordered so the strongest, most recent work
+   (X-ray defect detection at STMicroelectronics) leads. */
+export const focusWords = ["vision", "detection", "retrieval", "mlops"];
 
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },

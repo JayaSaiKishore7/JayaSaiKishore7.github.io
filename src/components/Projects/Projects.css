@@ -85,7 +85,7 @@
   pointer-events: none;
 }
 
-/* ---------- frag: default (split) sits as a faint background easter egg ---------- */
+/* ---------- frag: a faint background easter egg by default ---------- */
 
 .frag {
   position: absolute;
@@ -114,22 +114,7 @@
   font-size: 10px;
 }
 
-/* ---------- default two-column split: name/what left, notes right ---------- */
-
-.p-head {
-  grid-column: 1 / 6;
-  grid-row: 1 / 4;
-}
-
-.p-notes {
-  grid-column: 6 / 13;
-  grid-row: 1;
-}
-
-.p-aside {
-  grid-column: 6 / 13;
-  grid-row: 2;
-}
+/* ---------- head ---------- */
 
 .p-head h3 {
   font-family: var(--font-mono);
@@ -183,6 +168,61 @@
   font-size: 11.5px;
 }
 
+/* ---------- body: proof stays visible, the rest expands ---------- */
+
+.proof {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.proof b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/*
+ * Height animation with no JS measurement: a grid row interpolates from
+ * 0fr to 1fr, so the panel grows to exactly its natural height. The inner
+ * wrapper needs min-height:0 or the row refuses to collapse below content.
+ */
+.p-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease);
+}
+
+.p-collapse[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.p-collapse-in {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.p-collapse-in > * {
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.p-collapse[data-open="true"] .p-collapse-in > * {
+  opacity: 1;
+  /* Let the height finish opening before the text fades up, so the two
+     motions read as one gesture rather than racing each other. */
+  transition-delay: 140ms;
+}
+
+.p-notes {
+  padding-top: 16px;
+}
+
 .p-notes p {
   padding: 8px 0;
   display: grid;
@@ -196,7 +236,7 @@
 
 .p-notes p:first-child {
   border-top: 0;
-  padding-top: 2px;
+  padding-top: 0;
 }
 
 .p-notes b {
@@ -216,7 +256,62 @@
   font-size: 15px;
 }
 
-/* ---------- --lead: the headline card, bigger name, 3-up notes, frag as a side column ---------- */
+.p-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.p-toggle:hover {
+  color: var(--accent);
+}
+
+/* A plus that rotates into a minus. */
+.p-toggle-sign {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  flex: none;
+}
+
+.p-toggle-sign::before,
+.p-toggle-sign::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transition: transform var(--dur) var(--ease);
+  content: "";
+}
+
+.p-toggle-sign::after {
+  transform: rotate(90deg);
+}
+
+.p-toggle[aria-expanded="true"] .p-toggle-sign::after {
+  transform: rotate(0deg);
+}
+
+/* ---------- variants: each one places head and body as whole blocks ---------- */
+
+.p-head {
+  grid-column: 1 / 6;
+}
+
+.p-body {
+  grid-column: 6 / 13;
+}
 
 .spread--lead .p-head {
   grid-column: 1 / 8;
@@ -232,56 +327,44 @@
   font-size: 19px;
 }
 
+.spread--lead .p-body {
+  grid-column: 1 / 8;
+  grid-row: 2;
+}
+
 .spread--lead .frag {
   position: relative;
   right: auto;
   bottom: auto;
   z-index: 0;
   grid-column: 9 / 13;
-  grid-row: 1 / 3;
+  grid-row: 1 / -1;
   align-self: start;
   opacity: 0.5;
   padding-left: 14px;
   border-left: 1px solid var(--border-strong);
 }
 
-.spread--lead .p-notes {
-  grid-column: 1 / 8;
-  grid-row: 2;
+/* lead and row are wide enough to run the three notes side by side */
+.spread--lead .p-notes,
+.spread--row .p-notes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0 20px;
-  margin-top: 6px;
 }
 
-.spread--lead .p-notes p {
+.spread--lead .p-notes p,
+.spread--row .p-notes p {
   grid-template-columns: 1fr;
   gap: 4px;
   padding: 12px 0 0;
-}
-
-.spread--lead .p-notes p:first-child {
   border-top: 1px solid var(--border);
-  padding-top: 12px;
 }
 
-.spread--lead .p-notes b {
+.spread--lead .p-notes b,
+.spread--row .p-notes b {
   display: block;
-  margin-bottom: 0;
 }
-
-.spread--lead .p-notes .proof {
-  grid-column: 1 / -1;
-  margin-top: 16px;
-}
-
-.spread--lead .p-aside {
-  grid-column: 1 / 8;
-  grid-row: 3;
-  margin-top: 0;
-}
-
-/* ---------- --row: a quieter closing row, name left / what right on one line ---------- */
 
 .spread--row .p-head {
   grid-column: 1 / 13;
@@ -325,49 +408,16 @@
   text-align: right;
 }
 
-.spread--row .p-notes {
+.spread--row .p-body {
   grid-column: 1 / 13;
   grid-row: 2;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 24px;
 }
-
-.spread--row .p-notes p {
-  grid-template-columns: 1fr;
-  gap: 4px;
-  padding: 12px 0 0;
-}
-
-.spread--row .p-notes p:first-child {
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
-}
-
-.spread--row .p-notes b {
-  display: block;
-}
-
-.spread--row .p-notes .proof {
-  grid-column: 1 / -1;
-  margin-top: 16px;
-}
-
-.spread--row .p-aside {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  margin-top: 0;
-}
-
-/* ---------- --flip: notes on the left, name on the right ---------- */
 
 .spread--flip .p-head {
   grid-column: 8 / 13;
-  grid-row: 1 / 4;
 }
 
-.spread--flip .p-notes,
-.spread--flip .p-aside {
+.spread--flip .p-body {
   grid-column: 1 / 7;
 }
 
@@ -418,28 +468,32 @@
     display: none;
   }
 
-  .spread--lead .p-notes,
-  .spread--row .p-head,
-  .spread--row .p-notes {
+  .spread--row .p-head {
     display: block;
-  }
-
-  .spread--row .p-head h3 {
-    white-space: normal;
   }
 
   .spread--row .p-head .what,
   .spread--row .p-head .meta {
     justify-self: auto;
     text-align: left;
+    margin-top: 12px;
+  }
+
+  .spread--row .p-head h3 {
+    white-space: normal;
+  }
+
+  .p-body {
+    margin-top: 14px;
+  }
+
+  .spread--lead .p-notes,
+  .spread--row .p-notes {
+    grid-template-columns: 1fr;
   }
 
   .p-notes p {
     grid-template-columns: 1fr;
     gap: 4px;
-  }
-
-  .p-aside {
-    margin-top: 14px;
   }
 }
