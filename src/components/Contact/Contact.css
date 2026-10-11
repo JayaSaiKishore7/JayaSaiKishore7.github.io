@@ -49,26 +49,14 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.75rem;
-  opacity: 0;
-  transform: translateY(8px);
   transition:
-    opacity var(--dur) var(--ease),
-    color var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease),
-    transform var(--dur) var(--ease);
-  transition-delay: calc(var(--pi, 0) * 35ms);
+    color 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    transform 0.25s var(--ease);
 }
 
-.hello-skills.is-visible .hello-skill {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Once settled, hover responds immediately rather than inheriting the
-   entrance delay that cascaded this pill in. */
-.hello-skills.is-visible .hello-skill:hover {
+.hello-skill:hover {
   color: var(--accent);
   border-color: var(--accent);
   transform: translateY(-2px);
-  transition-delay: 0s;
 }

@@ -38,18 +38,16 @@ export class Connect extends Component {
     const { copied } = this.state;
 
     return (
-      <section id="contact" className="section" aria-label="Contact">
+      <section id="contact" className="section">
         <div className="container">
-          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
 
-          <Reveal as="p" className="section-label">
-            05 · contact
-          </Reveal>
-          <Reveal as="h2" className="section-heading" variant="mask">
-            <span>let's connect.</span>
-          </Reveal>
-          <Reveal as="p" className="section-sub" style={{ "--i": 1 }}>
-            open to new opportunities and collaborations, reach out below.
+          <Reveal as="div">
+            <p className="section-label">05 · contact</p>
+            <h2 className="section-heading">let's connect.</h2>
+            <p className="section-sub">
+              open to new opportunities and collaborations, reach out below.
+            </p>
           </Reveal>
 
           <Reveal as="div" className="credits" style={{ "--i": 1 }}>

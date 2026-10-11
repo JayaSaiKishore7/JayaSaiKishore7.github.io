@@ -1,54 +1,23 @@
-import { Component, createRef } from "react";
-import { profile, heroInfo, focusWords } from "../../data/profile";
+import { Component } from "react";
+import { profile, heroInfo } from "../../data/profile";
 import { navLinks } from "../../data/nav";
-import { WordRotator } from "../../utils/WordRotator";
-import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import "./Hero.css";
 
 export class Hero extends Component {
   constructor(props) {
     super(props);
-    this.state = { mounted: false, word: focusWords[0] };
-    this.rotator = null;
-    this.detector = null;
-    this.heroRef = createRef();
+    this.state = { mounted: false };
   }
 
   componentDidMount() {
     requestAnimationFrame(() => this.setState({ mounted: true }));
-
-    this.rotator = new WordRotator({
-      words: focusWords,
-      onChange: (word) => this.setState({ word }),
-    });
-    this.rotator.start();
-
-    this.detector = new DetectionBoxes({
-      container: this.heroRef.current,
-      targets: [
-        { selector: ".hero-name", label: "name 0.99", tight: true },
-        { selector: ".hero-tagline", label: "role 0.97", tight: true },
-        { selector: ".hero-panel", label: "info 0.95" },
-      ],
-    });
-    this.detector.start();
-  }
-
-  componentWillUnmount() {
-    this.rotator?.stop();
-    this.detector?.stop();
   }
 
   render() {
-    const { mounted, word } = this.state;
+    const { mounted } = this.state;
 
     return (
-      <section
-        id="home"
-        ref={this.heroRef}
-        className={`section hero ${mounted ? "is-mounted" : ""}`}
-        aria-label="Introduction"
-      >
+      <section id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>
@@ -71,11 +40,7 @@ export class Hero extends Component {
             <h2 className="hero-tagline stagger" style={{ "--stagger": 2 }}>
               machine learning &amp; data.
               <br />
-              lately pretty deep in{" "}
-              <em className="hero-accent" aria-live="off">
-                {word}
-              </em>
-              .
+              lately pretty deep in <em className="hero-accent">retrieval</em>.
             </h2>
 
             <p className="hero-note stagger" style={{ "--stagger": 3 }}>

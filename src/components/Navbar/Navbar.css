@@ -26,21 +26,10 @@
   letter-spacing: -0.03em;
   text-decoration: none;
   color: var(--text);
-  transition: color var(--dur) var(--ease);
 }
 
 .brand span {
   color: var(--accent);
-  display: inline-block;
-  transition: transform var(--dur) var(--ease);
-}
-
-.brand:hover {
-  color: var(--accent-soft);
-}
-
-.brand:hover span {
-  transform: translateY(-2px);
 }
 
 .bar-nav {
@@ -64,7 +53,7 @@
   padding: 8px 0;
   color: var(--muted);
   text-decoration: none;
-  transition: color var(--dur) var(--ease);
+  transition: color 400ms var(--ease);
 }
 
 .bar-nav a::after {
@@ -76,7 +65,7 @@
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: 100% 50%;
-  transition: transform var(--dur-slow) var(--ease);
+  transition: transform 700ms var(--ease);
   content: "";
 }
 
@@ -84,7 +73,7 @@
   margin-right: 7px;
   color: var(--border-strong);
   font-size: 10px;
-  transition: color var(--dur) var(--ease);
+  transition: color 400ms var(--ease);
 }
 
 .bar-nav a:hover,

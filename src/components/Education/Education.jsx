@@ -22,18 +22,17 @@ export class Education extends Component {
 
   render() {
     return (
-      <section id="education" className="section" aria-label="Education">
+      <section id="education" className="section">
         <div className="container">
-          <Reveal as="div" className="section-rule" variant="wipe" aria-hidden="true" />
+          <Reveal as="div" className="section-rule" aria-hidden="true" />
 
-          <Reveal as="p" className="section-label">
-            03 · education
+          <Reveal as="div">
+            <p className="section-label">03 · education</p>
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>
             {education.map((item, i) => (
               <Reveal as="article" className="edu-card" key={item.degree} style={{ "--i": i }}>
-                <p className="idx">{String(i + 1).padStart(2, "0")}</p>
                 <h3>{item.degree}</h3>
                 <p className="edu-meta">{item.meta}</p>
                 <ul>
