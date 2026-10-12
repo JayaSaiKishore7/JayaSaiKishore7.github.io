@@ -48,7 +48,6 @@ export class BootSequence {
   }
 
   _shouldPlay() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
     try {
       return sessionStorage.getItem(STORAGE_KEY) !== "yes";
     } catch {

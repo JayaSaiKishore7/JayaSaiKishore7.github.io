@@ -155,3 +155,32 @@ img {
     width: min(100% - 36px, var(--max-width));
   }
 }
+
+/* NMS heading reveal (see src/utils/NmsReveal.js) */
+.nms-box {
+  position: absolute;
+  z-index: 40;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  pointer-events: none;
+}
+
+.nms-box--winner {
+  border-color: var(--accent);
+}
+
+.nms-tag {
+  position: absolute;
+  bottom: 100%;
+  right: -1px;
+  padding: 2px 6px;
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.nms-box--winner .nms-tag {
+  background: var(--accent);
+}

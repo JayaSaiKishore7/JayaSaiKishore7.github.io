@@ -41,6 +41,10 @@ export class Projects extends Component {
                 key={project.id}
                 style={{ "--i": i }}
               >
+                <span className="spread-tag" aria-hidden="true">
+                  project {String(i + 1).padStart(2, "0")} · {(0.99 - i * 0.01).toFixed(2)}
+                </span>
+
                 <pre className="frag" aria-hidden="true">
                   <span className="frag-file">{project.frag.file}</span>
                   <code>{project.frag.code}</code>

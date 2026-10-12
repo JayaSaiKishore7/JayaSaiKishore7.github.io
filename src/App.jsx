@@ -7,8 +7,18 @@ import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
 import { Connect } from "./components/Connect/Connect";
 import { Footer } from "./components/Footer/Footer";
+import { NmsReveal } from "./utils/NmsReveal";
 
 class App extends Component {
+  componentDidMount() {
+    this.nms = new NmsReveal({ selector: ".work-statement, .section-heading, .hello-statement" });
+    this.nms.start();
+  }
+
+  componentWillUnmount() {
+    this.nms?.stop();
+  }
+
   render() {
     return (
       <>

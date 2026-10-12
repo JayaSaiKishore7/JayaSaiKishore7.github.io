@@ -305,3 +305,15 @@
     opacity: 0;
   }
 }
+
+/* Reduced motion: the boot still plays, but stays still. Lines appear without
+   a fade, and the cursor shows as a steady block instead of blinking. */
+@media (prefers-reduced-motion: reduce) {
+  .boot {
+    transition: none;
+  }
+
+  .boot-line:last-child::after {
+    animation: none;
+  }
+}
