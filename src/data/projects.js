@@ -38,7 +38,7 @@ insight = flan_t5.generate(
       inside:
         "a daily github actions job pulls geod'air measurements for ~90 station/pollutant series in paca, xgboost forecasts 24h ahead recursively, evidently checks for drift and opens an issue when it finds it, and a static page goes out to hugging face.",
       learning:
-        "the 3-hour average included the hour being predicted. fixing that leak made the test score look worse, but 24h-ahead accuracy improved, and a test now stops the leak from coming back.",
+        "my first score was too good to be true: the 3-hour average feature quietly included the hour being predicted. once it used only past hours, the 1-hour error rose (mae 3.42 → 3.69), but it now matches what the model actually sees when forecasting live. a test keeps it that way.",
     },
     proof: "on live data, beats persistence at 24h by 43% on o₃, 30% on no₂ and 23% on pm10. every forecast is scored against what was actually measured.",
     aside: "pm2.5 doesn't beat persistence yet, and the readme says so.",
