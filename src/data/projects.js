@@ -2,28 +2,25 @@ export const projects = [
   {
     id: "emotion-rag",
     title: "Emotion-Aware Insight Generator",
-    what: "turns a face into context-aware text, not just an emotion label.",
-    meta: "computer vision · ResNet-50 · FAISS · LangChain",
-    tags: ["ResNet-50", "FAISS", "LangChain", "Flan-T5"],
+    what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
+    meta: "computer vision · RAG · ResNet-50 · FAISS · Flan-T5",
+    tags: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
     link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
     notes: {
-      why: "a single emotion label throws away most of the signal. i wanted the system to explain the feeling, not just name it.",
+      why: "an emotion label on its own doesn't say why someone feels that way. i wanted to connect a detected emotion to the feedback behind it.",
       inside:
-        "resnet-50 extracts facial affect features, faiss retrieves similar context, and flan-t5 turns both into a short interpretive insight through langchain.",
+        "a resnet-50 fine-tuned on fer-2013 labels the face, the emotion becomes a query, faiss pulls the 4 closest of 500 reviews, flan-t5 summarizes them and roberta scores each review's sentiment, all in a streamlit app.",
       learning:
-        "retrieval quality mattered more than the generator, weak context produced confident but wrong insights.",
+        "the overall score hid the weak classes: 62% accuracy, but disgust, the rarest class, was right only 2 times out of 55, and none of the reviews ended up labelled disgust. per-class results told me more than the headline number.",
     },
-    proof: "every prediction runs through a validation and interpretability pass before it reaches the output.",
-    aside: "still refining how the interpretability checks catch weak context before it reaches the output.",
+    proof: "62.2% accuracy on the 3,589-image fer-2013 test set (happiness 89%), with a live streamlit demo.",
+    aside: "disgust and fear are still the weak classes, and the readme says so.",
     frag: {
-      file: "emotion-rag / src/insight.py",
-      code: `matches = faiss_index.search(
-    embed(face_features), k=5
-)
-context = "\\n".join(m.text for m in matches)
-insight = flan_t5.generate(
-    prompt=f"{emotion}: {context}"
-)`,
+      file: "emotion-rag / core/models.py",
+      code: `docs = db.similarity_search(query, k=4)
+context = "\\n\\n".join([doc.page_content for doc in docs])
+prompt = PROMPT_TEMPLATE.format(context=context, question=query)
+answer = llm.invoke(prompt)`,
     },
   },
   {
