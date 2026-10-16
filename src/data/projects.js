@@ -74,73 +74,75 @@ layers.Rescaling(1.0 / 255),`,
   {
     id: "rag-pdf",
     variant: "split",
-    title: "PDF Understanding & AI Summarization",
-    what: "retrieves the right page before it ever asks the model to summarize.",
-    meta: "retrieval · LangChain · ChromaDB · Flask",
-    tags: ["LangChain", "HuggingFace", "ChromaDB", "Flask"],
+    title: "PDF Question Answering with RAG",
+    what: "answers questions about an uploaded pdf from the passages it retrieves, not from memory.",
+    meta: "retrieval · LangChain · ChromaDB · Gemini · Flask",
+    tags: ["LangChain", "ChromaDB", "Sentence-Transformers", "Gemini", "Flask"],
     link: "https://github.com/JayaSaiKishore7/RagPdfSummarizer",
     notes: {
-      why: "long pdfs blow past context windows, and naive summarization drifts from the source. i wanted answers grounded in the actual pages.",
+      why: "long pdfs blow past context windows, and an llm answering from memory drifts from the source. i wanted answers grounded in the actual pages.",
       inside:
-        "documents are chunked and embedded into chromadb, langchain retrieves the relevant chunks, and the llm summarizes only what was retrieved.",
-      learning: "chunk size and overlap mattered more to answer quality than which llm did the summarizing.",
+        "the pdf is split into 1,000-character chunks with 200 overlap, embedded with minilm into a chromadb store per user session, and the 3 closest chunks go to gemini 2.0 flash, which answers from that context only.",
+      learning: "chunk size and overlap mattered more to answer quality than which llm wrote the answer.",
     },
-    proof: "served through a flask app that returns the summary alongside the source chunks it was built from.",
+    proof: "served through a flask app with a separate vector store per session, pdf-only uploads and a 16 mb size limit.",
     aside: "chunk size and overlap are still the main levers being tuned.",
     frag: {
-      file: "rag-pdf-summarizer / src/summarize.py",
-      code: `chunks = splitter.split_documents(pdf_docs)
-vectordb = Chroma.from_documents(chunks, embeddings)
-context = vectordb.similarity_search(query, k=4)
-summary = llm.invoke(prompt.format(context=context))`,
+      file: "rag-pdf-summarizer / app.py",
+      code: `text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200,
+    length_function=len
+)
+results = vector_store.similarity_search(query, k=3)`,
     },
   },
   {
     id: "electricity-forecast",
     variant: "row",
     title: "Electricity Load Forecasting (Time Series)",
-    what: "forecasts 96 steps ahead, not just the next hour.",
-    meta: "time series · XGBoost · Random Forest",
-    tags: ["Time Series", "XGBoost", "Random Forest"],
+    what: "forecasts a full day of 15-minute load (96 steps), and rebuilds a research algorithm as an r package.",
+    meta: "time series · scikit-learn · XGBoost · R",
+    tags: ["Time Series", "Random Forest", "XGBoost", "SARIMA", "LSTM", "R"],
     link: "https://github.com/JayaSaiKishore7/Time_Series_Electricity_Forecasting",
     notes: {
       why: "most demos stop at one-step-ahead forecasts, which hide how error compounds. i wanted a model that still held up 96 steps out.",
       inside:
-        "lag-based and temporal features feed random forest and xgboost, validated with timeseriessplit, forecasting recursively across the full horizon.",
+        "exponential smoothing, sarima, random forest, xgboost, svr, mlp and lstm are compared with timeseriessplit on lag, rolling and calendar features. the weighted nearest neighbours method (talavera-llames et al., 2016) is implemented from the paper as an installable r package.",
       learning: "recursive multi-step forecasting punishes small early errors, feature engineering mattered more than model choice.",
     },
-    proof: "benchmarked against statistical baselines on held-out rmse and mae.",
+    proof: "a final 96-step forecast, plus the wnnforecast r package with roxygen docs and a vignette.",
     aside: "still testing how far the recursive horizon can stretch before error compounds too much.",
     frag: {
-      file: "time-series-electricity-forecasting / src/forecast.py",
-      code: `cv = TimeSeriesSplit(n_splits=5)
-model = XGBRegressor(n_estimators=400)
-preds = recursive_forecast(model, horizon=96)
-rmse = mean_squared_error(y_true, preds, squared=False)`,
+      file: "time-series-electricity-forecasting / WNN_Package/R/wnn_forecast.R",
+      code: `dists <- apply(model$X, 1, function(row) euclidean_distance(row, window))
+idx <- order(dists)[1:model$k]
+weights <- 1/(dists[idx] + 1e-8)
+weights <- weights / sum(weights)
+sum(weights * model$y[idx])`,
     },
   },
   {
     id: "diabetes",
     variant: "flip",
     title: "Machine Learning for Diabetes Risk Prediction",
-    what: "96% accuracy, 0.993 auc, and a live app to act on it.",
+    what: "96% accuracy, 0.993 auc, and a web form to act on it.",
     meta: "clinical ML · XGBoost · FastAPI",
-    tags: ["XGBoost", "FastAPI", "Clinical Data"],
+    tags: ["XGBoost", "Random Forest", "FastAPI", "Clinical Data"],
     link: "https://github.com/JayaSaiKishore7/diabetes_prediction",
     notes: {
       why: "a model sitting in a notebook doesn't help anyone. i wanted the prediction to be one form-submit away.",
       inside:
-        "a cleaning and feature-engineering pipeline on 15k clinical records feeds several candidate models; xgboost won and ships behind a fastapi endpoint.",
+        "15,000 clinical records are cleaned down to 10,471, then random forest and xgboost are compared; xgboost won (0.993 vs 0.983 auc) and ships behind a fastapi endpoint.",
       learning: "the feature-engineering pass moved the needle more than swapping algorithms did.",
     },
-    proof: "0.993 auc and 96% accuracy on a held-out test set.",
-    aside: "the fastapi endpoint is live, the model is one request away.",
+    proof: "0.993 auc and 96.1% accuracy on 2,095 held-out records.",
+    aside: "the fastapi endpoint returns a diabetes probability from the saved xgboost model.",
     frag: {
-      file: "diabetes-prediction / src/train.py",
-      code: `model = XGBClassifier(
-    max_depth=4, n_estimators=300
-)
-model.fit(X_train, y_train)
+      file: "diabetes-prediction / models/XGBClassifier.ipynb",
+      code: `xgb_model = XGBClassifier()
+xgb_model.fit(X_train, y_train)
+y_proba = xgb_model.predict_proba(X_test)[:, 1]
 # test AUC: 0.993`,
     },
   },
