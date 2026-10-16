@@ -127,7 +127,7 @@ sum(weights * model$y[idx])`,
     variant: "flip",
     title: "Machine Learning for Diabetes Risk Prediction",
     what: "96% accuracy, 0.993 auc, and a web form to act on it.",
-    meta: "clinical ML · XGBoost · FastAPI",
+    meta: "team project · clinical ML · XGBoost · FastAPI",
     tags: ["XGBoost", "Random Forest", "FastAPI", "Clinical Data"],
     link: "https://github.com/JayaSaiKishore7/diabetes_prediction",
     notes: {
