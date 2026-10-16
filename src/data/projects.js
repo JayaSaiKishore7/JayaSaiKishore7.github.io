@@ -29,27 +29,25 @@ insight = flan_t5.generate(
   {
     id: "air-quality",
     title: "Air Quality Forecasting Platform",
-    what: "forecasts air quality station by station, not just city-wide averages.",
-    meta: "forecasting · Python · LSTM/GRU · MLflow",
-    tags: ["Python", "Scikit-learn", "LSTM/GRU", "MLflow", "FastAPI", "Streamlit"],
+    what: "re-forecasts 24 hours ahead every morning from live government data, then checks itself.",
+    meta: "forecasting · XGBoost · Evidently · GitHub Actions",
+    tags: ["Python", "XGBoost", "Evidently", "MLflow", "FastAPI", "Streamlit", "GitHub Actions"],
     link: "https://github.com/JayaSaiKishore7/AirQuality_AnalysisFR",
     notes: {
-      why: "a single city-wide number hides which stations are actually at risk. i wanted station-level forecasts people could act on.",
+      why: "a model trained once and left alone quietly goes stale. i wanted a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
       inside:
-        "lstm/gru sequence models benchmarked against classical baselines, every run tracked in mlflow, results served through a fastapi backend and a streamlit dashboard.",
+        "a daily github actions job pulls geod'air measurements for ~90 station/pollutant series in paca, xgboost forecasts 24h ahead recursively, evidently checks for drift and opens an issue when it finds it, and a static page goes out to hugging face.",
       learning:
-        "the neural baselines only earned their complexity on stations with long, clean histories. simpler models won everywhere else.",
+        "the 3-hour average included the hour being predicted. fixing that leak made the test score look worse, but 24h-ahead accuracy improved, and a test now stops the leak from coming back.",
     },
-    proof: "station-wise dashboard compares model forecasts against held-out actuals.",
-    aside: "next up: extending station coverage beyond the côte d'azur region.",
+    proof: "on live data, beats persistence at 24h by 43% on o₃, 30% on no₂ and 23% on pm10. every forecast is scored against what was actually measured.",
+    aside: "pm2.5 doesn't beat persistence yet, and the readme says so.",
     frag: {
-      file: "air-quality / src/forecast.py",
-      code: `model = Sequential([
-    LSTM(64, return_sequences=True),
-    GRU(32),
-    Dense(1),
-])
-mlflow.log_metric("rmse", rmse)`,
+      file: "air-quality / airquality/features.py",
+      code: `past = v.shift(1)
+g["lag_1"] = past
+g["lag_24"] = v.shift(24)
+g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
     },
   },
   {
