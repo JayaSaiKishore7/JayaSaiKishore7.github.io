@@ -1,29 +1,5 @@
 export const projects = [
   {
-    id: "emotion-rag",
-    title: "Emotion-Aware Insight Generator",
-    what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
-    meta: "computer vision · RAG · ResNet-50 · FAISS · Flan-T5",
-    tags: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
-    link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
-    notes: {
-      why: "an emotion label on its own doesn't say why someone feels that way. i wanted to connect a detected emotion to the feedback behind it.",
-      inside:
-        "a resnet-50 fine-tuned on fer-2013 labels the face, the emotion becomes a query, faiss pulls the 4 closest of 500 reviews, flan-t5 summarizes them and roberta scores each review's sentiment, all in a streamlit app.",
-      learning:
-        "the overall score hid the weak classes: 62% accuracy, but disgust, the rarest class, was right only 2 times out of 55, and none of the reviews ended up labelled disgust. per-class results told me more than the headline number.",
-    },
-    proof: "62.2% accuracy on the 3,589-image fer-2013 test set (happiness 89%), with a live streamlit demo.",
-    aside: "disgust and fear are still the weak classes, and the readme says so.",
-    frag: {
-      file: "emotion-rag / core/models.py",
-      code: `docs = db.similarity_search(query, k=4)
-context = "\\n\\n".join([doc.page_content for doc in docs])
-prompt = PROMPT_TEMPLATE.format(context=context, question=query)
-answer = llm.invoke(prompt)`,
-    },
-  },
-  {
     id: "air-quality",
     title: "Air Quality Forecasting Platform",
     what: "re-forecasts 24 hours ahead every morning from live government data, then checks itself.",
@@ -45,6 +21,30 @@ answer = llm.invoke(prompt)`,
 g["lag_1"] = past
 g["lag_24"] = v.shift(24)
 g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
+    },
+  },
+  {
+    id: "emotion-rag",
+    title: "Emotion-Aware Insight Generator",
+    what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
+    meta: "computer vision · RAG · ResNet-50 · FAISS · Flan-T5",
+    tags: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
+    link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
+    notes: {
+      why: "an emotion label on its own doesn't say why someone feels that way. i wanted to connect a detected emotion to the feedback behind it.",
+      inside:
+        "a resnet-50 fine-tuned on fer-2013 labels the face, the emotion becomes a query, faiss pulls the 4 closest of 500 reviews, flan-t5 summarizes them and roberta scores each review's sentiment, all in a streamlit app.",
+      learning:
+        "the overall score hid the weak classes: 62% accuracy, but disgust, the rarest class, was right only 2 times out of 55, and none of the reviews ended up labelled disgust. per-class results told me more than the headline number.",
+    },
+    proof: "62.2% accuracy on the 3,589-image fer-2013 test set (happiness 89%), with a live streamlit demo.",
+    aside: "disgust and fear are still the weak classes, and the readme says so.",
+    frag: {
+      file: "emotion-rag / core/models.py",
+      code: `docs = db.similarity_search(query, k=4)
+context = "\\n\\n".join([doc.page_content for doc in docs])
+prompt = PROMPT_TEMPLATE.format(context=context, question=query)
+answer = llm.invoke(prompt)`,
     },
   },
   {
