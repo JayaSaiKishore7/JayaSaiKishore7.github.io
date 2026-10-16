@@ -5,15 +5,16 @@ export const experience = [
     location: "Rousset, France",
     date: "Apr 2026 – Oct 2026",
     summary:
-      "Delivered an end-to-end AI-based X-ray inspection solution for semiconductor packaging, from data preparation to production deployment.",
+      "Part of the Quality, Manufacturing & Technology (QMT) – Data Science team. Improved production-line efficiency by developing a deep learning object detection solution that replaces manual operator inspection of solder-ball defects in semiconductor packages.",
     points: [
-      "Engineered a deep learning object detection solution (YOLO11) to identify defective solder balls in X-ray images of flip-chip BGA packages, supporting automated quality control in manufacturing.",
-      "Designed a semi-automated annotation pipeline combining SAM-based segmentation, grid-based labeling and template matching, reducing manual labeling effort.",
-      "Built and deployed an event-driven inference pipeline in Python that automatically processes incoming production images and persists results to a MariaDB database.",
-      "Developed a real-time Vue.js inspection dashboard enabling quality teams to visualize detected defects and their exact grid positions.",
-      "Collaborated with data engineering and manufacturing stakeholders to align the solution with production requirements.",
+      "Used SAM3 segmentation to automatically crop the region of interest from raw X-ray images, and generated training labels with a grid-based annotation method.",
+      "Fine-tuned a YOLO11 object detection model to locate defective solder balls, and tracked experiments with MLflow.",
+      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect.",
+      "Pushed inference results to a MariaDB database, with processed images stored on a network storage server (NAS).",
+      "Built a FastAPI backend and a Vue.js web dashboard that display each inspection result in real time.",
+      "Collaborated with data engineering and manufacturing teams to align the solution with production requirements.",
     ],
-    stack: ["Python", "FastAPI", "SAM3", "YOLO11", "WebSocket", "Watchdog Monitor", "MLflow"],
+    stack: ["Python", "SAM3", "YOLO11", "MLflow", "FastAPI", "Vue.js", "MariaDB"],
   },
   {
     role: "Sr. Software Engineer",
