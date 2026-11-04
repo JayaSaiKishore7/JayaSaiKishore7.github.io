@@ -22,7 +22,7 @@ Pushes to `main` trigger `.github/workflows/deploy.yml`, which builds the site a
 it to GitHub Pages. In the repo settings, **Settings → Pages → Source** must be set to
 **GitHub Actions** for this to take effect.
 
-## Structure
+## Structures
 
 - `src/components/` — one class component per section (Navbar, Hero, About, Resume, Projects, Contact, Footer)
 - `src/data/` — content (experience, education, projects, profile info) kept separate from markup
