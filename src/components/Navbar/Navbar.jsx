@@ -192,8 +192,9 @@ export class Navbar extends Component {
             ))}
           </nav>
 
+          {/* Location and local time, next to the section links (desktop). */}
           <p className="nav-time">
-            <span>{time ?? "--:--"}</span> in {profile.city.toLowerCase()}
+            {profile.location.toLowerCase()} · <span>{time ?? "--:--"}</span>
           </p>
 
           <ThemeToggle />

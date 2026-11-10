@@ -49,8 +49,18 @@
 
 /* ---------- text ---------- */
 
+/* Phones only: on desktop the navbar shows the location and time. */
 .hero-meta {
-  display: flex;
+  display: none;
+}
+
+@media (max-width: 899.98px) {
+  .hero-meta {
+    display: flex;
+  }
+}
+
+.hero-meta {
   flex-wrap: wrap;
   gap: 8px;
   color: var(--muted);
