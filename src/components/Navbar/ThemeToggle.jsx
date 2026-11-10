@@ -1,40 +1,23 @@
 import { Component } from "react";
 import "./ThemeToggle.css";
 
-const STORAGE_KEY = "theme";
-
 /**
- * Switches between the light and dark themes. The theme lives on <html>
- * (data-theme), set before the first paint by index.html; this button flips it
- * and remembers the choice. Both icons are rendered and CSS shows the right
- * one, so the button is correct even before React takes over.
+ * Switches between the light and dark themes. Every visit starts in light
+ * (set on <html> by index.html); this button flips data-theme for the rest of
+ * the visit. Both icons are rendered and CSS shows the right one, so the button
+ * is correct even before React takes over.
  */
 export class ThemeToggle extends Component {
   constructor(props) {
     super(props);
-    // Dark is the default theme, so the pre-rendered button starts pressed.
-    this.state = { dark: true };
+    this.state = { dark: false };
     this.toggle = this.toggle.bind(this);
   }
 
-  componentDidMount() {
-    this.sync();
-  }
-
-  sync() {
-    const dark = document.documentElement.dataset.theme !== "light";
-    if (dark !== this.state.dark) this.setState({ dark });
-  }
-
   toggle() {
-    const theme = this.state.dark ? "light" : "dark";
-    document.documentElement.dataset.theme = theme;
-    try {
-      localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      // Storage blocked: the choice simply isn't remembered.
-    }
-    this.setState({ dark: theme === "dark" });
+    const dark = !this.state.dark;
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    this.setState({ dark });
   }
 
   render() {

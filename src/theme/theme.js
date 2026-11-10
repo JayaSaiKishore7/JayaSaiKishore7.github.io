@@ -2,10 +2,11 @@
 // values are defined. src/theme/themeCss.js turns this into CSS variables at
 // build time. Every component stylesheet uses those variables, never raw values.
 //
-// Dark is the default theme; light is the alternative the toggle switches to.
+// Light is the default theme (every visit starts in it); dark is the
+// alternative the navbar toggle switches to.
 export const theme = {
   colors: {
-    // Default. Text colours reach WCAG AA (4.5:1) on bg, surface and surfaceSoft.
+    // Text colours reach WCAG AA (4.5:1) on bg, surface and surfaceSoft.
     dark: {
       bg: "#080808",
       surface: "#111111",
@@ -22,7 +23,7 @@ export const theme = {
       status: "#6fd88f",
       highlight: "#f2c94c",
     },
-    // Paper and ink. The accent is a darker orange from the same family:
+    // Default. Paper and ink. The accent is a darker orange from the same family:
     // 5.0:1 on bg, 5.5:1 on surface, 4.7:1 on surfaceSoft; white on it is 5.5:1.
     light: {
       bg: "#F6F4EE",

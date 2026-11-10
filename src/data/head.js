@@ -65,8 +65,8 @@ export function headTags({ profile, seo, projects, theme, path = "/" }) {
     `<title>${escape(page.title)}</title>`,
     `<meta name="description" content="${escape(page.description)}" />`,
     `<link rel="canonical" href="${escape(url)}" />`,
-    // Browser UI colour: the default (dark) theme's background, #080808.
-    `<meta name="theme-color" content="${escape(theme.colors.dark.bg)}" />`,
+    // Browser UI colour: the default (light) theme's background.
+    `<meta name="theme-color" content="${escape(theme.colors.light.bg)}" />`,
     `<meta property="og:type" content="${page.type}" />`,
     `<meta property="og:title" content="${escape(page.title)}" />`,
     `<meta property="og:description" content="${escape(page.description)}" />`,

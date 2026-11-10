@@ -32,18 +32,18 @@
     transform var(--dur-move) var(--ease);
 }
 
-/* Dark (the default) shows the sun: switch to light. Light shows the moon. */
-.theme-toggle-moon {
+/* Light (the default) shows the moon: switch to dark. Dark shows the sun. */
+.theme-toggle-sun {
   opacity: 0;
-  transform: rotate(45deg) scale(0.6);
+  transform: rotate(-45deg) scale(0.6);
 }
 
-:root[data-theme="light"] .theme-toggle-moon {
+:root[data-theme="dark"] .theme-toggle-sun {
   opacity: 1;
   transform: none;
 }
 
-:root[data-theme="light"] .theme-toggle-sun {
+:root[data-theme="dark"] .theme-toggle-moon {
   opacity: 0;
-  transform: rotate(-45deg) scale(0.6);
+  transform: rotate(45deg) scale(0.6);
 }
