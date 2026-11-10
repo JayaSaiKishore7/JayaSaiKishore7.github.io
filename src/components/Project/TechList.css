@@ -3,3 +3,8 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+
+.tech-list--one-row {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}

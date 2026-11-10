@@ -2,7 +2,8 @@
 // (ProjectSplit) and gets a case study page (/work/<id>/, see src/routes.js)
 // built from `notes`, `proof` and `aside`.
 //
-// Fields: what = the one-line description; tech = tools shown as tags;
+// Fields: featured = listed under "featured" in the split view (the rest under
+// "more"); what = the one-line description; tech = tools shown as tags;
 // thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
 // from `frag`; demo = live demo URL, if any; team = built as a team.
 //
@@ -10,6 +11,7 @@
 export const projects = [
   {
     id: "air-quality",
+    featured: true,
     title: "Air Quality Forecasting Platform",
     what: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
     tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face"],
@@ -76,6 +78,7 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
   },
   {
     id: "emotion-rag",
+    featured: true,
     title: "Emotion-Aware Insight Generator",
     what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
     tech: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
@@ -104,6 +107,7 @@ answer = llm.invoke(prompt)`,
   },
   {
     id: "brain-tumor",
+    featured: true,
     title: "Brain Tumor MRI Classifier",
     what: "97.15% test accuracy, after augmentation first made it worse.",
     tech: ["TensorFlow", "Keras", "CNN", "Flask"],
@@ -131,6 +135,7 @@ layers.Rescaling(1.0 / 255),`,
   },
   {
     id: "rag-pdf",
+    featured: true,
     title: "PDF Question Answering with RAG",
     what: "answers questions about an uploaded PDF from the passages it retrieves, not from memory.",
     tech: ["LangChain", "ChromaDB", "MiniLM", "Gemini", "Flask"],
