@@ -1,6 +1,6 @@
 .section-header {
   max-width: 46rem;
-  margin-bottom: clamp(32px, 4.5vw, 56px);
+  margin-bottom: clamp(20px, 2.5vw, 32px);
 }
 
 .section-header-label {

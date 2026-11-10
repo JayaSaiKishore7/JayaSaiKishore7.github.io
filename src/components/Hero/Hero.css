@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  padding: clamp(130px, 16vw, 190px) 0 clamp(56px, 7vw, 96px);
+  padding: clamp(120px, 14vw, 170px) 0 clamp(24px, 3vw, 40px);
 }
 
 .hero-grid {

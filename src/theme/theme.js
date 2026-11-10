@@ -57,7 +57,7 @@ export const theme = {
   },
 
   spacing: {
-    section: "clamp(72px, 10vw, 140px)",
+    section: "clamp(36px, 4.5vw, 64px)",
     gutter: "24px",
   },
 

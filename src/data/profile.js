@@ -28,16 +28,6 @@ export const heroInfo = [
   { label: "status", value: "open to work.", status: true },
 ];
 
-// Hero proof strip. Only figures that already appear elsewhere in the data:
-// 97.15% (brain tumor `what`), 19 checks, 41 tests and ~90 series (air quality
-// `proof` and `inside` in projects.js).
-export const proofStats = [
-  { value: 97.15, decimals: 2, suffix: "%", label: "test accuracy, brain tumor MRI classifier" },
-  { value: 19, label: "daily forecast checks, all beating the persistence baseline" },
-  { value: 41, label: "pytest tests run on every push of the air quality platform" },
-  { value: 90, prefix: "~", label: "station/pollutant series forecast every morning" },
-];
-
 export const aboutInfo = {
   statement: "i build things that have to survive the real world, not just the demo.",
   lead: "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
