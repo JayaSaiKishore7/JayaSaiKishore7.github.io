@@ -149,6 +149,17 @@
   }
 }
 
+/* Wide screens: SideNav shows the section links (same breakpoint as SideNav.css). */
+@media (min-width: 1480px) {
+  .bar-nav {
+    display: none;
+  }
+
+  .bar-time {
+    grid-column: 3;
+  }
+}
+
 @media (max-width: 680px) {
   .bar-in {
     width: min(100% - 36px, var(--max-width));

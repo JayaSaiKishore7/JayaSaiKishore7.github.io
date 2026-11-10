@@ -24,7 +24,7 @@ it to GitHub Pages. In the repo settings, **Settings → Pages → Source** must
 
 ## Structures
 
-- `src/components/` — one class component per section, in page order: Navbar, Hero, Projects (`#work`), Resume (`#experience`), Education, Contact (`#hello`, the about section), Connect (`#contact`), Footer. `Reveal.jsx` is the shared scroll-in wrapper. `SectionLabel.jsx` renders the "01 · work" labels, numbered from `src/data/nav.js`.
+- `src/components/` — one class component per section, in page order: Navbar, SideNav (the hook-rail section nav on wide screens, which replaces the top bar's links there), Hero, Projects (`#work`), Resume (`#experience`), Education, Contact (`#hello`, the about section), Connect (`#contact`), Footer. `Reveal.jsx` is the shared scroll-in wrapper. `SectionLabel.jsx` renders the "01 · work" labels, numbered from `src/data/nav.js`.
 - `src/index.css` — base styles and shared building blocks: `.container`, `.section*`, and the `.card` / `.card--lift` surface used by the project, experience and education cards
 - `src/data/` — content (profile, nav, projects, experience and education) kept separate from markup. `nav.js` sets the section order for both the navbar and the section labels.
 - `src/theme/theme.js` — the design tokens (colors, fonts, radius, spacing, easing). `ThemeInjector.js` writes them onto `:root` as CSS custom properties at startup. Stylesheets use these variables; a few one-off values (such as the heatmap colors in `Projects.css`) are still written inline.
@@ -38,6 +38,7 @@ Each stateful piece has a small set of named states, visible in the DOM for test
 | --- | --- | --- |
 | Hero intro (`BootSequence` + `Hero`) | `booting` → `ready`. The terminal intro plays once per session, and any key, click, wheel or touch skips it. | `#home[data-phase]` |
 | Copy-email button (`Connect`) | `idle` → `copied` or `failed` → `idle` | `.copy[data-state]`, announced through `aria-live` |
-| Nav active section (`ScrollSpy`) | one of the nav section ids | `aria-current="location"` on the active link |
+| Nav active section (`ScrollSpy`, owned by `App`) | one of the nav section ids. It feeds both the top bar and the side nav. | `aria-current="location"` on the active link |
+| Side nav hover (`SideNav`, screens ≥ 1480px) | `idle` ↔ `hovering` (pointer or keyboard focus on an item other than the active one) | `.side-nav-list[data-state]` |
 | Scroll reveal (`Reveal`) | hidden → visible (one way). On cards, `Reveal` wraps the card in a `.card-slot`, so scroll-in and hover motion stay separate. | `.reveal.is-visible`. Print shows everything. |
 | 3D tilt (`Tilt3D`, lead project card) | resting ↔ tilting. Off on touch-only devices and with reduced motion. | `.card--tilt.is-tilting`, with `--tilt-x`/`--tilt-y` |

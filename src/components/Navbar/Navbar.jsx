@@ -1,51 +1,33 @@
 import { Component } from "react";
 import { navLinks, navLink } from "../../data/nav";
-import { ScrollSpy } from "../../utils/ScrollSpy";
 import { Clock } from "../../utils/Clock";
 import "./Navbar.css";
 
-const sectionIds = navLinks.map((link) => link.id);
-
+/** Top bar: brand, section links (hidden on wide screens, where SideNav takes over) and clock. */
 export class Navbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: sectionIds[0],
-      clock: Clock.format(),
-    };
-    this.scrollSpy = null;
+    this.state = { clock: Clock.format() };
     this.clock = null;
-    this.handleActive = this.handleActive.bind(this);
     this.handleTick = this.handleTick.bind(this);
   }
 
   componentDidMount() {
-    this.scrollSpy = new ScrollSpy({
-      sectionIds,
-      initial: this.state.active,
-      onChange: this.handleActive,
-    });
-    this.scrollSpy.start();
-
     this.clock = new Clock({ onTick: this.handleTick });
     this.clock.start();
   }
 
-  handleActive(active) {
-    this.setState({ active });
+  componentWillUnmount() {
+    this.clock?.stop();
   }
 
   handleTick(clock) {
     this.setState({ clock });
   }
 
-  componentWillUnmount() {
-    this.scrollSpy?.stop();
-    this.clock?.stop();
-  }
-
   render() {
-    const { active, clock } = this.state;
+    const { active } = this.props;
+    const { clock } = this.state;
 
     return (
       <header className="bar">
@@ -59,7 +41,6 @@ export class Navbar extends Component {
               <a
                 key={link.id}
                 href={`#${link.id}`}
-                data-section={link.id}
                 className={active === link.id ? "is-active" : ""}
                 aria-current={active === link.id ? "location" : undefined}
               >

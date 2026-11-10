@@ -34,7 +34,13 @@ export class Hero extends Component {
         '<span class="boot-ready">ready.</span>',
       ],
       onDone: () => {
-        requestAnimationFrame(() => this.setState({ phase: "ready" }));
+        // Make sure the hidden starting styles have been applied before switching
+        // to "ready", so the fade-in transition always runs, even when the boot is
+        // skipped synchronously on mount. (This replaces a requestAnimationFrame,
+        // which background tabs and headless browsers may never fire, leaving the
+        // hero invisible.)
+        void this.heroRef.current?.offsetWidth;
+        this.setState({ phase: "ready" });
         this.boxes.start();
       },
     });

@@ -31,6 +31,8 @@ export const theme = {
 
   easing: {
     standard: "cubic-bezier(0.16, 1, 0.3, 1)",
+    // Slight overshoot, a CSS stand-in for a spring.
+    spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
   },
 
   layout: {
