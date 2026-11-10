@@ -1,12 +1,25 @@
-// Project cards, in display order. The first one is the lead card (it tilts in 3D).
+// Projects, in display order. `featured` ones get a card on the home page, the
+// rest a line in "more projects"; every project gets a case study page
+// (/work/<id>/, see src/routes.js) built from `notes`, `proof` and `aside`.
+//
+// Fields: what = the one-line description; tech = tools shown as tags;
+// thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
+// from `frag`; demo = live demo URL, if any; team = built as a team.
+//
 // Style: sentences start lowercase; names of tools, datasets and organisations keep their capitals.
 export const projects = [
   {
     id: "air-quality",
+    featured: true,
     title: "Air Quality Forecasting Platform",
     what: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
-    meta: "forecasting · XGBoost · Evidently · GitHub Actions",
+    tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face"],
+    thumbnail: {
+      src: "/projects/air-quality.webp",
+      alt: "the live forecast page: a station map of Provence-Alpes-Côte d'Azur and a chart of measured vs. forecast NO₂",
+    },
     link: "https://github.com/JayaSaiKishore7/AirQuality_AnalysisFR",
+    demo: "https://huggingface.co/spaces/JayaSaiKishore/airquality-paca",
     notes: {
       why: "a model trained once and left alone quietly goes stale. i wanted a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
       inside:
@@ -27,10 +40,16 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
   },
   {
     id: "emotion-rag",
+    featured: true,
     title: "Emotion-Aware Insight Generator",
     what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
-    meta: "computer vision · RAG · ResNet-50 · FAISS · Flan-T5",
+    tech: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
+    thumbnail: {
+      src: "/projects/emotion-rag.webp",
+      alt: "the Streamlit app: a photo of a smiling face uploaded for emotion detection",
+    },
     link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
+    demo: "https://emotionragapp-2.streamlit.app/",
     notes: {
       why: "an emotion label on its own doesn't say why someone feels that way. i wanted to connect a detected emotion to the feedback behind it.",
       inside:
@@ -50,9 +69,14 @@ answer = llm.invoke(prompt)`,
   },
   {
     id: "brain-tumor",
+    featured: true,
     title: "Brain Tumor MRI Classifier",
     what: "97.15% test accuracy, after augmentation first made it worse.",
-    meta: "computer vision · TensorFlow · Keras · Flask",
+    tech: ["TensorFlow", "Keras", "CNN", "Flask"],
+    thumbnail: {
+      src: "/projects/brain-tumor.webp",
+      alt: "confusion matrix on the test set: nearly all scans fall on the diagonal for glioma, meningioma, no tumor and pituitary",
+    },
     link: "https://github.com/JayaSaiKishore7/brain-tumor-classifier",
     notes: {
       why: "a basic CNN trained from scratch needed augmentation to generalize, but natural-photo-strength augmentation distorted the exact regions MRI diagnosis depends on.",
@@ -73,10 +97,11 @@ layers.Rescaling(1.0 / 255),`,
   },
   {
     id: "rag-pdf",
-    variant: "split",
+    featured: true,
     title: "PDF Question Answering with RAG",
     what: "answers questions about an uploaded PDF from the passages it retrieves, not from memory.",
-    meta: "retrieval · LangChain · ChromaDB · Gemini · Flask",
+    tech: ["LangChain", "ChromaDB", "MiniLM", "Gemini", "Flask"],
+    thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/RagPdfSummarizer",
     notes: {
       why: "long PDFs blow past context windows, and an LLM answering from memory drifts from the source. i wanted answers grounded in the actual pages.",
@@ -98,10 +123,11 @@ results = vector_store.similarity_search(query, k=3)`,
   },
   {
     id: "electricity-forecast",
-    variant: "row",
+    featured: false,
     title: "Electricity Load Forecasting (Time Series)",
     what: "forecasts a full day of 15-minute load (96 steps), and rebuilds a research algorithm as an R package.",
-    meta: "time series · scikit-learn · XGBoost · R",
+    tech: ["scikit-learn", "XGBoost", "SARIMA", "LSTM", "R"],
+    thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/Time_Series_Electricity_Forecasting",
     notes: {
       why: "most demos stop at one-step-ahead forecasts, which hide how error compounds. i wanted a model that still held up 96 steps out.",
@@ -122,10 +148,12 @@ sum(weights * model$y[idx])`,
   },
   {
     id: "diabetes",
-    variant: "flip",
+    featured: false,
+    team: true,
     title: "Machine Learning for Diabetes Risk Prediction",
     what: "96% accuracy, 0.993 AUC, and a web form to act on it.",
-    meta: "team project · clinical ML · XGBoost · FastAPI",
+    tech: ["XGBoost", "Random Forest", "FastAPI"],
+    thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/diabetes_prediction",
     notes: {
       why: "a model sitting in a notebook doesn't help anyone. i wanted the prediction to be one form-submit away.",

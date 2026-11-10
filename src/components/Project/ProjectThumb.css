@@ -1,0 +1,36 @@
+.project-thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* No screenshot: the project's own code, as a small editor window. */
+.project-thumb--code {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(16px, 4%, 32px);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
+    var(--bg);
+}
+
+.project-thumb-file {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.project-thumb--code pre {
+  margin: 0;
+  overflow: hidden;
+  color: var(--soft);
+  font: 12px/1.7 var(--font-mono);
+  white-space: pre;
+}

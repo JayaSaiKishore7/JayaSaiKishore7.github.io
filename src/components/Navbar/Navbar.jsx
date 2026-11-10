@@ -28,13 +28,15 @@ export class Navbar extends Component {
   }
 
   render() {
-    const { active } = this.props;
+    // On other pages (case studies), the links go back to the home page's sections.
+    const { active = null, onHome = true } = this.props;
     const { time } = this.state;
+    const home = onHome ? "" : "/";
 
     return (
       <header className="bar">
         <div className="bar-in">
-          <a href="#home" className="brand">
+          <a href={onHome ? "#home" : "/"} className="brand">
             jaya sai kishore<span>.</span>
           </a>
 
@@ -42,7 +44,7 @@ export class Navbar extends Component {
             {navLinks.map((link) => (
               <a
                 key={link.id}
-                href={`#${link.id}`}
+                href={`${home}#${link.id}`}
                 className={active === link.id ? "is-active" : ""}
                 aria-current={active === link.id ? "location" : undefined}
               >

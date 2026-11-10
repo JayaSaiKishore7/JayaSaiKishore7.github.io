@@ -26,11 +26,18 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
-            {aboutInfo.skills.map((skill) => (
-              <span className="hello-skill" key={skill}>
-                {skill}
-              </span>
+          <Reveal as="div" className="skill-groups" style={{ "--i": 2 }}>
+            {aboutInfo.skillGroups.map((group) => (
+              <div className="skill-group" key={group.name}>
+                <h3 className="k">{group.name}</h3>
+                <ul className="hello-skills">
+                  {group.items.map((skill) => (
+                    <li className="hello-skill" key={skill}>
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </Reveal>
         </div>

@@ -6,17 +6,25 @@ import { Resume } from "./components/Resume/Resume";
 import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
 import { Connect } from "./components/Connect/Connect";
+import { CaseStudy } from "./components/CaseStudy/CaseStudy";
 import { Footer } from "./components/Footer/Footer";
 import { navLinks } from "./data/nav";
+import { projects } from "./data/projects";
+import { resolveRoute } from "./routes";
 import { NmsReveal } from "./utils/NmsReveal";
 import { ScrollSpy } from "./utils/ScrollSpy";
 
 const sectionIds = navLinks.map((link) => link.id);
 
+/**
+ * The page shell. `path` (the URL path, from main.jsx in the browser or
+ * entry-server.jsx at build time) picks the page: home or a case study.
+ */
 class App extends Component {
   constructor(props) {
     super(props);
-    // The section currently in view (null on the hero), shown in the navbar.
+    this.route = resolveRoute(props.path, projects);
+    // The home section currently in view (null on the hero), shown in the navbar.
     this.state = { active: null };
     this.handleActive = this.handleActive.bind(this);
   }
@@ -28,8 +36,10 @@ class App extends Component {
     this.nms = new NmsReveal({ selector: ".work-statement, .section-heading, .hello-statement" });
     this.nms.start();
 
-    this.scrollSpy = new ScrollSpy({ sectionIds, initial: this.state.active, onChange: this.handleActive });
-    this.scrollSpy.start();
+    if (this.route.page === "home") {
+      this.scrollSpy = new ScrollSpy({ sectionIds, initial: this.state.active, onChange: this.handleActive });
+      this.scrollSpy.start();
+    }
   }
 
   componentWillUnmount() {
@@ -43,10 +53,21 @@ class App extends Component {
 
   render() {
     const { active } = this.state;
+    const { route } = this;
+
+    if (route.page === "case-study") {
+      return (
+        <>
+          <Navbar onHome={false} />
+          <CaseStudy project={route.project} />
+          <Footer />
+        </>
+      );
+    }
 
     return (
       <>
-        <Navbar active={active} />
+        <Navbar onHome active={active} />
         <Hero />
         <Projects />
         <Resume />

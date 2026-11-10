@@ -1,19 +1,26 @@
 import { Component, createRef } from "react";
 import { projects } from "../../data/projects";
+import { caseStudyPath } from "../../routes";
 import { Reveal } from "../Reveal";
 import { SectionLabel } from "../SectionLabel";
+import { ProjectThumb } from "../Project/ProjectThumb";
+import { TechList } from "../Project/TechList";
 import { Tilt3D } from "../../utils/Tilt3D";
 import "./Projects.css";
 
+const featured = projects.filter((project) => project.featured);
+const more = projects.filter((project) => !project.featured);
+
+/** Home page work section: featured project cards, then a short list of the rest. */
 export class Projects extends Component {
   constructor(props) {
     super(props);
-    this.spreadsRef = createRef();
+    this.gridRef = createRef();
     this.tilt = null;
   }
 
   componentDidMount() {
-    this.tilt = new Tilt3D({ container: this.spreadsRef.current, itemSelector: ".card--tilt" });
+    this.tilt = new Tilt3D({ container: this.gridRef.current, itemSelector: ".card--tilt" });
     this.tilt.start();
   }
 
@@ -34,61 +41,62 @@ export class Projects extends Component {
             </h2>
           </Reveal>
 
-          <div className="spreads" ref={this.spreadsRef}>
-            {projects.map((project, i) => {
-              const variant = project.variant || "lead";
-              // The lead card tilts in 3D; the rest get the simple hover lift.
-              const motion = variant === "lead" ? "card--tilt" : "card--lift";
+          <div className="project-grid" ref={this.gridRef}>
+            {featured.map((project, i) => (
+              <Reveal as="div" className="card-slot" key={project.id} style={{ "--i": i }}>
+                <article className="card card--tilt project-card">
+                  <a
+                    href={caseStudyPath(project.id)}
+                    className="project-card-thumb tilt-layer"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  >
+                    <ProjectThumb project={project} decorative />
+                  </a>
 
-              return (
-                <Reveal as="div" className="card-slot" key={project.id} style={{ "--i": i }}>
-                  <article className={`card ${motion} spread spread--${variant}`}>
-                    <span className="spread-tag" aria-hidden="true">
-                      project {String(i + 1).padStart(2, "0")}
-                    </span>
+                  <div className="project-card-body tilt-layer">
+                    <h3>
+                      <a href={caseStudyPath(project.id)}>{project.title}</a>
+                    </h3>
+                    <p className="project-card-what">{project.what}</p>
+                    <TechList items={project.tech} />
+                  </div>
 
-                    <pre className="frag tilt-layer" aria-hidden="true">
-                      <span className="frag-file">{project.frag.file}</span>
-                      <code>{project.frag.code}</code>
-                    </pre>
-
-                    <header className="p-head tilt-layer">
-                      <p className="idx">{String(i + 1).padStart(2, "0")}</p>
-                      <h3>
-                        <a href={project.link} target="_blank" rel="noreferrer">
-                          <span>{project.title}</span>
-                          <span className="p-github">github</span>
-                        </a>
-                      </h3>
-                      <p className="what">{project.what}</p>
-                      <p className="meta">{project.meta}</p>
-                    </header>
-
-                    <div className="p-notes tilt-layer">
-                      <p>
-                        <b>why</b>
-                        {project.notes.why}
-                      </p>
-                      <p>
-                        <b>inside</b>
-                        {project.notes.inside}
-                      </p>
-                      <p>
-                        <b>learning</b>
-                        {project.notes.learning}
-                      </p>
-                      <p className="proof">
-                        <b>proof</b>
-                        {project.proof}
-                      </p>
-                    </div>
-
-                    {project.aside ? <p className="p-aside tilt-layer">{project.aside}</p> : null}
-                  </article>
-                </Reveal>
-              );
-            })}
+                  <p className="project-links tilt-layer">
+                    <a href={caseStudyPath(project.id)}>case study →</a>
+                    <a href={project.link} target="_blank" rel="noreferrer">
+                      github ↗
+                    </a>
+                    {project.demo ? (
+                      <a href={project.demo} target="_blank" rel="noreferrer">
+                        live demo ↗
+                      </a>
+                    ) : null}
+                  </p>
+                </article>
+              </Reveal>
+            ))}
           </div>
+
+          {more.length ? (
+            <Reveal as="div" className="more-projects">
+              <h3 className="k">more projects</h3>
+              <ul>
+                {more.map((project) => (
+                  <li key={project.id}>
+                    <a href={caseStudyPath(project.id)} className="more-title">
+                      {project.title}
+                      {project.team ? <span className="more-team"> · team project</span> : null}
+                    </a>
+                    <span className="more-what">{project.what}</span>
+                    <a href={project.link} target="_blank" rel="noreferrer" className="more-github">
+                      github ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
         </div>
       </section>
     );

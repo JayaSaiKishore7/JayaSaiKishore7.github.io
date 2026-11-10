@@ -6,6 +6,7 @@ const themeFile = fileURLToPath(new URL('./src/theme/theme.js', import.meta.url)
 const themeCssFile = fileURLToPath(new URL('./src/theme/themeCss.js', import.meta.url))
 const headFile = fileURLToPath(new URL('./src/data/head.js', import.meta.url))
 const profileFile = fileURLToPath(new URL('./src/data/profile.js', import.meta.url))
+const projectsFile = fileURLToPath(new URL('./src/data/projects.js', import.meta.url))
 
 // Fresh import on every call, so edits to these data files apply without a restart.
 const load = (file) => import(`${pathToFileURL(file).href}?t=${Date.now()}`)
@@ -27,14 +28,21 @@ function themeCss() {
   }
 }
 
-// Fills <!--app-head--> in index.html with tags built from profile.js (see src/data/head.js).
+// Fills <!--app-head--> in index.html with the page's tags (see src/data/head.js).
+// In dev that's the requested page; in a build it's the home page, and
+// scripts/prerender.mjs then swaps in each page's own tags.
 function siteHead() {
   return {
     name: 'site-head',
     async transformIndexHtml(html, ctx) {
-      ctx.server?.watcher.add([headFile, profileFile])
-      const [{ headTags }, data] = await Promise.all([load(headFile), load(profileFile)])
-      return html.replace('<!--app-head-->', headTags(data))
+      ctx.server?.watcher.add([headFile, profileFile, projectsFile])
+      const [{ headTags }, { profile, seo }, { projects }] = await Promise.all([
+        load(headFile),
+        load(profileFile),
+        load(projectsFile),
+      ])
+      const path = ctx.server ? (ctx.originalUrl ?? '/').split(/[?#]/)[0] : '/'
+      return html.replace('<!--app-head-->', headTags({ profile, seo, projects, path }))
     },
   }
 }

@@ -19,8 +19,11 @@ const viewports = {
   wide: { viewport: { width: 1600, height: 1000 } },
 };
 
-// Where to scroll before each shot: the top, a section id, or the page bottom.
-const stops = ["top", "work", "experience", "hello", "bottom"];
+// Pages to shoot, and where to scroll before each shot: the top, a section id, or the page bottom.
+const pages = [
+  { name: "home", path: "/", stops: ["top", "work", "experience", "hello", "bottom"] },
+  { name: "case", path: "/work/air-quality/", stops: ["top", "bottom"] },
+];
 
 async function scrollTo(page, stop) {
   await page.evaluate((target) => {
@@ -44,20 +47,25 @@ try {
     page.on("pageerror", (error) => errors.push(error.message));
     page.on("console", (msg) => msg.type() === "error" && errors.push(msg.text()));
 
-    await page.goto(baseUrl, { waitUntil: "networkidle" });
-    await page.waitForSelector('#home[data-phase="ready"]', { timeout: 10000 });
-    await page.waitForTimeout(800); // hero fade-in
+    for (const { name, path, stops } of pages) {
+      await page.goto(new URL(path, baseUrl).href, { waitUntil: "networkidle" });
+      await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
+      if (path === "/") {
+        await page.waitForSelector('#home[data-phase="ready"]', { timeout: 10000 });
+        await page.waitForTimeout(800); // hero fade-in
+      }
 
-    for (const stop of stops) {
-      await scrollTo(page, stop);
-      const file = join(outDir, `${device}-${stop}.png`);
-      await page.screenshot({ path: file });
+      for (const stop of stops) {
+        await scrollTo(page, stop);
+        const shot = `${device}-${name === "home" ? "" : `${name}-`}${stop}`;
+        await page.screenshot({ path: join(outDir, `${shot}.png`) });
 
-      const report = await page.evaluate(() => ({
-        active: document.querySelector('[aria-current="location"]')?.textContent?.replace(/^\d+/, "") ?? "none",
-        overflowX: document.documentElement.scrollWidth - window.innerWidth,
-      }));
-      console.log(`${device}-${stop}: active=${report.active} overflowX=${report.overflowX}px`);
+        const report = await page.evaluate(() => ({
+          active: document.querySelector('[aria-current="location"]')?.textContent?.replace(/^\d+/, "") ?? "none",
+          overflowX: document.documentElement.scrollWidth - window.innerWidth,
+        }));
+        console.log(`${shot}: active=${report.active} overflowX=${report.overflowX}px`);
+      }
     }
 
     if (errors.length) console.log(`${device} console errors:\n  ${errors.join("\n  ")}`);
