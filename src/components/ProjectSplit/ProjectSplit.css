@@ -1,13 +1,5 @@
-/* Colours, fonts and easing come from the site tokens (src/theme/theme.js):
-   --bg #080808, --bg-soft #111111, --border #222224, --text #efeee9,
-   --accent rgb(242, 166, 90), --ease cubic-bezier(0.16, 1, 0.3, 1).
-   Corners stay square. Only opacity, transform and clip-path are animated. */
-
-.ps {
-  margin-top: clamp(24px, 3vw, 36px);
-}
-
-/* ================= desktop: split view ================= */
+/* All colours, fonts, radii and timings come from the theme tokens
+   (src/theme/theme.js). Only opacity, transform and clip-path are animated. */
 
 .ps-split {
   display: grid;
@@ -16,7 +8,7 @@
   align-items: start;
 }
 
-/* ---------- left: the list ---------- */
+/* ================= left: grouped project list ================= */
 
 .ps-nav {
   position: relative; /* the gliding bar is positioned against this box */
@@ -34,25 +26,40 @@
   background: var(--accent);
   transform-origin: top;
   opacity: 0;
-  transition: transform 0.55s var(--ease);
+  transition: transform 550ms var(--ease);
 }
 
 .ps-indicator.is-placed {
   opacity: 1;
 }
 
+.ps-group + .ps-group {
+  margin-top: 22px;
+}
+
+.ps-group-label {
+  margin: 0 0 6px 20px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+}
+
 .ps-select {
   width: 100%;
-  padding: 14px 16px 14px 20px;
+  padding: 11px 16px 11px 20px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   border: 0;
   background: transparent;
-  color: inherit;
-  font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: background-color var(--dur-colour) var(--ease);
+}
+
+.ps-select:hover {
+  background: var(--surface-soft);
 }
 
 .ps-select:focus-visible {
@@ -64,18 +71,24 @@
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 11.5px;
-  transition: color 0.3s var(--ease);
+  transition: color var(--dur-colour) var(--ease);
 }
 
 .ps-title {
   color: var(--muted);
   font-family: var(--font-display);
-  font-size: clamp(17px, 1.6vw, 21px);
+  font-size: clamp(17px, 1.6vw, 20px);
   letter-spacing: -0.02em;
   line-height: 1.25;
   transition:
-    color 0.3s var(--ease),
-    transform 0.5s var(--ease);
+    color var(--dur-colour) var(--ease),
+    transform var(--dur-move) var(--ease);
+}
+
+.ps-tech {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
 }
 
 .ps-select:hover .ps-title {
@@ -107,100 +120,258 @@
   transform-origin: left;
 }
 
-/* ---------- right: the preview stage ---------- */
+/* ================= right: the slide stage ================= */
 
-/* Every preview sits in the same grid cell, so the stage is exactly as tall as
-   the tallest one: nothing to guess, nothing clipped, no jump when switching. */
+/* Always fits one screen: the image window takes whatever height is left after
+   the controls and the fixed text block, so nothing scrolls or falls below. */
 .ps-stage {
   position: sticky;
   top: 96px;
-  padding: 16px;
-  display: grid;
+  height: min(640px, calc(100vh - 140px));
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+/* Every slide sits in the same grid cell, filling the rest of the stage. */
+.ps-slides {
+  flex: 1;
+  min-height: 0;
+  display: grid;
 }
 
 .ps-preview--stage {
   grid-area: 1 / 1;
-}
-
-/* Outgoing preview: fades out in 300 ms. Its parts snap back to their hidden
-   positions only after that, so nothing visibly un-animates. */
-.ps-preview--stage:not(.is-active) {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s var(--ease);
 }
 
-.ps-preview--stage:not(.is-active) .ps-frame {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 0s linear 0.3s;
-}
-
-.ps-preview--stage:not(.is-active) .ps-zoom {
-  transform: scale(1.04);
-  transition: transform 0s linear 0.3s;
-}
-
-.ps-preview--stage:not(.is-active) .ps-rise {
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0s linear 0.3s,
-    transform 0s linear 0.3s;
-}
-
-/* Incoming preview: shown at once; its image wipes in from the left while
-   settling from 104% to 100%, then the text rises in, one part after another. */
 .ps-preview--stage.is-active {
   z-index: 1;
-}
-
-.ps-preview--stage.is-active .ps-frame {
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 0.7s var(--ease);
-}
-
-.ps-preview--stage.is-active .ps-zoom {
-  transform: none;
-  transition: transform 0.7s var(--ease);
-}
-
-.ps-preview--stage.is-active .ps-rise {
   opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.5s var(--ease) var(--delay, 0ms),
-    transform 0.5s var(--ease) var(--delay, 0ms);
+  pointer-events: auto;
 }
 
-/* ---------- preview content (stage and gallery cards) ---------- */
+/* Directional slide change (--dir is 1 forward, -1 back): the old slide moves
+   24px the way you are going and fades out in 250 ms; the new one comes from
+   24px the other side and settles in 550 ms; its image also wipes in from the
+   left. Only while the app runs (html.js); otherwise the active slide just shows. */
+.js .ps-preview--stage.is-leaving {
+  animation: ps-leave 250ms var(--ease) both;
+}
 
-/* Reserves the 16:10 space before the image loads: never an empty box or a jump. */
-.ps-frame {
-  display: block;
-  aspect-ratio: 16 / 10;
+.js .ps-preview--stage.is-active {
+  animation: ps-enter 550ms var(--ease) both;
+}
+
+.js .ps-preview--stage.is-active .ps-wipe {
+  animation: ps-wipe var(--dur-reveal) var(--ease) both;
+}
+
+.js .ps-preview--stage.is-active .ps-settle {
+  animation: ps-settle var(--dur-reveal) var(--ease) both;
+}
+
+@keyframes ps-leave {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--dir, 1) * -24px));
+  }
+}
+
+@keyframes ps-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--dir, 1) * 24px));
+  }
+}
+
+@keyframes ps-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes ps-settle {
+  from {
+    transform: scale(1.04);
+  }
+}
+
+/* ---------- counter and arrows (stage top-right; phone gallery top) ---------- */
+
+.ps-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+}
+
+.ps-count {
+  --line: 1.15em;
+  display: flex;
+  align-items: flex-end;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 22px;
+  line-height: var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The current number is a strip of all the numbers behind a one-line window;
+   moving the strip makes the digit roll to its new value. */
+.ps-count-roll {
+  height: var(--line);
+  overflow: hidden;
+  color: var(--text);
+}
+
+.ps-count-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--n, 0) * var(--line) * -1));
+  transition: transform var(--dur-move) var(--ease);
+}
+
+.ps-count-strip span {
+  height: var(--line);
+}
+
+.ps-count-total {
+  font-size: 14px;
+  line-height: 1.9;
+  white-space: pre;
+}
+
+.ps-arrows {
+  display: flex;
+  gap: 6px;
+}
+
+.ps-arrows button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.ps-arrows button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ps-arrows svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+/* ---------- the browser-style window around the screenshot ---------- */
+
+.ps-window {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--border);
-  background: var(--bg-soft);
+  border-radius: var(--radius-card);
+  background: var(--surface-soft);
   color: inherit;
   text-decoration: none;
 }
 
-.ps-zoom {
-  height: 100%;
+.ps-window-bar {
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
 
-.ps-frame .project-thumb {
+/* Three small dots, drawn with one element and two shadows. */
+.ps-window-dots {
+  width: 7px;
+  height: 7px;
+  margin-right: 16px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  box-shadow:
+    11px 0 0 var(--border-strong),
+    22px 0 0 var(--border-strong);
+}
+
+.ps-window-id {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+/* The whole screenshot is shown (contain), never larger than its frame. */
+.ps-window-body {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  display: flex;
+}
+
+.ps-wipe,
+.ps-settle {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ps-window .project-thumb {
+  width: 100%;
   height: 100%;
+  aspect-ratio: auto;
   border: 0;
+  background: transparent;
 }
 
-.ps-heading {
-  margin-top: 18px;
+.ps-window img.project-thumb {
+  object-fit: contain;
+}
+
+/* ---------- fixed text block ---------- */
+
+.ps-text {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .ps-team {
-  margin-bottom: 4px;
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: 11.5px;
@@ -208,30 +379,36 @@
 
 .ps-preview h3 {
   font-family: var(--font-display);
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-size: clamp(19px, 1.8vw, 24px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
   line-height: 1.2;
 }
 
 .ps-preview h3 a {
   color: var(--text);
   text-decoration: none;
+  transition: color var(--dur-colour) var(--ease);
 }
 
 .ps-preview h3 a:hover {
   color: var(--accent);
 }
 
+/* At most two lines, so the slide's height never changes. */
 .ps-what {
-  margin: 8px 0 14px;
+  max-width: 68ch;
+  display: -webkit-box;
+  overflow: hidden;
   color: var(--soft);
   font-size: 15px;
   line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .ps-links {
-  margin-top: 16px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px 18px;
@@ -245,8 +422,8 @@
   color: var(--text);
   text-decoration: none;
   transition:
-    color 0.25s var(--ease),
-    border-color 0.25s var(--ease);
+    color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease);
 }
 
 .ps-links a:hover {
@@ -269,46 +446,9 @@
     display: block;
   }
 
-  .ps-gallery-bar {
+  .ps-gallery .ps-controls {
     margin-bottom: 12px;
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-  }
-
-  .ps-counter {
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 12px;
-  }
-
-  .ps-arrows {
-    display: flex;
-    gap: 8px;
-  }
-
-  .ps-arrows button {
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--border-strong);
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-  }
-
-  .ps-arrows button:active {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .ps-arrows svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
   }
 
   /* Horizontal strip that snaps each card to the centre. The ::before/::after
@@ -338,12 +478,13 @@
     padding: 12px;
     scroll-snap-align: center;
     border: 1px solid var(--border);
-    background: var(--bg-soft);
+    border-radius: var(--radius-card);
+    background: var(--surface);
     opacity: 0.45;
     transform: scale(0.92);
     transition:
-      opacity 0.5s var(--ease),
-      transform 0.5s var(--ease);
+      opacity var(--dur-move) var(--ease),
+      transform var(--dur-move) var(--ease);
   }
 
   .ps-card.is-centered {
@@ -351,8 +492,15 @@
     transform: none;
   }
 
-  .ps-card .ps-frame {
-    background: var(--bg);
+  .ps-preview--card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Cards have no fixed height, so the window keeps a 16:10 picture area. */
+  .ps-preview--card .ps-window-body {
+    aspect-ratio: 16 / 10;
   }
 }
 
@@ -364,23 +512,23 @@
     display: none;
   }
 
+  .js .ps-preview--stage.is-leaving,
+  .js .ps-preview--stage.is-active,
+  .js .ps-preview--stage.is-active .ps-wipe,
+  .js .ps-preview--stage.is-active .ps-settle {
+    animation: none;
+  }
+
   .ps-title,
   .ps-item.is-active .ps-title,
   .ps-card,
-  .ps-card.is-centered,
-  .ps-preview--stage .ps-zoom,
-  .ps-preview--stage .ps-rise {
-    transform: none !important;
+  .ps-card.is-centered {
+    transform: none;
   }
 
-  .ps-preview--stage .ps-frame {
-    clip-path: none !important;
-  }
-
-  .ps-preview--stage:not(.is-active),
-  .ps-preview--stage .ps-rise,
-  .ps-card {
-    transition: opacity 0.15s linear !important;
+  /* The counter still shows the right number, it just doesn't roll. */
+  .ps-count-strip {
+    transition: none;
   }
 
   .ps-indicator {

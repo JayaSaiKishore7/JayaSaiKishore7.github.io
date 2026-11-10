@@ -29,10 +29,8 @@
 }
 
 .sign-sub {
-  max-width: 24em;
+  max-width: 68ch;
   color: var(--soft);
-  font-size: 14.5px;
-  line-height: 1.55;
 }
 
 .mail-row {
@@ -52,7 +50,9 @@
   letter-spacing: -0.03em;
   text-decoration: none;
   overflow-wrap: anywhere;
-  transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
+  transition:
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
 }
 
 .email-link:hover {
@@ -68,7 +68,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   cursor: pointer;
-  transition: color 0.3s var(--ease);
+  transition: color var(--dur-colour) var(--ease);
 }
 
 .copy:hover {
@@ -90,7 +90,9 @@
   gap: 8px;
   color: var(--soft);
   text-decoration: none;
-  transition: color 0.3s var(--ease), transform 0.5s var(--ease);
+  transition:
+    color var(--dur-colour) var(--ease),
+    transform var(--dur-move) var(--ease);
 }
 
 .social-icon {

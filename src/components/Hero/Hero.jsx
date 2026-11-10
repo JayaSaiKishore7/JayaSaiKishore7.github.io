@@ -1,123 +1,117 @@
 import { Component, createRef } from "react";
 import { profile, heroInfo } from "../../data/profile";
-import { navLinks } from "../../data/nav";
+import { Clock } from "../../utils/Clock";
 import { DetectionBoxes } from "../../utils/DetectionBoxes";
-import { BootSequence } from "../../utils/BootSequence";
+import { Magnetic } from "../../utils/Magnetic";
 import "./Hero.css";
 
+/**
+ * The opening section: location and time, the name, the tagline, two buttons
+ * and the info card. Visible immediately: the reveal is a CSS animation that
+ * starts with the first paint (only while html.js is set), not something
+ * JavaScript has to trigger. After it, DetectionBoxes draws its labelled
+ * boxes around the name, tagline and info card.
+ */
 export class Hero extends Component {
   constructor(props) {
     super(props);
-    // "booting" while the terminal intro plays, then "ready" (content fades in).
-    this.state = { phase: "booting" };
+    this.state = { time: null };
     this.heroRef = createRef();
-    this.boxes = null;
-    this.boot = null;
+    this.buttonRefs = [createRef(), createRef()];
+    this.handleTick = this.handleTick.bind(this);
   }
 
   componentDidMount() {
+    this.clock = new Clock({ timeZone: profile.timeZone, onTick: this.handleTick });
+    this.clock.start();
+
+    this.magnets = this.buttonRefs.map((ref) => new Magnetic({ element: ref.current }));
+    this.magnets.forEach((magnet) => magnet.start());
+
     this.boxes = new DetectionBoxes({
       container: this.heroRef.current,
+      startDelay: 1300, // after the text has risen in
       targets: [
         { selector: ".hero-name", label: "name 0.99", tight: true },
-        { selector: ".hero-tagline", label: "role 0.97", tight: true, labelInside: true },
-        { selector: ".hero-panel", label: "info 0.95" },
+        { selector: ".hero-tagline", label: "role 0.97", tight: true },
+        { selector: ".hero-card", label: "info 0.95" },
       ],
     });
-
-    this.boot = new BootSequence({
-      container: this.heroRef.current.querySelector(".hero-inner"),
-      lines: [
-        "$ python portfolio.py",
-        'loading weights ........ <span class="boot-ok">ok</span>',
-        'warming up inference ... <span class="boot-ok">ok</span>',
-        '<span class="boot-ready">ready.</span>',
-      ],
-      onDone: () => {
-        // Make sure the hidden starting styles have been applied before switching
-        // to "ready", so the fade-in transition always runs, even when the boot is
-        // skipped synchronously on mount. (This replaces a requestAnimationFrame,
-        // which background tabs and headless browsers may never fire, leaving the
-        // hero invisible.)
-        void this.heroRef.current?.offsetWidth;
-        this.setState({ phase: "ready" });
-        this.boxes.start();
-      },
-    });
-    this.boot.start();
+    this.boxes.start();
   }
 
   componentWillUnmount() {
-    this.boot?.stop();
+    this.clock?.stop();
+    this.magnets?.forEach((magnet) => magnet.stop());
     this.boxes?.stop();
   }
 
+  handleTick(time) {
+    this.setState({ time });
+  }
+
   render() {
-    const { phase } = this.state;
+    const { time } = this.state;
+    const words = profile.name.toLowerCase().split(" ");
 
     return (
-      <section
-        ref={this.heroRef}
-        id="home"
-        className={`section hero ${phase === "ready" ? "is-ready" : ""}`}
-        data-phase={phase}
-      >
-        <div className="container hero-inner">
+      <section ref={this.heroRef} id="home" className="hero">
+        <div className="container hero-grid">
           <div className="hero-main">
-            <p className="hero-meta stagger" style={{ "--stagger": 0 }}>
-              {profile.location.toLowerCase()}
+            <p className="hero-meta hero-fade" style={{ "--s": 0 }}>
+              <span>{profile.location.toLowerCase()}</span>
+              <span aria-hidden="true">·</span>
+              <span>{time ?? "--:--"} local time</span>
             </p>
 
+            {/* Each word slides up from behind its own mask. The spaces sit between
+                the masks (a space inside an inline-block would collapse), and the
+                aria-label gives screen readers the plain name. */}
             <h1 className="hero-name" aria-label={profile.name.toLowerCase()}>
-              {profile.name.toLowerCase().split("").map((char, i) => (
-                <span
-                  key={i}
-                  className="hero-letter"
-                  aria-hidden="true"
-                  style={{ "--li": i }}
-                >
-                  {char === " " ? " " : char}
+              {words.map((word, i) => (
+                <span key={word}>
+                  <span className="hero-word" aria-hidden="true">
+                    <span className="hero-word-inner" style={{ "--w": i }}>
+                      {word}
+                    </span>
+                  </span>
+                  {i < words.length - 1 ? " " : null}
                 </span>
               ))}
             </h1>
 
-            <p className="hero-tagline stagger" style={{ "--stagger": 2 }}>
+            <p className="hero-tagline hero-fade" style={{ "--s": 1 }}>
               {profile.role}.
               <br />
               lately, computer vision on a <em className="hero-accent">production line</em>.
             </p>
 
-            <p className="hero-note stagger" style={{ "--stagger": 3 }}>
+            <p className="hero-note hero-fade" style={{ "--s": 2 }}>
               (more interested in how models behave in production than how they're trained.)
             </p>
 
-            <div className="hero-foot stagger" style={{ "--stagger": 4 }}>
-              <span>scroll</span>
-              <span className="hero-rule" aria-hidden="true" />
-              <span className="hero-breadcrumb">
-                {navLinks.map((link) => link.label).join(", ")}
-              </span>
+            <div className="hero-actions hero-fade" style={{ "--s": 3 }}>
+              <a ref={this.buttonRefs[0]} href="#work" className="hero-button hero-button--primary">
+                view work
+              </a>
+              <a ref={this.buttonRefs[1]} href={profile.resume} download className="hero-button">
+                download resume
+              </a>
             </div>
           </div>
 
-          <aside className="hero-panel stagger" style={{ "--stagger": 1 }}>
-            {heroInfo.map((row) => (
-              <div className="hero-panel-row" key={row.label}>
-                <span className="hero-panel-label">{row.label}</span>
-                <span className="hero-panel-value">
-                  {row.status ? <span className="hero-status-dot" /> : null}
-                  {row.value}
-                </span>
-              </div>
-            ))}
-            <div className="hero-panel-row">
-              <span className="hero-panel-label">resume</span>
-              <span className="hero-panel-value">
-                <a href={profile.resume} download>
-                  download ↗
-                </a>
-              </span>
-            </div>
+          <aside className="hero-card hero-fade" style={{ "--s": 2 }}>
+            <dl>
+              {heroInfo.map((row) => (
+                <div className="hero-row" key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>
+                    {row.status ? <span className="hero-status-dot" aria-hidden="true" /> : null}
+                    {row.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </aside>
         </div>
       </section>

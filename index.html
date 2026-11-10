@@ -4,20 +4,28 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
     <!--app-head-->
     <script>
+      // Runs before the first paint, so there is no flash of the wrong theme or content.
+      //
+      // Theme: every visit starts in light (data-theme="light" on <html>); the
+      // navbar toggle switches to dark for the rest of the visit.
+      //
       // Page boot states, on <html>:
       //   .js              hidden "before reveal" styles apply (see index.css)
       //   [data-app=ready] React has mounted (set in App.jsx)
       // If the app hasn't mounted within 4 s (script blocked, failed or very slow),
       // drop .js so the pre-rendered content simply stays visible.
-      document.documentElement.classList.add("js");
-      setTimeout(function () {
-        if (document.documentElement.dataset.app !== "ready") {
-          document.documentElement.classList.remove("js");
-        }
-      }, 4000);
+      (function () {
+        var root = document.documentElement;
+        root.dataset.theme = "light";
+
+        root.classList.add("js");
+        setTimeout(function () {
+          if (root.dataset.app !== "ready") root.classList.remove("js");
+        }, 4000);
+      })();
     </script>
   </head>
   <body>

@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
-import { SectionLabel } from "../SectionLabel";
+import { SectionHeader } from "../ui/SectionHeader";
 import "./Connect.css";
 
 const GithubIcon = () => (
@@ -57,11 +57,11 @@ export class Connect extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionLabel id="contact" />
-            <h2 className="section-heading">let's connect.</h2>
-            <p className="section-sub">
-              open to new opportunities and collaborations, reach out below.
-            </p>
+            <SectionHeader
+              id="contact"
+              title="let's connect."
+              sub="open to new opportunities and collaborations, reach out below."
+            />
           </Reveal>
 
           <Reveal as="div" className="credits" style={{ "--i": 1 }}>

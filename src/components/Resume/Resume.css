@@ -1,126 +1,225 @@
-.xps {
+/* Timeline: [when, 220px] [line] [details]. The line and dots sit in the
+   middle column; --line-x is where that column is. */
+.tl {
+  --when: 220px;
+  --col-gap: 32px;
+  --line-x: calc(var(--when) + var(--col-gap));
+  position: relative;
+}
+
+/* The vertical line: a 1px track, with an accent fill that grows as the
+   section scrolls through the screen. */
+.tl-line {
+  position: absolute;
+  top: 6px;
+  bottom: 0;
+  left: var(--line-x);
+  width: 1px;
+  background: var(--border);
+}
+
+.tl-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top;
+}
+
+/* Browsers with scroll-driven animations draw the fill with the scroll; the
+   others simply show the line already filled. */
+@supports (animation-timeline: view()) {
+  .tl {
+    view-timeline: --timeline block;
+  }
+
+  .tl-fill {
+    animation: tl-draw linear both;
+    animation-timeline: --timeline;
+    animation-range: entry 30% exit 60%;
+  }
+}
+
+@keyframes tl-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.tl-role {
+  position: relative;
   display: grid;
-  gap: 14px;
-  margin-top: 1rem;
+  grid-template-columns: var(--when) minmax(0, 1fr);
+  column-gap: calc(var(--col-gap) * 2 + 1px);
 }
 
-/* Surface, hover border and pointer glow come from .card / .card--glow in index.css. */
-.xp {
-  padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px);
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gut);
-  row-gap: 14px;
-  align-items: start;
-  border-left: 2px solid var(--accent);
+.tl-role + .tl-role {
+  margin-top: clamp(32px, 4vw, 48px);
 }
 
-.xp-when {
-  grid-column: 1 / 4;
+.tl-when {
+  position: sticky;
+  top: 96px;
+  align-self: start;
 }
 
-.xp-when time {
+.tl-when time {
   display: block;
   color: var(--soft);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
 }
 
-.xp-when .k {
+.tl-when p {
   margin-top: 4px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
 }
 
-.xp-main {
-  grid-column: 4 / 8;
+/* The role's dot on the line; it turns accent once the role reaches mid-screen. */
+.tl-dot {
+  position: absolute;
+  top: 6px;
+  left: calc(var(--line-x) - 5px);
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg);
+  transition:
+    background-color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease);
 }
 
-.xp-main h3 {
-  font-family: var(--font-display);
-  font-size: clamp(18px, 1.9vw, 24px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
+.tl-role.is-reached .tl-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.tl-main {
+  max-width: 68ch;
+}
+
+.tl-company {
   color: var(--text);
-}
-
-.xp-location {
-  font-size: 0.5em;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
   font-weight: 400;
-  letter-spacing: normal;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.tl-location {
+  margin-top: 2px;
   color: var(--muted);
+  font-size: 0.95rem;
 }
 
-.xp-what {
-  max-width: 18em;
-  margin-top: 10px;
+.tl-summary {
+  margin-top: 12px;
   color: var(--soft);
-  font-size: 15.5px;
-  line-height: 1.4;
 }
 
-.xp-list {
-  grid-column: 8 / 13;
+.tl-points {
+  margin-top: 12px;
   display: grid;
   gap: 8px;
   color: var(--soft);
-  font-size: 14px;
-  line-height: 1.55;
 }
 
-.xp-list li {
+.tl-points li {
   position: relative;
-  padding-left: 16px;
+  padding-left: 18px;
 }
 
-.xp-list li::before {
+.tl-points li::before {
   position: absolute;
-  top: 0.72em;
+  top: 0.8em;
   left: 0;
-  width: 7px;
+  width: 8px;
   height: 1px;
   background: var(--muted);
   content: "";
 }
 
-.xp-stack {
-  grid-column: 4 / 13;
-  margin-top: 4px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
+/* "show more": rows 0fr → 1fr animates the height without measuring it.
+   Collapsed only while the app runs; without JavaScript everything shows. */
+.tl-more {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--dur-move) var(--ease);
+}
+
+.tl-more-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.js .tl-more:not(.is-open) {
+  grid-template-rows: 0fr;
+}
+
+/* Out of the tab order and screen readers once collapsed (after the animation). */
+.js .tl-more:not(.is-open) .tl-more-inner {
+  visibility: hidden;
+  transition: visibility 0s linear var(--dur-move);
+}
+
+.tl-toggle {
+  display: none;
+}
+
+.js .tl-toggle {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 1px solid var(--border-strong);
+  background: none;
+  color: var(--text);
   font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.7;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition:
+    color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease);
 }
 
-@media (hover: hover) {
-  .xp:hover {
-    border-left-color: var(--accent);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%), var(--bg-soft);
+.tl-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tl-stack {
+  margin-top: 16px;
+}
+
+/* Phones and small tablets: one column, the line down the left edge. */
+@media (max-width: 760px) {
+  .tl {
+    --line-x: 5px;
+  }
+
+  .tl-role {
+    grid-template-columns: 1fr;
+    padding-left: 32px;
+  }
+
+  .tl-when {
+    position: static;
+    margin-bottom: 10px;
+  }
+
+  .tl-dot {
+    top: 4px;
   }
 }
 
-@media (max-width: 680px) {
-  .xp {
-    padding-inline: 16px;
-  }
-}
-
-@media (max-width: 900px) {
-  .xp {
-    display: block;
-  }
-
-  .xp-main,
-  .xp-list,
-  .xp-stack {
-    margin-top: 14px;
-  }
-
-  .xp-list {
-    gap: 6px;
+@media (prefers-reduced-motion: reduce) {
+  .tl-fill {
+    animation: none;
   }
 }

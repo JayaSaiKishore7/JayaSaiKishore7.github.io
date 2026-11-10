@@ -1,14 +1,18 @@
 import { theme } from "../theme/theme";
 
-const EASE = theme.easing.standard;
+const EASE = theme.motion.ease;
+
+const DURATION_MS = 2000;
 
 /**
  * Non-max suppression, as a reveal. When a heading scrolls into view, several
  * jittered "candidate" boxes appear around it, then collapse onto one clean box
- * (the winner keeps its label), which holds and fades. Plays once per heading.
+ * (the winner keeps its label), which holds briefly and fades out completely
+ * about 1.1 s after settling. Plays once per heading. Off on narrow screens
+ * (under 600px) and with reduced motion.
  */
 export class NmsReveal {
-  constructor({ selector, label = "heading", count = 5, jitter = 14, pad = 8, settle = 650 }) {
+  constructor({ selector, label = "heading", count = 5, jitter = 14, pad = 6, settle = 650 }) {
     this.selector = selector;
     this.label = label;
     this.count = count;
@@ -21,7 +25,7 @@ export class NmsReveal {
   }
 
   start() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 599px)").matches) return;
 
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -87,23 +91,29 @@ export class NmsReveal {
       document.body.appendChild(box);
       this.boxes.push(box);
 
+      // Candidates show, collapse onto the winner by 900 ms, the winner holds
+      // until 1.5 s and is fully gone at 2 s.
       const shown = isWinner ? 1 : 0.6;
       const animation = box.animate(
         [
           { ...start, opacity: 0 },
-          { ...start, opacity: shown, offset: 0.2 },
-          { ...start, opacity: shown, offset: 0.4 },
-          { ...final, opacity: isWinner ? 1 : 0, offset: 0.62 },
-          { ...final, opacity: isWinner ? 1 : 0, offset: 0.85 },
+          { ...start, opacity: shown, offset: 0.15 },
+          { ...start, opacity: shown, offset: 0.3 },
+          { ...final, opacity: isWinner ? 1 : 0, offset: 0.45 },
+          { ...final, opacity: isWinner ? 1 : 0, offset: 0.75 },
           { ...final, opacity: 0 },
         ],
-        { duration: 1900, delay: i * 45, easing: EASE, fill: "both" }
+        { duration: DURATION_MS, delay: i * 45, easing: EASE, fill: "both" }
       );
 
-      animation.onfinish = () => {
+      const remove = () => {
         box.remove();
         this.boxes = this.boxes.filter((b) => b !== box);
       };
+      animation.onfinish = remove;
+      // Also remove it on a timer, in case the animation never reports finishing
+      // (e.g. it was in a background tab), so no faint box is ever left behind.
+      this.timers.push(setTimeout(remove, DURATION_MS + i * 45 + 300));
     }
   }
 }

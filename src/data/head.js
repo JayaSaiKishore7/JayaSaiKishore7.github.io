@@ -15,7 +15,7 @@ export const HEAD_END = "<!--head:end-->";
  * content. A pure function: callers pass the data in (vite.config.js loads it
  * fresh in dev; the pre-render step uses the bundled copy).
  */
-export function headTags({ profile, seo, projects, path = "/" }) {
+export function headTags({ profile, seo, projects, theme, path = "/" }) {
   const route = resolveRoute(path, projects);
   const url = new URL(path, profile.siteUrl).href;
 
@@ -65,7 +65,8 @@ export function headTags({ profile, seo, projects, path = "/" }) {
     `<title>${escape(page.title)}</title>`,
     `<meta name="description" content="${escape(page.description)}" />`,
     `<link rel="canonical" href="${escape(url)}" />`,
-    `<meta name="theme-color" content="${escape(seo.themeColor)}" />`,
+    // Browser UI colour: the default (light) theme's background.
+    `<meta name="theme-color" content="${escape(theme.colors.light.bg)}" />`,
     `<meta property="og:type" content="${page.type}" />`,
     `<meta property="og:title" content="${escape(page.title)}" />`,
     `<meta property="og:description" content="${escape(page.description)}" />`,

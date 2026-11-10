@@ -1,0 +1,57 @@
+.arrow-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color var(--dur-colour) var(--ease);
+}
+
+.arrow-link-text {
+  position: relative;
+  padding-bottom: 2px;
+}
+
+/* A faint resting underline, and an accent one that draws in from the left on hover. */
+.arrow-link-text::before,
+.arrow-link-text::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+}
+
+.arrow-link-text::before {
+  background: var(--border-strong);
+}
+
+.arrow-link-text::after {
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-move) var(--ease);
+}
+
+.arrow-link-arrow {
+  display: inline-block;
+  transition: transform var(--dur-move) var(--ease);
+}
+
+.arrow-link:hover,
+.arrow-link:focus-visible {
+  color: var(--accent);
+}
+
+.arrow-link:hover .arrow-link-text::after,
+.arrow-link:focus-visible .arrow-link-text::after {
+  transform: scaleX(1);
+}
+
+.arrow-link:hover .arrow-link-arrow,
+.arrow-link:focus-visible .arrow-link-arrow {
+  transform: translateX(4px);
+}

@@ -1,7 +1,8 @@
 import { Component } from "react";
 import { aboutInfo } from "../../data/profile";
 import { Reveal } from "../Reveal";
-import { SectionLabel } from "../SectionLabel";
+import { TechList } from "../Project/TechList";
+import { SectionHeader } from "../ui/SectionHeader";
 import "./Contact.css";
 
 export class Contact extends Component {
@@ -12,8 +13,7 @@ export class Contact extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionLabel id="hello" />
-            <h2 className="hello-statement">{aboutInfo.statement}</h2>
+            <SectionHeader id="hello" title={aboutInfo.statement} />
           </Reveal>
 
           <Reveal as="div" className="hello-about" style={{ "--i": 1 }}>
@@ -30,13 +30,7 @@ export class Contact extends Component {
             {aboutInfo.skillGroups.map((group) => (
               <div className="skill-group" key={group.name}>
                 <h3 className="k">{group.name}</h3>
-                <ul className="hello-skills">
-                  {group.items.map((skill) => (
-                    <li className="hello-skill" key={skill}>
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
+                <TechList items={group.items} label={group.name} />
               </div>
             ))}
           </Reveal>
