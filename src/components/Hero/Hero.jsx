@@ -107,7 +107,13 @@ export class Hero extends Component {
                   <dt>{row.label}</dt>
                   <dd>
                     {row.status ? <span className="hero-status-dot" aria-hidden="true" /> : null}
-                    {row.value}
+                    {row.href ? (
+                      <a className="hero-row-link" href={row.href} download={row.download || undefined}>
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
                   </dd>
                 </div>
               ))}

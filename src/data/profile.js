@@ -22,10 +22,12 @@ export const seo = {
 };
 
 export const heroInfo = [
-  { label: "focus", value: "computer vision, MLOps, forecasting, LLMs/RAG." },
+  { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
   { label: "latest", value: "data science intern, STMicroelectronics." },
-  { label: "stack", value: "Python, PyTorch, YOLO, XGBoost, MLflow, FastAPI." },
+  { label: "stack", value: "Python, PyTorch, TensorFlow, Computer Vision, MLflow, MLOps." },
   { label: "status", value: "open to work.", status: true },
+  // `href` renders the value as a link; `download` makes the browser save the file.
+  { label: "resume", value: "download ↗", href: profile.resume, download: true },
 ];
 
 export const aboutInfo = {
