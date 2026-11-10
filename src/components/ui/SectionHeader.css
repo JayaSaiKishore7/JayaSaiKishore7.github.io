@@ -1,0 +1,26 @@
+.section-header {
+  max-width: 46rem;
+  margin-bottom: clamp(32px, 4.5vw, 56px);
+}
+
+.section-header-label {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.section-header-title {
+  margin-top: 14px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--size-heading);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.section-header-sub {
+  max-width: 38rem;
+  margin-top: 16px;
+  color: var(--muted);
+}

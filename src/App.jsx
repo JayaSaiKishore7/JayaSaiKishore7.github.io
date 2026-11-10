@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Navbar } from "./components/Navbar/Navbar";
+import { ScrollProgress } from "./components/ScrollProgress/ScrollProgress";
 import { Hero } from "./components/Hero/Hero";
 import { Projects } from "./components/Projects/Projects";
 import { Resume } from "./components/Resume/Resume";
@@ -33,7 +34,7 @@ class App extends Component {
     // Page boot state for index.html's fallback timer, tests and tools.
     document.documentElement.dataset.app = "ready";
 
-    this.nms = new NmsReveal({ selector: ".work-statement, .section-heading, .hello-statement" });
+    this.nms = new NmsReveal({ selector: ".section-header-title, .work-statement, .section-heading, .hello-statement" });
     this.nms.start();
 
     if (this.route.page === "home") {
@@ -58,6 +59,7 @@ class App extends Component {
     if (route.page === "case-study") {
       return (
         <>
+          <ScrollProgress />
           <Navbar onHome={false} />
           <CaseStudy project={route.project} />
           <Footer />
@@ -67,6 +69,7 @@ class App extends Component {
 
     return (
       <>
+        <ScrollProgress />
         <Navbar onHome active={active} />
         <Hero />
         <Projects />

@@ -1,12 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-import "@fontsource/ibm-plex-sans/400.css";
-import "@fontsource/ibm-plex-sans/500.css";
-import "@fontsource/ibm-plex-sans/700.css";
+// Self-hosted fonts (font-display: swap): Geist for body text, Fraunces for the
+// name and headings (upright and italic, with optical sizing), IBM Plex Mono
+// for labels, numbers and links.
+import "@fontsource-variable/geist";
+import "@fontsource-variable/fraunces/opsz.css";
+import "@fontsource-variable/fraunces/opsz-italic.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
-import "@fontsource/ibm-plex-mono/600.css";
-import "@fontsource-variable/fraunces/opsz-italic.css";
 import "virtual:theme.css";
 import "./index.css";
 import App from "./App.jsx";

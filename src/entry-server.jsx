@@ -5,6 +5,7 @@ import { headTags } from "./data/head.js";
 import { profile, seo } from "./data/profile.js";
 import { projects } from "./data/projects.js";
 import { allPaths } from "./routes.js";
+import { theme } from "./theme/theme.js";
 
 // Build-time rendering, used by scripts/prerender.mjs.
 
@@ -22,7 +23,7 @@ export function render(path) {
 
 /** The <head> tags for the page at `path`. */
 export function head(path) {
-  return headTags({ profile, seo, projects, path });
+  return headTags({ profile, seo, projects, theme, path });
 }
 
 export const siteUrl = profile.siteUrl;

@@ -3,13 +3,3 @@
   flex-wrap: wrap;
   gap: 6px;
 }
-
-.tech-list li {
-  padding: 2px 8px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  line-height: 1.6;
-}

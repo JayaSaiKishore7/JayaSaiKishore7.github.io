@@ -35,14 +35,15 @@ function siteHead() {
   return {
     name: 'site-head',
     async transformIndexHtml(html, ctx) {
-      ctx.server?.watcher.add([headFile, profileFile, projectsFile])
-      const [{ headTags }, { profile, seo }, { projects }] = await Promise.all([
+      ctx.server?.watcher.add([headFile, profileFile, projectsFile, themeFile])
+      const [{ headTags }, { profile, seo }, { projects }, { theme }] = await Promise.all([
         load(headFile),
         load(profileFile),
         load(projectsFile),
+        load(themeFile),
       ])
       const path = ctx.server ? (ctx.originalUrl ?? '/').split(/[?#]/)[0] : '/'
-      return html.replace('<!--app-head-->', headTags({ profile, seo, projects, path }))
+      return html.replace('<!--app-head-->', headTags({ profile, seo, projects, theme, path }))
     },
   }
 }

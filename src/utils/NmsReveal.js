@@ -1,6 +1,6 @@
 import { theme } from "../theme/theme";
 
-const EASE = theme.easing.standard;
+const EASE = theme.motion.ease;
 
 /**
  * Non-max suppression, as a reveal. When a heading scrolls into view, several

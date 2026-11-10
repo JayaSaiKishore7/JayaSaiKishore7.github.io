@@ -181,7 +181,7 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border: 1px solid var(--border);
-  background: var(--bg-soft);
+  background: var(--surface);
   color: inherit;
   text-decoration: none;
 }
@@ -338,7 +338,7 @@
     padding: 12px;
     scroll-snap-align: center;
     border: 1px solid var(--border);
-    background: var(--bg-soft);
+    background: var(--surface);
     opacity: 0.45;
     transform: scale(0.92);
     transition:

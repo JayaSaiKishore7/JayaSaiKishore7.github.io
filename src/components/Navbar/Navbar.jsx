@@ -58,7 +58,6 @@ export class Navbar extends Component {
             <span data-clock>{time ?? "--:--"}</span> in {profile.city.toLowerCase()}
           </p>
         </div>
-        <div className="prog" aria-hidden="true" />
       </header>
     );
   }

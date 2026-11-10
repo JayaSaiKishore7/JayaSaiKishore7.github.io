@@ -6,7 +6,7 @@
 .arch-scroll {
   overflow-x: auto;
   border: 1px solid var(--border);
-  background: var(--bg-soft);
+  background: var(--surface);
 }
 
 .arch-svg {

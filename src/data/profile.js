@@ -19,7 +19,6 @@ export const seo = {
   description:
     "Machine learning engineer in Nice, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
   image: "/og-image.png",
-  themeColor: "#080808",
 };
 
 export const heroInfo = [
