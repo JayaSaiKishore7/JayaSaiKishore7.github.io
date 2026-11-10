@@ -17,7 +17,7 @@ export const seo = {
   title: "Jaya Sai Kishore Neerukonda | Machine Learning Engineer",
   jobTitle: "Machine Learning Engineer",
   description:
-    "Machine learning engineer in Nice, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, improving its accuracy by 20%.",
+    "Machine learning engineer in Nice, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
   image: "/og-image.png",
   themeColor: "#080808",
 };
@@ -34,7 +34,7 @@ export const aboutInfo = {
   lead: "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
   sub: [
     "i hold a master's in data science & AI (2026), with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale.",
-    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, improving the YOLO model's accuracy by 20% through fine-tuning.",
+    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, fine-tuning its YOLO model from 70% to 90% accuracy.",
   ],
   skills: [
     "Python",
