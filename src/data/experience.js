@@ -15,11 +15,6 @@ export const experience = [
       "Collaborated with data engineering and manufacturing teams to align the solution with production requirements.",
     ],
     stack: ["Python", "SAM3", "YOLO11", "MLflow", "FastAPI", "Vue.js", "MariaDB"],
-    // Measured results, shown as before → after on the card.
-    metrics: [
-      { label: "detection accuracy", before: "70%", after: "90%" },
-      { label: "processing time per image", before: "2 s", after: "milliseconds" },
-    ],
   },
   {
     role: "Sr. Software Engineer",
