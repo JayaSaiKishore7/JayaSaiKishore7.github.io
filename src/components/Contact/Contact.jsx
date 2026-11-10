@@ -26,13 +26,10 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          <Reveal as="div" className="skill-groups" style={{ "--i": 2 }}>
-            {aboutInfo.skillGroups.map((group) => (
-              <div className="skill-group" key={group.name}>
-                <h3 className="k">{group.name}</h3>
-                <TechList items={group.items} label={group.name} />
-              </div>
-            ))}
+          {/* Every skill in one row of chips (wrapping on narrow screens); the data stays grouped. */}
+          <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
+            <h3 className="k">skills</h3>
+            <TechList items={aboutInfo.skillGroups.flatMap((group) => group.items)} label="skills" />
           </Reveal>
         </div>
       </section>
