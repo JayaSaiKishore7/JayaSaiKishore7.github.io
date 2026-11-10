@@ -99,7 +99,7 @@
 @media (hover: hover) {
   .xp:hover {
     border-left-color: var(--accent);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%), var(--surface);
+    background: var(--surface-soft);
   }
 }
 

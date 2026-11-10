@@ -12,7 +12,8 @@ const STORAGE_KEY = "theme";
 export class ThemeToggle extends Component {
   constructor(props) {
     super(props);
-    this.state = { dark: false };
+    // Dark is the default theme, so the pre-rendered button starts pressed.
+    this.state = { dark: true };
     this.toggle = this.toggle.bind(this);
   }
 
@@ -21,7 +22,7 @@ export class ThemeToggle extends Component {
   }
 
   sync() {
-    const dark = document.documentElement.dataset.theme === "dark";
+    const dark = document.documentElement.dataset.theme !== "light";
     if (dark !== this.state.dark) this.setState({ dark });
   }
 

@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="dark light" />
     <!--app-head-->
     <script>
       // Runs before the first paint, so there is no flash of the wrong theme or content.
       //
       // Theme: data-theme="light|dark" on <html>: the visitor's saved choice
-      // (localStorage, set by the navbar toggle), else the system setting.
+      // (localStorage, set by the navbar toggle), else dark, for everyone.
       //
       // Page boot states, on <html>:
       //   .js              hidden "before reveal" styles apply (see index.css)
@@ -23,10 +23,7 @@
         try {
           theme = localStorage.getItem("theme");
         } catch (e) {}
-        if (theme !== "light" && theme !== "dark") {
-          theme = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        }
-        root.dataset.theme = theme;
+        root.dataset.theme = theme === "light" ? "light" : "dark";
 
         root.classList.add("js");
         setTimeout(function () {

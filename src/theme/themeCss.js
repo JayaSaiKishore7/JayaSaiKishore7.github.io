@@ -4,9 +4,9 @@
  * which serves it as "virtual:theme.css", so the tokens are in the first
  * stylesheet the browser loads.
  *
- * Themes: light is the default. index.html sets data-theme="light|dark" on
- * <html> before the first paint (saved choice, else the system setting).
- * Without JavaScript, the system setting still picks the colours.
+ * Themes: dark is the default, for every first-time visitor (and without
+ * JavaScript). index.html sets data-theme="light" before the first paint only
+ * when the visitor has chosen light with the toggle.
  */
 const kebab = (name) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
@@ -42,11 +42,8 @@ const block = (selector, variables, extra = "") =>
     .join("\n")}${extra ? `\n  ${extra}` : ""}\n}\n`;
 
 export function themeToCss(t) {
-  const light = colourVariables(t.colors.light);
-  const dark = colourVariables(t.colors.dark);
   return [
-    block(":root", { ...cssVariables(t), ...light }, "color-scheme: light;"),
-    block(':root[data-theme="dark"]', dark, "color-scheme: dark;"),
-    `@media (prefers-color-scheme: dark) {\n${block(":root:not([data-theme])", dark, "color-scheme: dark;")}}\n`,
+    block(":root", { ...cssVariables(t), ...colourVariables(t.colors.dark) }, "color-scheme: dark;"),
+    block(':root[data-theme="light"]', colourVariables(t.colors.light), "color-scheme: light;"),
   ].join("\n");
 }

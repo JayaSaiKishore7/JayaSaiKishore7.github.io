@@ -2,10 +2,28 @@
 // values are defined. src/theme/themeCss.js turns this into CSS variables at
 // build time. Every component stylesheet uses those variables, never raw values.
 //
-// "Inspection report": a light, calm, editorial look, with a dark mode.
+// Dark is the default theme; light is the alternative the toggle switches to.
 export const theme = {
   colors: {
-    // Default. Every text colour below reaches WCAG AA (4.5:1) on bg, surface and surfaceSoft.
+    // Default. Text colours reach WCAG AA (4.5:1) on bg, surface and surfaceSoft.
+    dark: {
+      bg: "#080808",
+      surface: "#111111",
+      surfaceSoft: "#161616",
+      border: "#222224",
+      borderStrong: "#353537",
+      text: "#efeee9",
+      soft: "#c2c1bb",
+      muted: "#86857f",
+      // Decorative only (bullets, scrollbar): too low contrast for text.
+      mutedSoft: "#5c5b56",
+      accent: "#f2a65a",
+      onAccent: "#080808",
+      status: "#6fd88f",
+      highlight: "#f2c94c",
+    },
+    // Paper and ink. The accent is a darker orange from the same family:
+    // 5.0:1 on bg, 5.5:1 on surface, 4.7:1 on surfaceSoft; white on it is 5.5:1.
     light: {
       bg: "#F6F4EE",
       surface: "#FFFFFF",
@@ -15,23 +33,13 @@ export const theme = {
       text: "#15171A",
       soft: "#3A3D40",
       muted: "#5E625F",
-      accent: "#2447F9",
+      // Decorative only, like dark's mutedSoft.
+      mutedSoft: "#BDB8A9",
+      accent: "#A84F06",
       onAccent: "#FFFFFF",
-      // Graphics only (the status dot): 3.2:1 on white, below the 4.5:1 needed for text.
+      // Graphics only (the status dot): below the 4.5:1 needed for text.
       status: "#1E9E55",
-    },
-    dark: {
-      bg: "#0C0E12",
-      surface: "#14171D",
-      surfaceSoft: "#1A1E26",
-      border: "#252A33",
-      borderStrong: "#3A414D",
-      text: "#ECEEF1",
-      soft: "#C3C7CE",
-      muted: "#8B919B",
-      accent: "#8196FF",
-      onAccent: "#0C0E12",
-      status: "#6FD88F",
+      highlight: "#8A5A00",
     },
   },
 
@@ -53,7 +61,7 @@ export const theme = {
 
   shadows: {
     // The one shadow on the site: under the floating navbar.
-    nav: "0 8px 30px rgba(15, 20, 30, 0.08)",
+    nav: "0 8px 30px rgba(0, 0, 0, 0.18)",
   },
 
   spacing: {
