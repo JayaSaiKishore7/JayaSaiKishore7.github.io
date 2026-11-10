@@ -22,66 +22,7 @@
   color: var(--text);
 }
 
-/* Featured projects: see ProjectSplit.css. */
-
-/* ---------- more projects ---------- */
-
-.more-projects {
-  margin-top: clamp(28px, 3.4vw, 44px);
-}
-
-.more-projects .k {
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 400;
-}
-
-.more-projects li {
-  padding: 12px 0;
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) auto;
-  gap: 6px 24px;
-  align-items: baseline;
-  border-top: 1px solid var(--border);
-}
-
-.more-projects li:last-child {
-  border-bottom: 1px solid var(--border);
-}
-
-.more-title {
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.more-title:hover {
-  color: var(--accent);
-}
-
-.more-team {
-  color: var(--muted);
-}
-
-.more-what {
-  color: var(--soft);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.more-github {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-decoration: none;
-}
-
-.more-github:hover {
-  color: var(--accent);
-}
+/* The projects themselves: see ProjectSplit.css. */
 
 @media (max-width: 900px) {
   .work-head {
@@ -91,14 +32,5 @@
   .work-statement {
     margin-top: 8px;
     max-width: none;
-  }
-
-  .more-projects li {
-    grid-template-columns: 1fr auto;
-  }
-
-  .more-what {
-    grid-column: 1 / -1;
-    grid-row: 2;
   }
 }

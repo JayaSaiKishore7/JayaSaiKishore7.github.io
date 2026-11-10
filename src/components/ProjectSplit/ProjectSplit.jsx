@@ -36,9 +36,12 @@ class ProjectPreview extends Component {
           </div>
         </a>
 
-        <h3 className="ps-step" style={step("title")}>
-          <a href={href}>{project.title}</a>
-        </h3>
+        <div className="ps-heading ps-step" style={step("title")}>
+          {project.team ? <p className="ps-team">team project</p> : null}
+          <h3>
+            <a href={href}>{project.title}</a>
+          </h3>
+        </div>
         <p className="ps-what ps-step" style={step("text")}>
           {project.what}
         </p>
