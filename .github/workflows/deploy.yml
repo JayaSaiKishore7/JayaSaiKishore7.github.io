@@ -26,10 +26,6 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
-        env:
-          # Authenticated GitHub API calls for the build-time activity section
-          # (shared runner IPs often hit the anonymous rate limit).
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

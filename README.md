@@ -22,13 +22,6 @@ search engines and tools that don't run JavaScript see the full content: the hom
 `<head>` tags, plus `dist/sitemap.xml`. In the browser, React takes over a page only when its HTML
 was rendered for that path (`data-path` on `#root`, checked in `src/main.jsx`).
 
-## GitHub activity
-
-The "on github" block under the projects is fetched **at build time** from GitHub's public REST API
-(`src/data/github.js`, served as `virtual:github-activity` by a plugin in `vite.config.js`), so
-visitors' browsers never call GitHub. It refreshes on every build. The deploy passes `GITHUB_TOKEN`
-to avoid the anonymous rate limit. If the fetch fails, the block is left out and the build continues.
-
 ## Architecture diagrams
 
 A project with an `architecture` entry in `src/data/projects.js` (nodes on a grid, edges, groups)

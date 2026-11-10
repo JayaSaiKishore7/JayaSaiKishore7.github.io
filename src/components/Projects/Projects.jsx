@@ -3,7 +3,6 @@ import { projects } from "../../data/projects";
 import { caseStudyPath } from "../../routes";
 import { Reveal } from "../Reveal";
 import { SectionLabel } from "../SectionLabel";
-import { GithubActivity } from "../GithubActivity/GithubActivity";
 import { ProjectThumb } from "../Project/ProjectThumb";
 import { TechList } from "../Project/TechList";
 import { Tilt3D } from "../../utils/Tilt3D";
@@ -98,8 +97,6 @@ export class Projects extends Component {
               </ul>
             </Reveal>
           ) : null}
-
-          <GithubActivity />
         </div>
       </section>
     );
