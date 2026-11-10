@@ -1,5 +1,5 @@
 .hello-about {
-  max-width: 32em;
+  max-width: 68ch;
 }
 
 .hello-about .k {
@@ -8,28 +8,26 @@
   border-bottom: 1px solid var(--border);
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 
 .hello-lead {
   color: var(--text);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.hello-sub {
-  margin-top: 10px;
-  color: var(--soft);
-  font-size: 14px;
+  font-size: 1.125rem;
   line-height: 1.6;
 }
 
+.hello-sub {
+  margin-top: 12px;
+  color: var(--soft);
+}
+
+/* Skill groups as equal-height cards: 3 × 2, then 2 × 3, then one column. */
 .skill-groups {
-  margin-top: clamp(24px, 3vw, 36px);
+  margin-top: 48px;
   display: grid;
-  /* six groups: 3 × 2, then 2 × 3, then one column */
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px var(--gut);
+  gap: var(--gut);
 }
 
 @media (max-width: 900px) {
@@ -45,39 +43,21 @@
 }
 
 .skill-group {
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  transition: border-color var(--dur-colour) var(--ease);
+}
+
+.skill-group:hover {
+  border-color: var(--border-strong);
 }
 
 .skill-group .k {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 400;
-}
-
-.hello-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.hello-skill {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 0.3rem 0.75rem;
-  transition:
-    color 0.25s var(--ease),
-    border-color 0.25s var(--ease),
-    transform 0.25s var(--ease);
-}
-
-.hello-skill:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  transform: translateY(-2px);
 }

@@ -1,26 +1,11 @@
-import { Component, createRef } from "react";
+import { Component } from "react";
 import { education } from "../../data/experience";
 import { Reveal } from "../Reveal";
 import { SectionHeader } from "../ui/SectionHeader";
-import { PointerGlow } from "../../utils/PointerGlow";
 import "./Education.css";
 
+/** Education: one card per degree, side by side, all the same height. */
 export class Education extends Component {
-  constructor(props) {
-    super(props);
-    this.listRef = createRef();
-    this.glow = null;
-  }
-
-  componentDidMount() {
-    this.glow = new PointerGlow({ container: this.listRef.current, itemSelector: ".edu-card" });
-    this.glow.start();
-  }
-
-  componentWillUnmount() {
-    this.glow?.stop();
-  }
-
   render() {
     return (
       <section id="education" className="section">
@@ -32,15 +17,15 @@ export class Education extends Component {
             <SectionHeader id="education" />
           </Reveal>
 
-          <div className="edu-list" ref={this.listRef}>
+          <div className="edu-list">
             {education.map((item, i) => (
-              <Reveal as="div" className="card-slot" key={item.degree} style={{ "--i": i }}>
-                <article className="card card--lift card--glow edu-card">
+              <Reveal as="div" className="edu-slot" key={item.degree} style={{ "--i": i }}>
+                <article className="edu-card">
                   <h3>{item.degree}</h3>
                   <p className="edu-meta">{item.meta}</p>
                   <ul>
-                    {item.points.map((point, idx) => (
-                      <li key={idx}>{point}</li>
+                    {item.points.map((point) => (
+                      <li key={point}>{point}</li>
                     ))}
                   </ul>
                 </article>

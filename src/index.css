@@ -117,65 +117,6 @@ button {
   background: var(--border);
 }
 
-/* ---------- cards (experience and education, until their redesign) ---------- */
-
-@property --mx {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 50%;
-}
-
-@property --my {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 0%;
-}
-
-.card {
-  position: relative;
-  isolation: isolate;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  background: var(--surface);
-  transition:
-    border-color var(--dur-colour) var(--ease),
-    transform var(--dur-move) var(--ease);
-}
-
-.card--glow::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(
-    360px circle at var(--mx) var(--my),
-    color-mix(in srgb, var(--accent) 8%, transparent),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity var(--dur-reveal) var(--ease);
-  content: "";
-  pointer-events: none;
-}
-
-@media (hover: hover) {
-  .card:hover {
-    border-color: var(--border-strong);
-  }
-
-  .card--glow:hover::before {
-    opacity: 1;
-  }
-
-  .card--lift:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.card-slot {
-  display: grid;
-}
-
 /* ---------- scroll reveal ----------
    Visible by default; hidden only while the app runs (html.js, see index.html)
    and the element hasn't scrolled into view. Staggered by --i. */
