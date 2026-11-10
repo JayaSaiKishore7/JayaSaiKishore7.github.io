@@ -22,85 +22,7 @@
   color: var(--text);
 }
 
-/* ---------- featured cards ---------- */
-
-.project-grid {
-  margin-top: clamp(24px, 3vw, 36px);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-/* Surface and hover border come from .card, the 3D tilt from .card--tilt
-   (index.css). The thumbnail floats furthest forward while tilting. */
-.project-card {
-  padding: 14px 14px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.project-card-thumb {
-  --depth: 36px;
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-
-.project-card-body {
-  --depth: 20px;
-  flex: 1;
-  padding-inline: 6px;
-}
-
-.project-card h3 {
-  font-family: var(--font-mono);
-  font-size: clamp(16px, 1.5vw, 19px);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 1.2;
-}
-
-.project-card h3 a {
-  color: var(--text);
-  text-decoration: none;
-}
-
-.project-card h3 a:hover {
-  color: var(--accent);
-}
-
-.project-card-what {
-  margin: 8px 0 14px;
-  color: var(--soft);
-  font-size: 14.5px;
-  line-height: 1.5;
-}
-
-.project-links {
-  --depth: 12px;
-  padding-inline: 6px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-}
-
-.project-links a {
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--border-strong);
-  color: var(--text);
-  text-decoration: none;
-  transition:
-    color 0.25s var(--ease),
-    border-color 0.25s var(--ease);
-}
-
-.project-links a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
+/* Featured projects: see ProjectSplit.css. */
 
 /* ---------- more projects ---------- */
 
@@ -169,10 +91,6 @@
   .work-statement {
     margin-top: 8px;
     max-width: none;
-  }
-
-  .project-grid {
-    grid-template-columns: 1fr;
   }
 
   .more-projects li {

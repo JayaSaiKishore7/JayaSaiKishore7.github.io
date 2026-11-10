@@ -1,0 +1,260 @@
+/* Colours, fonts and easing come from the site tokens (src/theme/theme.js):
+   --bg-soft #111111, --border #222224, --text #efeee9, --accent #f2a65a,
+   --ease cubic-bezier(0.16, 1, 0.3, 1). Corners stay square. */
+
+.ps {
+  margin-top: clamp(24px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  gap: 32px;
+  align-items: start;
+}
+
+/* ---------- left: the list ---------- */
+
+.ps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ps-select {
+  width: 100%;
+  padding: 16px 16px 16px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+
+.ps-item.is-active .ps-select {
+  border-left-color: var(--accent);
+  background: var(--bg-soft);
+}
+
+.ps-index {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  transition: color 0.25s var(--ease);
+}
+
+.ps-title {
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.6vw, 21px);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  transition:
+    color 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+/* Square focus ring, drawn inside the item so it lines up with the accent border. */
+.ps-select:focus-visible {
+  border-radius: 0;
+  outline-offset: -2px;
+}
+
+.ps-select:hover .ps-title {
+  color: var(--soft);
+}
+
+.ps-item.is-active .ps-index {
+  color: var(--accent);
+}
+
+.ps-item.is-active .ps-title {
+  color: var(--text);
+  transform: translateX(6px);
+}
+
+/* ---------- right: the preview stage (desktop) ---------- */
+
+/* Every preview sits in the same grid cell, so the stage is as tall as the
+   tallest one: no fixed height to guess, no clipping, no jump when switching. */
+.ps-stage {
+  position: sticky;
+  top: 72px; /* below the 48px navbar */
+  display: grid;
+}
+
+.ps-preview {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(8px) scale(0.985);
+  pointer-events: none;
+  /* Leaving: fade out; the transform resets only once it is invisible. */
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0s linear 0.45s;
+}
+
+.ps-preview.is-active {
+  z-index: 1;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease);
+}
+
+/* Inside the incoming preview, each part settles in a moment after the last
+   (delays set per part in ProjectSplit.jsx). */
+.ps-step {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease);
+}
+
+.ps-preview.is-active .ps-step {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--delay, 0ms);
+}
+
+/* The thumbnail's frame reserves the 16:10 space before the image loads. */
+.ps-frame {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ps-zoom {
+  height: 100%;
+  transform: scale(1.04);
+  transition: transform 0.7s var(--ease);
+}
+
+.ps-preview.is-active .ps-zoom {
+  transform: none;
+}
+
+.ps-frame .project-thumb {
+  height: 100%;
+  border: 0;
+}
+
+.ps-preview h3 {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.ps-preview h3 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ps-preview h3 a:hover {
+  color: var(--accent);
+}
+
+.ps-what {
+  margin: 8px 0 14px;
+  color: var(--soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.ps-links {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.ps-links a {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+
+.ps-links a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* The accordion copy of each preview is for phones only. */
+.ps-accordion {
+  display: none;
+}
+
+/* ---------- phones: one column, accordion ---------- */
+
+@media (max-width: 899.98px) {
+  .ps {
+    grid-template-columns: 1fr;
+  }
+
+  .ps-stage {
+    display: none;
+  }
+
+  /* Height animates via grid rows (0fr → 1fr): the browser works out the real
+     height, so nothing is hard-coded. */
+  .ps-accordion {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s var(--ease);
+  }
+
+  .ps-item.is-active .ps-accordion {
+    grid-template-rows: 1fr;
+  }
+
+  .ps-accordion-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .ps-accordion .ps-preview {
+    padding: 14px 0 24px 18px;
+  }
+}
+
+/* ---------- reduced motion: no movement, only a quick fade ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-preview,
+  .ps-preview.is-active,
+  .ps-step,
+  .ps-preview.is-active .ps-step,
+  .ps-zoom,
+  .ps-item.is-active .ps-title {
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .ps-preview,
+  .ps-preview.is-active,
+  .ps-step {
+    transition: opacity 0.15s linear;
+  }
+}

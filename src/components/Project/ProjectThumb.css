@@ -6,6 +6,13 @@
   object-fit: cover;
   border: 1px solid var(--border);
   background: var(--bg);
+  transition: opacity 0.4s var(--ease);
+}
+
+/* Screenshots wait, invisible, until loaded, then fade in. Only while the app
+   runs (html.js): without JavaScript they simply show. */
+.js img.project-thumb:not(.is-loaded) {
+  opacity: 0;
 }
 
 /* No screenshot: the project's own code, as a small editor window. */
