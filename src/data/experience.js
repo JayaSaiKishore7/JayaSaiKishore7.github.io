@@ -9,12 +9,17 @@ export const experience = [
     points: [
       "Used SAM3 segmentation to automatically crop the region of interest from raw X-ray images, and generated training labels with a grid-based annotation method.",
       "Fine-tuned a YOLO11 object detection model to locate defective solder balls, raising accuracy from 70% to 90%, with experiments tracked in MLflow.",
-      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect, saving GPU time by loading all models only once for the entire pipeline.",
+      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect. Loading all models only once for the entire pipeline cut processing time from 2 seconds per image to milliseconds.",
       "Pushed inference results to a MariaDB database, with processed images stored on a network storage server (NAS).",
       "Built a FastAPI backend and a Vue.js web dashboard that display each inspection result in real time.",
       "Collaborated with data engineering and manufacturing teams to align the solution with production requirements.",
     ],
     stack: ["Python", "SAM3", "YOLO11", "MLflow", "FastAPI", "Vue.js", "MariaDB"],
+    // Measured results, shown as before → after on the card.
+    metrics: [
+      { label: "detection accuracy", before: "70%", after: "90%" },
+      { label: "processing time per image", before: "2 s", after: "milliseconds" },
+    ],
   },
   {
     role: "Sr. Software Engineer",

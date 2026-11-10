@@ -59,6 +59,21 @@ export class Resume extends Component {
                     ))}
                   </ul>
 
+                  {item.metrics ? (
+                    <dl className="xp-metrics">
+                      {item.metrics.map((metric) => (
+                        <div key={metric.label}>
+                          <dt>{metric.label}</dt>
+                          <dd>
+                            <span className="xp-before">{metric.before}</span>
+                            <span aria-label="to"> → </span>
+                            <span className="xp-after">{metric.after}</span>
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+
                   {item.stack ? <p className="xp-stack">{item.stack.join(" · ")}</p> : null}
                 </article>
               </Reveal>
