@@ -1,6 +1,7 @@
 import { Component, createRef } from "react";
 import { experience } from "../../data/experience";
 import { Reveal } from "../Reveal";
+import { SectionLabel } from "../SectionLabel";
 import { PointerGlow } from "../../utils/PointerGlow";
 import "./Resume.css";
 
@@ -27,7 +28,7 @@ export class Resume extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <p className="section-label">02 · experience</p>
+            <SectionLabel id="experience" />
             <h2 className="section-heading">where i've worked</h2>
             <p className="section-sub">
               software engineering and data science roles, contributing to ML workflows,
@@ -37,27 +38,29 @@ export class Resume extends Component {
 
           <div className="xps" ref={this.xpsRef}>
             {experience.map((item, i) => (
-              <Reveal as="article" className="xp" key={item.company + item.date} style={{ "--i": i }}>
-                <div className="xp-when">
-                  <time>{item.date}</time>
-                  <p className="k">{item.role}</p>
-                </div>
+              <Reveal as="div" className="card-slot" key={item.company + item.date} style={{ "--i": i }}>
+                <article className="card xp">
+                  <div className="xp-when">
+                    <time>{item.date}</time>
+                    <p className="k">{item.role}</p>
+                  </div>
 
-                <div className="xp-main">
-                  <h3>
-                    {item.company}
-                    {item.location ? <span className="xp-location">, {item.location}</span> : null}
-                  </h3>
-                  <p className="xp-what">{item.summary}</p>
-                </div>
+                  <div className="xp-main">
+                    <h3>
+                      {item.company}
+                      {item.location ? <span className="xp-location">, {item.location}</span> : null}
+                    </h3>
+                    <p className="xp-what">{item.summary}</p>
+                  </div>
 
-                <ul className="xp-list">
-                  {item.points.map((point, idx) => (
-                    <li key={idx}>{point}</li>
-                  ))}
-                </ul>
+                  <ul className="xp-list">
+                    {item.points.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
 
-                {item.stack ? <p className="xp-stack">{item.stack.join(" · ")}</p> : null}
+                  {item.stack ? <p className="xp-stack">{item.stack.join(" · ")}</p> : null}
+                </article>
               </Reveal>
             ))}
           </div>

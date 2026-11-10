@@ -10,42 +10,9 @@
   }
 }
 
+/* Surface, glow and hover come from .card / .card--lift in index.css. */
 .edu-card {
-  position: relative;
-  isolation: isolate;
-  border: 1px solid var(--border);
   padding: 1.8rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 55%), var(--bg-soft);
-  transition:
-    border-color 0.4s var(--ease),
-    transform 0.4s var(--ease);
-}
-
-.edu-card::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-    360px circle at var(--mx, 50%) var(--my, 0%),
-    color-mix(in srgb, var(--accent) 9%, transparent),
-    transparent 70%
-  );
-  opacity: 0;
-  transition:
-    opacity 0.9s var(--ease),
-    --mx 0.3s var(--ease),
-    --my 0.3s var(--ease);
-  content: "";
-  pointer-events: none;
-}
-
-.edu-card:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-}
-
-.edu-card:hover::before {
-  opacity: 1;
 }
 
 .edu-card h3 {

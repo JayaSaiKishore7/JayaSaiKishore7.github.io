@@ -2,19 +2,11 @@ export const profile = {
   name: "Jaya Sai Kishore",
   fullName: "Jaya Sai Kishore Neerukonda",
   location: "Nice, France",
-  phone: "+33 07 45 32 40 32",
   email: "jayasaikishoren@gmail.com",
   linkedin: "https://www.linkedin.com/in/jaya-sai-kishore/",
   github: "https://github.com/JayaSaiKishore7",
   resume: "/resume/JayaSaiKishoreN_Resume.pdf",
 };
-
-export const roles = [
-  "a Data Science Student",
-  "a Machine Learning Engineer",
-  "interested in model development",
-  "exploring evaluation & scaling",
-];
 
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },

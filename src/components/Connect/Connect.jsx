@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
+import { SectionLabel } from "../SectionLabel";
 import "./Connect.css";
 
 const GithubIcon = () => (
@@ -15,27 +16,40 @@ const LinkedinIcon = () => (
   </svg>
 );
 
+// Copy-button states: idle → copied | failed → (after a moment) idle.
+const COPY_LABELS = { idle: "copy", copied: "copied", failed: "copy failed" };
+const COPY_RESET_MS = 1800;
+
 export class Connect extends Component {
   constructor(props) {
     super(props);
-    this.state = { copied: false };
+    this.state = { copy: "idle" };
     this.copyTimeout = null;
+    this.handleCopy = this.handleCopy.bind(this);
   }
 
   componentWillUnmount() {
     clearTimeout(this.copyTimeout);
   }
 
-  handleCopy() {
-    navigator.clipboard?.writeText(profile.email).then(() => {
-      this.setState({ copied: true });
-      clearTimeout(this.copyTimeout);
-      this.copyTimeout = setTimeout(() => this.setState({ copied: false }), 1800);
-    });
+  async handleCopy() {
+    try {
+      // Throws if the Clipboard API is missing (non-HTTPS) or permission is denied.
+      await navigator.clipboard.writeText(profile.email);
+      this._setCopy("copied");
+    } catch {
+      this._setCopy("failed");
+    }
+  }
+
+  _setCopy(copy) {
+    this.setState({ copy });
+    clearTimeout(this.copyTimeout);
+    this.copyTimeout = setTimeout(() => this.setState({ copy: "idle" }), COPY_RESET_MS);
   }
 
   render() {
-    const { copied } = this.state;
+    const { copy } = this.state;
 
     return (
       <section id="contact" className="section">
@@ -43,7 +57,7 @@ export class Connect extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <p className="section-label">05 · contact</p>
+            <SectionLabel id="contact" />
             <h2 className="section-heading">let's connect.</h2>
             <p className="section-sub">
               open to new opportunities and collaborations, reach out below.
@@ -60,8 +74,8 @@ export class Connect extends Component {
                 <a href={`mailto:${profile.email}`} className="email-link">
                   {profile.email} ↗
                 </a>
-                <button type="button" className="copy" onClick={() => this.handleCopy()}>
-                  <span>{copied ? "copied" : "copy"}</span>
+                <button type="button" className="copy" data-state={copy} onClick={this.handleCopy}>
+                  <span aria-live="polite">{COPY_LABELS[copy]}</span>
                 </button>
               </p>
             </div>

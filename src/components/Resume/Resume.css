@@ -4,37 +4,15 @@
   margin-top: 1rem;
 }
 
+/* Surface, glow and hover border come from .card in index.css. */
 .xp {
-  position: relative;
-  isolation: isolate;
   padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gut);
   row-gap: 14px;
   align-items: start;
-  border: 1px solid var(--border);
   border-left: 2px solid var(--accent);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 55%), var(--bg-soft);
-  transition: border-color 0.7s var(--ease), background 0.7s var(--ease);
-}
-
-.xp::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-    360px circle at var(--mx, 50%) var(--my, 0%),
-    color-mix(in srgb, var(--accent) 9%, transparent),
-    transparent 70%
-  );
-  opacity: 0;
-  transition:
-    opacity 0.9s var(--ease),
-    --mx 0.3s var(--ease),
-    --my 0.3s var(--ease);
-  content: "";
-  pointer-events: none;
 }
 
 .xp-when {
@@ -120,13 +98,8 @@
 
 @media (hover: hover) {
   .xp:hover {
-    border-color: var(--border-strong);
     border-left-color: var(--accent);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%), var(--bg-soft);
-  }
-
-  .xp:hover::before {
-    opacity: 1;
   }
 }
 

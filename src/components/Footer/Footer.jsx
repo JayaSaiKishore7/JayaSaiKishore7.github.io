@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { profile } from "../../data/profile";
 import "./Footer.css";
 
 export class Footer extends Component {
@@ -6,7 +7,7 @@ export class Footer extends Component {
     return (
       <footer className="footer">
         <p>
-          © {new Date().getFullYear()} jaya sai kishore neerukonda &middot; written, built and debugged in france
+          © {new Date().getFullYear()} {profile.fullName.toLowerCase()} &middot; written, built and debugged in france
         </p>
       </footer>
     );

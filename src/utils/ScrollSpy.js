@@ -2,10 +2,14 @@
  * Watches window scroll position and reports which of the given section ids
  * is currently active, based on each section's offsetTop. Framework-agnostic
  * so it can be owned by a class component's lifecycle methods.
+ *
+ * State: the active section id. onChange fires only when it changes, so the
+ * owner doesn't re-render on every scroll event.
  */
 export class ScrollSpy {
-  constructor({ sectionIds, offset = 140, onChange }) {
+  constructor({ sectionIds, initial = sectionIds[0], offset = 140, onChange }) {
     this.sectionIds = sectionIds;
+    this.active = initial;
     this.offset = offset;
     this.onChange = onChange;
     this._handleScroll = this._handleScroll.bind(this);
@@ -31,6 +35,8 @@ export class ScrollSpy {
       }
     }
 
+    if (current === this.active) return;
+    this.active = current;
     this.onChange(current);
   }
 }

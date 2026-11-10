@@ -1,6 +1,7 @@
 import { Component, createRef } from "react";
 import { education } from "../../data/experience";
 import { Reveal } from "../Reveal";
+import { SectionLabel } from "../SectionLabel";
 import { PointerGlow } from "../../utils/PointerGlow";
 import "./Education.css";
 
@@ -27,19 +28,21 @@ export class Education extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <p className="section-label">03 · education</p>
+            <SectionLabel id="education" />
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>
             {education.map((item, i) => (
-              <Reveal as="article" className="edu-card" key={item.degree} style={{ "--i": i }}>
-                <h3>{item.degree}</h3>
-                <p className="edu-meta">{item.meta}</p>
-                <ul>
-                  {item.points.map((point, i) => (
-                    <li key={i}>{point}</li>
-                  ))}
-                </ul>
+              <Reveal as="div" className="card-slot" key={item.degree} style={{ "--i": i }}>
+                <article className="card card--lift edu-card">
+                  <h3>{item.degree}</h3>
+                  <p className="edu-meta">{item.meta}</p>
+                  <ul>
+                    {item.points.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </article>
               </Reveal>
             ))}
           </div>

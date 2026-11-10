@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { navLinks } from "../../data/nav";
+import { navLinks, navLink } from "../../data/nav";
 import { ScrollSpy } from "../../utils/ScrollSpy";
 import { Clock } from "../../utils/Clock";
 import "./Navbar.css";
@@ -15,17 +15,28 @@ export class Navbar extends Component {
     };
     this.scrollSpy = null;
     this.clock = null;
+    this.handleActive = this.handleActive.bind(this);
+    this.handleTick = this.handleTick.bind(this);
   }
 
   componentDidMount() {
     this.scrollSpy = new ScrollSpy({
       sectionIds,
-      onChange: (active) => this.setState({ active }),
+      initial: this.state.active,
+      onChange: this.handleActive,
     });
     this.scrollSpy.start();
 
-    this.clock = new Clock({ onTick: (clock) => this.setState({ clock }) });
+    this.clock = new Clock({ onTick: this.handleTick });
     this.clock.start();
+  }
+
+  handleActive(active) {
+    this.setState({ active });
+  }
+
+  handleTick(clock) {
+    this.setState({ clock });
   }
 
   componentWillUnmount() {
@@ -44,14 +55,15 @@ export class Navbar extends Component {
           </a>
 
           <nav className="bar-nav" aria-label="Sections">
-            {navLinks.map((link, i) => (
+            {navLinks.map((link) => (
               <a
                 key={link.id}
                 href={`#${link.id}`}
                 data-section={link.id}
                 className={active === link.id ? "is-active" : ""}
+                aria-current={active === link.id ? "location" : undefined}
               >
-                <span className="n">{String(i + 1).padStart(2, "0")}</span>
+                <span className="n">{navLink(link.id).number}</span>
                 {link.label}
               </a>
             ))}

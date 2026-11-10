@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { aboutInfo } from "../../data/profile";
 import { Reveal } from "../Reveal";
+import { SectionLabel } from "../SectionLabel";
 import "./Contact.css";
 
 export class Contact extends Component {
@@ -11,7 +12,7 @@ export class Contact extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <p className="section-label">04 · hello</p>
+            <SectionLabel id="hello" />
             <h2 className="hello-statement">{aboutInfo.statement}</h2>
           </Reveal>
 

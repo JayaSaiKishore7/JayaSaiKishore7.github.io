@@ -30,7 +30,8 @@ export class Reveal extends Component {
   }
 
   render() {
-    const { as: Tag = "div", className = "", threshold, children, ...rest } = this.props;
+    // threshold is read in componentDidMount; pulled out here so it isn't passed to the DOM.
+    const { as: Tag = "div", className = "", threshold: _threshold, children, ...rest } = this.props;
     const classes = ["reveal", this.state.visible ? "is-visible" : "", className]
       .filter(Boolean)
       .join(" ");

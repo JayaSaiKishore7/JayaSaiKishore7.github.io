@@ -8,7 +8,8 @@ import "./Hero.css";
 export class Hero extends Component {
   constructor(props) {
     super(props);
-    this.state = { mounted: false };
+    // "booting" while the terminal intro plays, then "ready" (content fades in).
+    this.state = { phase: "booting" };
     this.heroRef = createRef();
     this.boxes = null;
     this.boot = null;
@@ -33,7 +34,7 @@ export class Hero extends Component {
         '<span class="boot-ready">ready.</span>',
       ],
       onDone: () => {
-        requestAnimationFrame(() => this.setState({ mounted: true }));
+        requestAnimationFrame(() => this.setState({ phase: "ready" }));
         this.boxes.start();
       },
     });
@@ -46,10 +47,15 @@ export class Hero extends Component {
   }
 
   render() {
-    const { mounted } = this.state;
+    const { phase } = this.state;
 
     return (
-      <section ref={this.heroRef} id="home" className={`section hero ${mounted ? "is-mounted" : ""}`}>
+      <section
+        ref={this.heroRef}
+        id="home"
+        className={`section hero ${phase === "ready" ? "is-ready" : ""}`}
+        data-phase={phase}
+      >
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>

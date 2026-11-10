@@ -1,4 +1,6 @@
-const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+import { theme } from "../theme/theme";
+
+const EASE = theme.easing.standard;
 
 /**
  * Non-max suppression, as a reveal. When a heading scrolls into view, several

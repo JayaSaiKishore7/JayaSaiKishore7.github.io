@@ -1,6 +1,10 @@
+const TICK_MS = 30000;
+
 /**
- * Ticks a 24h local time string plus a short time-of-day remark, once a
- * minute. Framework-agnostic; owned by a component's lifecycle methods.
+ * Ticks a 24h local time string plus a short time-of-day remark every 30
+ * seconds. Framework-agnostic; owned by a component's lifecycle methods.
+ * The owner seeds its initial state with Clock.format(), so start() only
+ * schedules the ticks.
  */
 export class Clock {
   constructor({ onTick }) {
@@ -13,7 +17,7 @@ export class Clock {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const time = `${String(hours).padStart(2, "0")}:${minutes}`;
 
-    let remark = "good afternoon.";
+    let remark;
     if (hours < 5) remark = "it's late.";
     else if (hours < 12) remark = "good morning.";
     else if (hours < 18) remark = "good afternoon.";
@@ -24,8 +28,7 @@ export class Clock {
   }
 
   start() {
-    this.onTick(Clock.format());
-    this.interval = setInterval(() => this.onTick(Clock.format()), 30000);
+    this.interval = setInterval(() => this.onTick(Clock.format()), TICK_MS);
   }
 
   stop() {
