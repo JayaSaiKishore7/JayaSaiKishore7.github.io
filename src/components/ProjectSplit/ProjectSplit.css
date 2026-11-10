@@ -1,52 +1,70 @@
 /* Colours, fonts and easing come from the site tokens (src/theme/theme.js):
-   --bg-soft #111111, --border #222224, --text #efeee9, --accent #f2a65a,
-   --ease cubic-bezier(0.16, 1, 0.3, 1). Corners stay square. */
+   --bg #080808, --bg-soft #111111, --border #222224, --text #efeee9,
+   --accent rgb(242, 166, 90), --ease cubic-bezier(0.16, 1, 0.3, 1).
+   Corners stay square. Only opacity, transform and clip-path are animated. */
 
 .ps {
   margin-top: clamp(24px, 3vw, 36px);
+}
+
+/* ================= desktop: split view ================= */
+
+.ps-split {
   display: grid;
-  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
-  gap: 32px;
+  grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  gap: 40px;
   align-items: start;
 }
 
 /* ---------- left: the list ---------- */
 
-.ps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.ps-nav {
+  position: relative; /* the gliding bar is positioned against this box */
+}
+
+/* One bar for the whole list. It is 1px tall; JavaScript moves it with
+   translateY and stretches it with scaleY to match the active button. */
+.ps-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 2px;
+  height: 1px;
+  background: var(--accent);
+  transform-origin: top;
+  opacity: 0;
+  transition: transform 0.55s var(--ease);
+}
+
+.ps-indicator.is-placed {
+  opacity: 1;
 }
 
 .ps-select {
   width: 100%;
-  padding: 16px 16px 16px 18px;
+  padding: 14px 16px 14px 20px;
   display: flex;
-  align-items: baseline;
-  gap: 14px;
+  flex-direction: column;
+  gap: 4px;
   border: 0;
-  border-left: 2px solid transparent;
   background: transparent;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition:
-    background-color 0.25s var(--ease),
-    border-color 0.25s var(--ease);
 }
 
-.ps-item.is-active .ps-select {
-  border-left-color: var(--accent);
-  background: var(--bg-soft);
+.ps-select:focus-visible {
+  border-radius: 0;
+  outline-offset: -2px;
 }
 
 .ps-index {
-  flex-shrink: 0;
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 11.5px;
-  transition: color 0.25s var(--ease);
+  transition: color 0.3s var(--ease);
 }
 
 .ps-title {
@@ -56,14 +74,8 @@
   letter-spacing: -0.02em;
   line-height: 1.25;
   transition:
-    color 0.25s var(--ease),
-    transform 0.25s var(--ease);
-}
-
-/* Square focus ring, drawn inside the item so it lines up with the accent border. */
-.ps-select:focus-visible {
-  border-radius: 0;
-  outline-offset: -2px;
+    color 0.3s var(--ease),
+    transform 0.5s var(--ease);
 }
 
 .ps-select:hover .ps-title {
@@ -76,57 +88,94 @@
 
 .ps-item.is-active .ps-title {
   color: var(--text);
-  transform: translateX(6px);
+  transform: translateX(4px);
 }
 
-/* ---------- right: the preview stage (desktop) ---------- */
+/* Auto-play progress under each item: a 1px track; the fill is scaled by JS. */
+.ps-progress {
+  display: block;
+  height: 1px;
+  overflow: hidden;
+  background: var(--border);
+}
 
-/* Every preview sits in the same grid cell, so the stage is as tall as the
-   tallest one: no fixed height to guess, no clipping, no jump when switching. */
+.ps-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---------- right: the preview stage ---------- */
+
+/* Every preview sits in the same grid cell, so the stage is exactly as tall as
+   the tallest one: nothing to guess, nothing clipped, no jump when switching. */
 .ps-stage {
   position: sticky;
-  top: 72px; /* below the 48px navbar */
+  top: 96px;
+  padding: 16px;
   display: grid;
+  border: 1px solid var(--border);
 }
 
-.ps-preview {
+.ps-preview--stage {
   grid-area: 1 / 1;
+}
+
+/* Outgoing preview: fades out in 300 ms. Its parts snap back to their hidden
+   positions only after that, so nothing visibly un-animates. */
+.ps-preview--stage:not(.is-active) {
   opacity: 0;
-  transform: translateY(8px) scale(0.985);
   pointer-events: none;
-  /* Leaving: fade out; the transform resets only once it is invisible. */
-  transition:
-    opacity 0.45s var(--ease),
-    transform 0s linear 0.45s;
+  transition: opacity 0.3s var(--ease);
 }
 
-.ps-preview.is-active {
-  z-index: 1;
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-  transition:
-    opacity 0.45s var(--ease),
-    transform 0.45s var(--ease);
+.ps-preview--stage:not(.is-active) .ps-frame {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0s linear 0.3s;
 }
 
-/* Inside the incoming preview, each part settles in a moment after the last
-   (delays set per part in ProjectSplit.jsx). */
-.ps-step {
+.ps-preview--stage:not(.is-active) .ps-zoom {
+  transform: scale(1.04);
+  transition: transform 0s linear 0.3s;
+}
+
+.ps-preview--stage:not(.is-active) .ps-rise {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(10px);
   transition:
-    opacity 0.45s var(--ease),
-    transform 0.45s var(--ease);
+    opacity 0s linear 0.3s,
+    transform 0s linear 0.3s;
 }
 
-.ps-preview.is-active .ps-step {
+/* Incoming preview: shown at once; its image wipes in from the left while
+   settling from 104% to 100%, then the text rises in, one part after another. */
+.ps-preview--stage.is-active {
+  z-index: 1;
+}
+
+.ps-preview--stage.is-active .ps-frame {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.7s var(--ease);
+}
+
+.ps-preview--stage.is-active .ps-zoom {
+  transform: none;
+  transition: transform 0.7s var(--ease);
+}
+
+.ps-preview--stage.is-active .ps-rise {
   opacity: 1;
   transform: none;
-  transition-delay: var(--delay, 0ms);
+  transition:
+    opacity 0.5s var(--ease) var(--delay, 0ms),
+    transform 0.5s var(--ease) var(--delay, 0ms);
 }
 
-/* The thumbnail's frame reserves the 16:10 space before the image loads. */
+/* ---------- preview content (stage and gallery cards) ---------- */
+
+/* Reserves the 16:10 space before the image loads: never an empty box or a jump. */
 .ps-frame {
   display: block;
   aspect-ratio: 16 / 10;
@@ -139,12 +188,6 @@
 
 .ps-zoom {
   height: 100%;
-  transform: scale(1.04);
-  transition: transform 0.7s var(--ease);
-}
-
-.ps-preview.is-active .ps-zoom {
-  transform: none;
 }
 
 .ps-frame .project-thumb {
@@ -211,60 +254,136 @@
   color: var(--accent);
 }
 
-/* The accordion copy of each preview is for phones only. */
-.ps-accordion {
+/* ================= phones: snap gallery ================= */
+
+.ps-gallery {
   display: none;
 }
 
-/* ---------- phones: one column, accordion ---------- */
-
 @media (max-width: 899.98px) {
-  .ps {
-    grid-template-columns: 1fr;
-  }
-
-  .ps-stage {
+  .ps-split {
     display: none;
   }
 
-  /* Height animates via grid rows (0fr → 1fr): the browser works out the real
-     height, so nothing is hard-coded. */
-  .ps-accordion {
+  .ps-gallery {
+    display: block;
+  }
+
+  .ps-gallery-bar {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ps-counter {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .ps-arrows {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ps-arrows button {
+    width: 36px;
+    height: 36px;
     display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.45s var(--ease);
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
   }
 
-  .ps-item.is-active .ps-accordion {
-    grid-template-rows: 1fr;
+  .ps-arrows button:active {
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
-  .ps-accordion-inner {
-    min-height: 0;
-    overflow: hidden;
+  .ps-arrows svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
   }
 
-  .ps-accordion .ps-preview {
-    padding: 14px 0 24px 18px;
+  /* Horizontal strip that snaps each card to the centre. The ::before/::after
+     spacers let the first and last cards reach the centre too. */
+  .ps-scroller {
+    position: relative; /* card offsets are measured against the strip */
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .ps-scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ps-scroller::before,
+  .ps-scroller::after {
+    flex: 0 0 calc(9% - 14px);
+    content: "";
+  }
+
+  .ps-card {
+    flex: 0 0 82%;
+    padding: 12px;
+    scroll-snap-align: center;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    opacity: 0.45;
+    transform: scale(0.92);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease);
+  }
+
+  .ps-card.is-centered {
+    opacity: 1;
+    transform: none;
+  }
+
+  .ps-card .ps-frame {
+    background: var(--bg);
   }
 }
 
-/* ---------- reduced motion: no movement, only a quick fade ---------- */
+/* ================= reduced motion ================= */
+/* No auto-play (handled in JS), no progress lines, no movement: only a quick fade. */
 
 @media (prefers-reduced-motion: reduce) {
-  .ps-preview,
-  .ps-preview.is-active,
-  .ps-step,
-  .ps-preview.is-active .ps-step,
-  .ps-zoom,
-  .ps-item.is-active .ps-title {
-    transform: none;
-    transition-delay: 0s;
+  .ps-progress {
+    display: none;
   }
 
-  .ps-preview,
-  .ps-preview.is-active,
-  .ps-step {
-    transition: opacity 0.15s linear;
+  .ps-title,
+  .ps-item.is-active .ps-title,
+  .ps-card,
+  .ps-card.is-centered,
+  .ps-preview--stage .ps-zoom,
+  .ps-preview--stage .ps-rise {
+    transform: none !important;
+  }
+
+  .ps-preview--stage .ps-frame {
+    clip-path: none !important;
+  }
+
+  .ps-preview--stage:not(.is-active),
+  .ps-preview--stage .ps-rise,
+  .ps-card {
+    transition: opacity 0.15s linear !important;
+  }
+
+  .ps-indicator {
+    transition: none;
   }
 }
