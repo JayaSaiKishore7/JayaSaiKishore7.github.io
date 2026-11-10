@@ -64,12 +64,16 @@ export class Hero extends Component {
               <span>{time ?? "--:--"} local time</span>
             </p>
 
-            {/* Each word slides up from behind its own mask. */}
-            <h1 className="hero-name">
+            {/* Each word slides up from behind its own mask. The spaces sit between
+                the masks (a space inside an inline-block would collapse), and the
+                aria-label gives screen readers the plain name. */}
+            <h1 className="hero-name" aria-label={profile.name.toLowerCase()}>
               {words.map((word, i) => (
-                <span className="hero-word" key={word}>
-                  <span className="hero-word-inner" style={{ "--w": i }}>
-                    {word}
+                <span key={word}>
+                  <span className="hero-word" aria-hidden="true">
+                    <span className="hero-word-inner" style={{ "--w": i }}>
+                      {word}
+                    </span>
                   </span>
                   {i < words.length - 1 ? " " : null}
                 </span>
