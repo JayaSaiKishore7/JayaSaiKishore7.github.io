@@ -2,7 +2,6 @@ import { Component, createRef } from "react";
 import { projects } from "../../data/projects";
 import { Reveal } from "../Reveal";
 import { SectionLabel } from "../SectionLabel";
-import { PointerGlow } from "../../utils/PointerGlow";
 import { Tilt3D } from "../../utils/Tilt3D";
 import "./Projects.css";
 
@@ -10,20 +9,15 @@ export class Projects extends Component {
   constructor(props) {
     super(props);
     this.spreadsRef = createRef();
-    this.glow = null;
     this.tilt = null;
   }
 
   componentDidMount() {
-    this.glow = new PointerGlow({ container: this.spreadsRef.current, itemSelector: ".spread" });
-    this.glow.start();
-
     this.tilt = new Tilt3D({ container: this.spreadsRef.current, itemSelector: ".card--tilt" });
     this.tilt.start();
   }
 
   componentWillUnmount() {
-    this.glow?.stop();
     this.tilt?.stop();
   }
 

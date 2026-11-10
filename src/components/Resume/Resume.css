@@ -4,7 +4,7 @@
   margin-top: 1rem;
 }
 
-/* Surface, glow and hover border come from .card in index.css. */
+/* Surface, hover border and pointer glow come from .card / .card--glow in index.css. */
 .xp {
   padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px);
   display: grid;

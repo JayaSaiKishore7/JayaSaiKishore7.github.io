@@ -113,10 +113,12 @@ img {
 }
 
 /* CARD SURFACE
-   Shared by project, experience and education cards. PointerGlow writes the
-   pointer position to --mx/--my on the card; the ::before glow inherits it
-   (hence inherits: true) and eases toward it. .card--lift adds a hover lift.
-   A section can restyle the glow by overriding its own ::before background. */
+   Shared by project, experience and education cards: border, background and
+   the hover border. Opt-in modifiers:
+   .card--lift  rises 2px on hover.
+   .card--glow  a soft accent light that follows the pointer. PointerGlow writes
+                the pointer position to --mx/--my on the card; the ::before glow
+                inherits it (hence inherits: true) and eases toward it. */
 @property --mx {
   syntax: "<percentage>";
   inherits: true;
@@ -140,7 +142,7 @@ img {
     background 0.7s var(--ease);
 }
 
-.card::before {
+.card--glow::before {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -163,7 +165,7 @@ img {
     border-color: var(--border-strong);
   }
 
-  .card:hover::before {
+  .card--glow:hover::before {
     opacity: 1;
   }
 
@@ -182,7 +184,7 @@ img {
 /* 3D TILT (see src/utils/Tilt3D.js)
    The card leans toward the pointer and .tilt-layer children float forward by
    their --depth while it tilts. isolation is reset because it would flatten
-   those layers; the transform already keeps the ::before glow behind content. */
+   those layers; the transform already creates the card's stacking context. */
 .card--tilt {
   isolation: auto;
   transform-style: preserve-3d;

@@ -39,7 +39,7 @@ export class Resume extends Component {
           <div className="xps" ref={this.xpsRef}>
             {experience.map((item, i) => (
               <Reveal as="div" className="card-slot" key={item.company + item.date} style={{ "--i": i }}>
-                <article className="card xp">
+                <article className="card card--glow xp">
                   <div className="xp-when">
                     <time>{item.date}</time>
                     <p className="k">{item.role}</p>

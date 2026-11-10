@@ -13,9 +13,10 @@
   height: 48px;
   margin-inline: auto;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* brand | section links | time: links and time sit together on the right */
+  grid-template-columns: 1fr auto auto;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
 }
 
 .brand {
@@ -34,7 +35,7 @@
 
 .bar-nav {
   min-width: 0;
-  justify-self: center;
+  justify-self: end;
   display: flex;
   gap: 4px 30px;
   overflow-x: auto;
@@ -146,17 +147,6 @@
   to {
     background: color-mix(in srgb, var(--bg) 88%, transparent);
     border-color: var(--border);
-  }
-}
-
-/* Wide screens: SideNav shows the section links (same breakpoint as SideNav.css). */
-@media (min-width: 1480px) {
-  .bar-nav {
-    display: none;
-  }
-
-  .bar-time {
-    grid-column: 3;
   }
 }
 

@@ -10,7 +10,7 @@
   }
 }
 
-/* Surface, glow and hover come from .card / .card--lift in index.css. */
+/* Surface, hover, lift and pointer glow come from .card / .card--lift / .card--glow in index.css. */
 .edu-card {
   padding: 1.8rem;
 }

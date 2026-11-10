@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { Navbar } from "./components/Navbar/Navbar";
-import { SideNav } from "./components/SideNav/SideNav";
 import { Hero } from "./components/Hero/Hero";
 import { Projects } from "./components/Projects/Projects";
 import { Resume } from "./components/Resume/Resume";
@@ -17,7 +16,7 @@ const sectionIds = navLinks.map((link) => link.id);
 class App extends Component {
   constructor(props) {
     super(props);
-    // The section currently in view (null on the hero). One ScrollSpy feeds both navigations.
+    // The section currently in view (null on the hero), shown in the navbar.
     this.state = { active: null };
     this.handleActive = this.handleActive.bind(this);
   }
@@ -48,7 +47,6 @@ class App extends Component {
     return (
       <>
         <Navbar active={active} />
-        <SideNav active={active} />
         <Hero />
         <Projects />
         <Resume />

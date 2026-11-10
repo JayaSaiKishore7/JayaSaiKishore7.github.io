@@ -4,7 +4,7 @@ import { profile } from "../../data/profile";
 import { Clock } from "../../utils/Clock";
 import "./Navbar.css";
 
-/** Top bar: brand, section links (hidden on wide screens, where SideNav takes over) and local time in Nice. */
+/** Top bar: brand on the left; section links, then the local time in Nice, on the right. */
 export class Navbar extends Component {
   constructor(props) {
     super(props);

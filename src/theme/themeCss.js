@@ -26,7 +26,6 @@ export function cssVariables(t) {
     "--space-section": t.spacing.section,
     "--gut": t.spacing.gutter,
     "--ease": t.easing.standard,
-    "--ease-spring": t.easing.spring,
     "--max-width": t.layout.maxWidth,
   };
 }
