@@ -1,6 +1,7 @@
 .hero {
   position: relative;
-  padding: clamp(120px, 14vw, 170px) 0 clamp(24px, 3vw, 40px);
+  /* Just clears the floating navbar (about 64px tall), plus a little air. */
+  padding: clamp(86px, 8vw, 92px) 0 clamp(24px, 3vw, 40px);
 }
 
 .hero-grid {
