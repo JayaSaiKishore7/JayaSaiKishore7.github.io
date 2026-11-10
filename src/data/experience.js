@@ -8,8 +8,8 @@ export const experience = [
       "Part of the Quality, Manufacturing & Technology (QMT) – Data Science team. Improved production-line efficiency by developing a deep learning object detection solution that replaces manual operator inspection of solder-ball defects in semiconductor packages.",
     points: [
       "Used SAM3 segmentation to automatically crop the region of interest from raw X-ray images, and generated training labels with a grid-based annotation method.",
-      "Fine-tuned a YOLO11 object detection model to locate defective solder balls, and tracked experiments with MLflow.",
-      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect.",
+      "Fine-tuned a YOLO11 object detection model to locate defective solder balls, improving accuracy by 20%, with experiments tracked in MLflow.",
+      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect, saving GPU time by loading all models only once for the entire pipeline.",
       "Pushed inference results to a MariaDB database, with processed images stored on a network storage server (NAS).",
       "Built a FastAPI backend and a Vue.js web dashboard that display each inspection result in real time.",
       "Collaborated with data engineering and manufacturing teams to align the solution with production requirements.",
