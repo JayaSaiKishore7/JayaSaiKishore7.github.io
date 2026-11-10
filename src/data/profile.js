@@ -40,9 +40,9 @@ export const aboutInfo = {
   skillGroups: [
     { name: "programming", items: ["Python", "SQL"] },
     { name: "computer vision", items: ["OpenCV", "YOLO", "SAM3"] },
-    { name: "deep learning", items: ["PyTorch", "CNN", "ResNet"] },
-    { name: "backend", items: ["FastAPI", "WebSockets"] },
-    { name: "data", items: ["NumPy", "scikit-learn", "MariaDB"] },
+    { name: "deep learning", items: ["PyTorch", "CNN", "ResNet", "Hugging Face"] },
+    { name: "backend", items: ["FastAPI", "Flask", "WebSockets"] },
+    { name: "data", items: ["NumPy", "scikit-learn", "XGBoost", "MariaDB", "ChromaDB"] },
     { name: "MLOps", items: ["MLflow", "DVC"] },
   ],
 };
