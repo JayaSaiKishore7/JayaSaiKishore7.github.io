@@ -17,12 +17,15 @@ const sectionIds = navLinks.map((link) => link.id);
 class App extends Component {
   constructor(props) {
     super(props);
-    // The section currently in view. One ScrollSpy feeds both navigations.
-    this.state = { active: sectionIds[0] };
+    // The section currently in view (null on the hero). One ScrollSpy feeds both navigations.
+    this.state = { active: null };
     this.handleActive = this.handleActive.bind(this);
   }
 
   componentDidMount() {
+    // Page boot state for index.html's fallback timer, tests and tools.
+    document.documentElement.dataset.app = "ready";
+
     this.nms = new NmsReveal({ selector: ".work-statement, .section-heading, .hello-statement" });
     this.nms.start();
 

@@ -45,7 +45,7 @@
 .hello-skill {
   font-family: var(--font-mono);
   font-size: 0.76rem;
-  color: var(--muted-soft);
+  color: var(--muted);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.75rem;

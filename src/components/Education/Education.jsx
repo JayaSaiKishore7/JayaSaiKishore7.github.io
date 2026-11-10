@@ -28,7 +28,8 @@ export class Education extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionLabel id="education" />
+            {/* The section's only title, so it is the heading (styled as a label). */}
+            <SectionLabel id="education" as="h2" />
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>

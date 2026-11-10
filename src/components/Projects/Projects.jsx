@@ -50,7 +50,7 @@ export class Projects extends Component {
                 <Reveal as="div" className="card-slot" key={project.id} style={{ "--i": i }}>
                   <article className={`card ${motion} spread spread--${variant}`}>
                     <span className="spread-tag" aria-hidden="true">
-                      project {String(i + 1).padStart(2, "0")} · {(0.99 - i * 0.01).toFixed(2)}
+                      project {String(i + 1).padStart(2, "0")}
                     </span>
 
                     <pre className="frag tilt-layer" aria-hidden="true">

@@ -200,6 +200,8 @@
 .p-notes p {
   padding: 8px 0;
   display: grid;
+  /* Keep label and text at the top when a cell is stretched to its row's height. */
+  align-content: start;
   grid-template-columns: 76px minmax(0, 1fr);
   gap: 16px;
   border-top: 1px solid var(--border);

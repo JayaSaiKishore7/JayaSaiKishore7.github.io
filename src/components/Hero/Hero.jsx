@@ -65,7 +65,7 @@ export class Hero extends Component {
         <div className="container hero-inner">
           <div className="hero-main">
             <p className="hero-meta stagger" style={{ "--stagger": 0 }}>
-              Hola
+              {profile.location.toLowerCase()}
             </p>
 
             <h1 className="hero-name" aria-label={profile.name.toLowerCase()}>
@@ -81,11 +81,11 @@ export class Hero extends Component {
               ))}
             </h1>
 
-            <h2 className="hero-tagline stagger" style={{ "--stagger": 2 }}>
-              machine learning &amp; data.
+            <p className="hero-tagline stagger" style={{ "--stagger": 2 }}>
+              {profile.role}.
               <br />
-              lately pretty deep in <em className="hero-accent">retrieval</em>.
-            </h2>
+              lately, computer vision on a <em className="hero-accent">production line</em>.
+            </p>
 
             <p className="hero-note stagger" style={{ "--stagger": 3 }}>
               (more interested in how models behave in production than how they're trained.)

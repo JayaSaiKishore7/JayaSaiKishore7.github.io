@@ -1,34 +1,31 @@
 const TICK_MS = 30000;
 
 /**
- * Ticks a 24h local time string plus a short time-of-day remark every 30
- * seconds. Framework-agnostic; owned by a component's lifecycle methods.
- * The owner seeds its initial state with Clock.format(), so start() only
- * schedules the ticks.
+ * Ticks the current 24h time in a given time zone (the site owner's, so
+ * visitors see the local time in Nice) every 30 seconds.
+ * Framework-agnostic; owned by a component's lifecycle methods. start() ticks
+ * once immediately, so the owner can render a placeholder until mounted (the
+ * pre-rendered HTML can't know the visitor's current time).
  */
 export class Clock {
-  constructor({ onTick }) {
+  constructor({ timeZone, onTick }) {
+    this.formatter = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+      timeZone,
+    });
     this.onTick = onTick;
     this.interval = null;
   }
 
-  static format(date = new Date()) {
-    const hours = date.getHours();
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const time = `${String(hours).padStart(2, "0")}:${minutes}`;
-
-    let remark;
-    if (hours < 5) remark = "it's late.";
-    else if (hours < 12) remark = "good morning.";
-    else if (hours < 18) remark = "good afternoon.";
-    else if (hours < 22) remark = "good evening.";
-    else remark = "it's late.";
-
-    return { time, remark };
+  format(date = new Date()) {
+    return this.formatter.format(date);
   }
 
   start() {
-    this.interval = setInterval(() => this.onTick(Clock.format()), TICK_MS);
+    this.onTick(this.format());
+    this.interval = setInterval(() => this.onTick(this.format()), TICK_MS);
   }
 
   stop() {

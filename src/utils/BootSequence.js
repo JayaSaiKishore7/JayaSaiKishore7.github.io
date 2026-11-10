@@ -7,8 +7,8 @@ const SKIP_EVENTS = ["pointerdown", "keydown", "wheel", "touchstart"];
  * Phases: idle → playing → leaving → done.
  * skip() (any pointer, key, wheel or touch input) jumps from playing/leaving
  * straight to done. stop() (unmount) also ends in done, but without onDone.
- * If the boot already played this session, or storage is blocked, start()
- * goes straight from idle to done.
+ * If the boot already played this session, storage is blocked, or the page
+ * isn't in its JS-hidden state (html.js), start() goes straight to done.
  */
 export class BootSequence {
   constructor({ container, lines, lineGap = 230, onDone }) {
@@ -70,6 +70,9 @@ export class BootSequence {
   }
 
   _shouldPlay() {
+    // Without html.js (index.html dropped it because the app started too
+    // slowly) the hero is already showing; don't type over it.
+    if (!document.documentElement.classList.contains("js")) return false;
     try {
       return sessionStorage.getItem(STORAGE_KEY) !== "yes";
     } catch {

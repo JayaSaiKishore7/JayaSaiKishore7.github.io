@@ -18,18 +18,18 @@
   max-width: 760px;
 }
 
+/* Hero content is visible by default. Only while the app is running (html.js,
+   see index.html) and the intro hasn't finished is it hidden, ready to fade in. */
 .stagger {
-  opacity: 0;
-  transform: translateY(16px);
   transition:
     opacity 0.6s var(--ease),
     transform 0.6s var(--ease);
   transition-delay: calc(var(--stagger, 0) * 90ms);
 }
 
-.hero.is-ready .stagger {
-  opacity: 1;
-  transform: translateY(0);
+.js .hero:not(.is-ready) .stagger {
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 .hero-meta {
@@ -52,9 +52,6 @@
 .hero-letter {
   display: inline-block;
   white-space: pre;
-  opacity: 0;
-  transform: translateY(0.4em);
-  filter: blur(6px);
   transition:
     opacity 0.55s var(--ease),
     transform 0.55s var(--ease),
@@ -62,10 +59,10 @@
   transition-delay: calc(60ms + var(--li, 0) * 38ms);
 }
 
-.hero.is-ready .hero-letter {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+.js .hero:not(.is-ready) .hero-letter {
+  opacity: 0;
+  transform: translateY(0.4em);
+  filter: blur(6px);
 }
 
 .hero-tagline {

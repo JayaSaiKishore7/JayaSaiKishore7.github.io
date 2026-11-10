@@ -6,7 +6,8 @@ export class Footer extends Component {
   render() {
     return (
       <footer className="footer">
-        <p>
+        {/* The year comes from the build; the browser may disagree right after New Year. */}
+        <p suppressHydrationWarning>
           © {new Date().getFullYear()} {profile.fullName.toLowerCase()} &middot; written, built and debugged in france
         </p>
       </footer>

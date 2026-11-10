@@ -7,6 +7,7 @@ export const theme = {
     text: "#efeee9",
     soft: "#c2c1bb",
     muted: "#86857f",
+    // Decorative only (bullets, scrollbar): about 2.9:1 on bg, too low for text.
     mutedSoft: "#5c5b56",
     accent: "#f2a65a",
     onAccent: "#080808",
@@ -17,7 +18,7 @@ export const theme = {
   typography: {
     fontDisplay: '"IBM Plex Sans", Arial, system-ui, sans-serif',
     fontMono: '"IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
-    fontSerif: '"Fraunces", Georgia, "Times New Roman", serif',
+    fontSerif: '"Fraunces Variable", Georgia, "Times New Roman", serif',
   },
 
   radii: {

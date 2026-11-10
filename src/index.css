@@ -1,8 +1,8 @@
 /*
- * No design tokens are declared here. Every --variable referenced in this
- * file (and every component stylesheet) is produced at runtime by
- * src/theme/ThemeInjector.js from the single canonical source,
- * src/theme/theme.js. Change a color/radius/shadow/font there, not here.
+ * No design tokens are declared here. Every --variable used in this file and
+ * the component stylesheets comes from src/theme/theme.js, turned into a
+ * :root block at build time (virtual:theme.css, see src/theme/themeCss.js).
+ * Change a color/font/spacing value there, not here.
  */
 
 * {
@@ -12,6 +12,8 @@
 }
 
 html {
+  color-scheme: dark;
+  background: var(--bg);
   scroll-behavior: smooth;
   scroll-padding-top: 72px;
 }
@@ -81,6 +83,7 @@ img {
 
 .section-label {
   font-family: var(--font-mono);
+  font-weight: 400;
   font-size: 0.8rem;
   color: var(--accent);
   margin-bottom: 0.8rem;
@@ -198,11 +201,10 @@ img {
   transform: translateZ(var(--depth, 0px));
 }
 
-/* SCROLL REVEAL */
+/* SCROLL REVEAL
+   Visible by default; hidden only while the app is running (html.js, see
+   index.html) and the element hasn't scrolled into view yet. */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px) scale(0.99);
-  filter: blur(3px);
   transition:
     opacity 0.55s var(--ease),
     transform 0.55s var(--ease),
@@ -210,10 +212,10 @@ img {
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: none;
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(24px) scale(0.99);
+  filter: blur(3px);
 }
 
 @media (prefers-reduced-motion: reduce) {

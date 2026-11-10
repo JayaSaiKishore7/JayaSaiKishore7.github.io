@@ -1,19 +1,21 @@
 import { Component } from "react";
 import { navLinks, navLink } from "../../data/nav";
+import { profile } from "../../data/profile";
 import { Clock } from "../../utils/Clock";
 import "./Navbar.css";
 
-/** Top bar: brand, section links (hidden on wide screens, where SideNav takes over) and clock. */
+/** Top bar: brand, section links (hidden on wide screens, where SideNav takes over) and local time in Nice. */
 export class Navbar extends Component {
   constructor(props) {
     super(props);
-    this.state = { clock: Clock.format() };
+    // null until mounted: the pre-rendered page shows a placeholder, not the build's time.
+    this.state = { time: null };
     this.clock = null;
     this.handleTick = this.handleTick.bind(this);
   }
 
   componentDidMount() {
-    this.clock = new Clock({ onTick: this.handleTick });
+    this.clock = new Clock({ timeZone: profile.timeZone, onTick: this.handleTick });
     this.clock.start();
   }
 
@@ -21,13 +23,13 @@ export class Navbar extends Component {
     this.clock?.stop();
   }
 
-  handleTick(clock) {
-    this.setState({ clock });
+  handleTick(time) {
+    this.setState({ time });
   }
 
   render() {
     const { active } = this.props;
-    const { clock } = this.state;
+    const { time } = this.state;
 
     return (
       <header className="bar">
@@ -51,7 +53,7 @@ export class Navbar extends Component {
           </nav>
 
           <p className="bar-time">
-            <span data-clock>{clock.time}</span> · {clock.remark}
+            <span data-clock>{time ?? "--:--"}</span> in {profile.city.toLowerCase()}
           </p>
         </div>
         <div className="prog" aria-hidden="true" />
