@@ -1,3 +1,8 @@
+/**
+ * Draws labelled "detection" boxes around elements (like an object detector's
+ * output), one after another, each fading out by itself. The label sits
+ * outside the box, above its top-left corner, so it never covers the text.
+ */
 export class DetectionBoxes {
   constructor({ container, targets, startDelay = 1100, gap = 180 }) {
     this.container = container;
@@ -23,7 +28,7 @@ export class DetectionBoxes {
     this.container?.querySelectorAll(".detect-box").forEach((box) => box.remove());
   }
 
-  _drawBox({ selector, label, tight, labelInside }) {
+  _drawBox({ selector, label, tight }) {
     const el = this.container.querySelector(selector);
     if (!el) return;
 
@@ -48,7 +53,7 @@ export class DetectionBoxes {
     box.style.height = `${rect.height + pad * 2}px`;
 
     const tag = document.createElement("span");
-    tag.className = labelInside ? "detect-label detect-label--inside" : "detect-label";
+    tag.className = "detect-label";
     tag.textContent = label;
     box.appendChild(tag);
 

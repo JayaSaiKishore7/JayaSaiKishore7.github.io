@@ -1,7 +1,7 @@
 import { Component, createRef } from "react";
 import { experience } from "../../data/experience";
 import { Reveal } from "../Reveal";
-import { SectionLabel } from "../SectionLabel";
+import { SectionHeader } from "../ui/SectionHeader";
 import { PointerGlow } from "../../utils/PointerGlow";
 import "./Resume.css";
 
@@ -28,12 +28,11 @@ export class Resume extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionLabel id="experience" />
-            <h2 className="section-heading">where i've worked</h2>
-            <p className="section-sub">
-              software engineering and data science roles, contributing to ML workflows,
-              automation, and production inference.
-            </p>
+            <SectionHeader
+              id="experience"
+              title="where i've worked"
+              sub="software engineering and data science roles, contributing to ML workflows, automation, and production inference."
+            />
           </Reveal>
 
           <div className="xps" ref={this.xpsRef}>

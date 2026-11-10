@@ -1,7 +1,7 @@
 import { Component, createRef } from "react";
 import { education } from "../../data/experience";
 import { Reveal } from "../Reveal";
-import { SectionLabel } from "../SectionLabel";
+import { SectionHeader } from "../ui/SectionHeader";
 import { PointerGlow } from "../../utils/PointerGlow";
 import "./Education.css";
 
@@ -28,8 +28,8 @@ export class Education extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            {/* The section's only title, so it is the heading (styled as a label). */}
-            <SectionLabel id="education" as="h2" />
+            {/* No separate title: the "03 · education" label is the section's heading. */}
+            <SectionHeader id="education" />
           </Reveal>
 
           <div className="edu-list" ref={this.listRef}>

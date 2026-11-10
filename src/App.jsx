@@ -34,7 +34,7 @@ class App extends Component {
     // Page boot state for index.html's fallback timer, tests and tools.
     document.documentElement.dataset.app = "ready";
 
-    this.nms = new NmsReveal({ selector: ".section-header-title, .work-statement, .section-heading, .hello-statement" });
+    this.nms = new NmsReveal({ selector: ".section-header-title" });
     this.nms.start();
 
     if (this.route.page === "home") {

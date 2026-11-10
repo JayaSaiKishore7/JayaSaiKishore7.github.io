@@ -101,7 +101,7 @@ button {
   }
 }
 
-/* ---------- section headings (shared by the sections not yet using SectionHeader) ---------- */
+/* ---------- small accent label (case study pages, until their restyle) ---------- */
 
 .section-label {
   margin-bottom: 0.8rem;
@@ -109,23 +109,6 @@ button {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 400;
-}
-
-.section-heading {
-  margin-bottom: 0.9rem;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: var(--size-heading);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-}
-
-.section-sub {
-  max-width: 620px;
-  margin-bottom: 1.5rem;
-  color: var(--muted);
-  line-height: 1.7;
 }
 
 .section-rule {
@@ -255,10 +238,11 @@ button {
   border-color: var(--accent);
 }
 
+/* Label outside the box, above its top-left corner, so it never covers the heading. */
 .nms-tag {
   position: absolute;
-  bottom: 100%;
-  right: -1px;
+  bottom: calc(100% + 2px);
+  left: -1px;
   padding: 1px 6px;
   background: color-mix(in srgb, var(--accent) 45%, transparent);
   color: var(--on-accent);

@@ -33,7 +33,7 @@ export class Hero extends Component {
       startDelay: 1300, // after the text has risen in
       targets: [
         { selector: ".hero-name", label: "name 0.99", tight: true },
-        { selector: ".hero-tagline", label: "role 0.97", tight: true, labelInside: true },
+        { selector: ".hero-tagline", label: "role 0.97", tight: true },
         { selector: ".hero-card", label: "info 0.95" },
       ],
     });
