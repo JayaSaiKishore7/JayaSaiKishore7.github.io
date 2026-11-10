@@ -30,6 +30,43 @@ export const projects = [
     proof:
       "in all 19 daily checks (17 Oct – 4 Nov 2026), its 24-hour forecasts beat persistence, by 22–56%. over the latest week: 26% lower error on O₃ and NO₂ and 34% on PM10, across 14,468 scored values.",
     aside: "PM2.5 and CO still only match persistence, and the README says so.",
+    // Drawn by ArchitectureDiagram on the case study page. Nodes sit on a grid
+    // (col, row); edges are [from, to, options] and run along a row or a column.
+    architecture: {
+      caption:
+        "top: the daily pipeline on GitHub Actions. bottom: training and serving, run locally with Docker Compose. hover or tab through the steps for details.",
+      groups: [
+        { label: "daily · GitHub Actions, 04:30 UTC", from: [1, 0], to: [4, 0] },
+        { label: "local · Docker Compose", from: [1, 2], to: [4, 2] },
+      ],
+      nodes: [
+        { id: "geodair", col: 0, row: 0, title: "Geod'Air", sub: "hourly measurements", detail: "the French national air quality database: hourly values for ~90 station/pollutant series in PACA." },
+        { id: "fetch", col: 1, row: 0, title: "fetch", sub: "download + clean", detail: "fetch_geodair.py downloads the latest days of measurements and cleans them." },
+        { id: "forecast", col: 2, row: 0, title: "forecast", sub: "XGBoost, 24 h", detail: "make_forecasts.py predicts the next 24 hours recursively, one hour at a time, feeding each prediction back in as the next hour's input." },
+        { id: "monitor", col: 3, row: 0, title: "monitor", sub: "drift + skill", detail: "monitor_drift.py scores past forecasts against what was measured, and Evidently compares live data with a same-season, same-station reference." },
+        { id: "site", col: 4, row: 0, title: "build page", sub: "static HTML", detail: "build_site.py renders the station map and charts (Plotly) into one static page." },
+        { id: "hf", col: 5, row: 0, title: "Hugging Face", sub: "live page", detail: "the page is published to a free Hugging Face Space: this is the live demo." },
+        { id: "issue", col: 3, row: 1, title: "GitHub issue", sub: "on drift", detail: "when drift is detected, the job opens a GitHub issue automatically." },
+        { id: "repo", col: 4, row: 1, title: "git history", sub: "data + monitoring", detail: "observations, forecasts and the monitoring history are committed back to the repository every day." },
+        { id: "train", col: 1, row: 2, title: "train", sub: "MLflow runs", detail: "preprocess_data.py and train_model.py compare Random Forest and XGBoost on a chronological 80/20 split, logging runs to MLflow." },
+        { id: "model", col: 2, row: 2, title: "model", sub: "XGBoost, 4.8 MB", detail: "the deployed model: XGBoost, chosen over a slightly better but 278 MB Random Forest because it is small enough to ship." },
+        { id: "api", col: 3, row: 2, title: "FastAPI", sub: "/forecast/24h", detail: "the API serves 24-hour forecasts from the same model and shared feature code." },
+        { id: "ui", col: 4, row: 2, title: "Streamlit", sub: "dashboard", detail: "a local dashboard for exploring history and forecasts; it works with or without the API." },
+      ],
+      edges: [
+        ["geodair", "fetch"],
+        ["fetch", "forecast"],
+        ["forecast", "monitor"],
+        ["monitor", "site"],
+        ["site", "hf"],
+        ["monitor", "issue", { dashed: true, label: "drift" }],
+        ["site", "repo"],
+        ["train", "model"],
+        ["model", "forecast"],
+        ["model", "api"],
+        ["api", "ui"],
+      ],
+    },
     frag: {
       file: "air-quality / airquality/features.py",
       code: `past = v.shift(1)

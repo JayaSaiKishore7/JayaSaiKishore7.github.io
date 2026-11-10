@@ -22,6 +22,20 @@ search engines and tools that don't run JavaScript see the full content: the hom
 `<head>` tags, plus `dist/sitemap.xml`. In the browser, React takes over a page only when its HTML
 was rendered for that path (`data-path` on `#root`, checked in `src/main.jsx`).
 
+## GitHub activity
+
+The "on github" block under the projects is fetched **at build time** from GitHub's public REST API
+(`src/data/github.js`, served as `virtual:github-activity` by a plugin in `vite.config.js`), so
+visitors' browsers never call GitHub. It refreshes on every build. The deploy passes `GITHUB_TOKEN`
+to avoid the anonymous rate limit. If the fetch fails, the block is left out and the build continues.
+
+## Architecture diagrams
+
+A project with an `architecture` entry in `src/data/projects.js` (nodes on a grid, edges, groups)
+gets an interactive diagram on its case study page (`src/components/ArchitectureDiagram/`): hovering
+or tabbing to a step highlights its connections and shows its description. To add one for another
+project, add the data; no new code is needed.
+
 ## Pages
 
 `src/routes.js` maps paths to pages, with no router library: `/` is the home page, and `/work/<id>/`
@@ -65,4 +79,5 @@ Each stateful piece has a small set of named states, visible in the DOM for test
 | Copy-email button (`Connect`) | `idle` → `copied` or `failed` → `idle` | `.copy[data-state]`, announced through `aria-live` |
 | Nav active section (`ScrollSpy`, owned by `App`) | `null` on the hero, then one of the nav section ids. At the page bottom the last section wins. | `aria-current="location"` on the active navbar link |
 | Scroll reveal (`Reveal`) | hidden → visible (one way). On cards, `Reveal` wraps the card in a `.card-slot`, so scroll-in and hover motion stay separate. | `.reveal.is-visible`. Print shows everything. |
-| 3D tilt (`Tilt3D`, lead project card) | resting ↔ tilting. Off on touch-only devices and with reduced motion. | `.card--tilt.is-tilting`, with `--tilt-x`/`--tilt-y` |
+| Architecture diagram (`ArchitectureDiagram`) | `none` ↔ a step id (hover or keyboard focus) | `.arch[data-active]`, caption announced through `aria-live` |
+| 3D tilt (`Tilt3D`, featured project cards) | resting ↔ tilting. Off on touch-only devices and with reduced motion. | `.card--tilt.is-tilting`, with `--tilt-x`/`--tilt-y` |

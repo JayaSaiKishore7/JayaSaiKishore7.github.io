@@ -113,6 +113,18 @@
   font-weight: 300;
 }
 
+.case-section {
+  margin-top: clamp(36px, 5vw, 64px);
+}
+
+.case-section-title {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
 .case-code {
   margin: clamp(28px, 4vw, 44px) 0 0;
   padding: 16px 18px;

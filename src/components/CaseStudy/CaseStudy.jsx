@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { projects } from "../../data/projects";
 import { caseStudyPath } from "../../routes";
+import { ArchitectureDiagram } from "../ArchitectureDiagram/ArchitectureDiagram";
 import { ProjectThumb } from "../Project/ProjectThumb";
 import { TechList } from "../Project/TechList";
 import "./CaseStudy.css";
@@ -64,6 +65,19 @@ export class CaseStudy extends Component {
           </dl>
 
           {project.aside ? <p className="case-aside">{project.aside}</p> : null}
+
+          {project.architecture ? (
+            <section className="case-section" aria-labelledby="case-architecture">
+              <h2 id="case-architecture" className="case-section-title">
+                architecture
+              </h2>
+              <ArchitectureDiagram
+                id={`${project.id}-architecture`}
+                title={`${project.title} architecture`}
+                diagram={project.architecture}
+              />
+            </section>
+          ) : null}
 
           {/* Projects without a screenshot already show their code as the figure. */}
           {project.thumbnail ? (

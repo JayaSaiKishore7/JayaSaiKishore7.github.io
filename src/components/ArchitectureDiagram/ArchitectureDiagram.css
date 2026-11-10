@@ -1,0 +1,115 @@
+.arch {
+  margin: 0;
+}
+
+/* Wide diagrams scroll sideways on phones instead of shrinking to unreadable text. */
+.arch-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.arch-svg {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+  font-family: var(--font-mono);
+}
+
+.arch-group rect {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-dasharray: 3 4;
+}
+
+.arch-group text {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.arch-edge line {
+  stroke: var(--muted);
+  stroke-width: 1;
+  transition: stroke 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.arch-edge.is-dashed line {
+  stroke-dasharray: 4 4;
+}
+
+.arch-edge text {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.arch-arrow {
+  fill: var(--muted);
+}
+
+.arch-arrow--on {
+  fill: var(--accent);
+}
+
+.arch-node {
+  cursor: default;
+  outline: none;
+}
+
+.arch-node rect {
+  fill: var(--bg);
+  stroke: var(--border-strong);
+  transition: stroke 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.arch-title {
+  fill: var(--text);
+  font-size: 13px;
+}
+
+.arch-sub {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+/* While a step is selected: it and its connections stand out, the rest fades. */
+.has-active .arch-node,
+.has-active .arch-edge {
+  opacity: 0.35;
+  transition: opacity 0.2s var(--ease);
+}
+
+.has-active .arch-node.is-related,
+.has-active .arch-node.is-active,
+.has-active .arch-edge.is-on {
+  opacity: 1;
+}
+
+.arch-node.is-active rect {
+  stroke: var(--accent);
+}
+
+.arch-node:focus-visible rect {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.arch-edge.is-on line {
+  stroke: var(--accent);
+}
+
+.arch figcaption {
+  min-height: 3.2em;
+  margin-top: 10px;
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.arch figcaption b {
+  margin-right: 6px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 400;
+}
