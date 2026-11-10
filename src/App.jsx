@@ -1,7 +1,8 @@
-import { Component } from "react";
+﻿import { Component } from "react";
 import { Navbar } from "./components/Navbar/Navbar";
 import { ScrollProgress } from "./components/ScrollProgress/ScrollProgress";
 import { Hero } from "./components/Hero/Hero";
+import { ProofStrip } from "./components/ProofStrip/ProofStrip";
 import { Projects } from "./components/Projects/Projects";
 import { Resume } from "./components/Resume/Resume";
 import { Education } from "./components/Education/Education";
@@ -72,6 +73,7 @@ class App extends Component {
         <ScrollProgress />
         <Navbar onHome active={active} />
         <Hero />
+        <ProofStrip />
         <Projects />
         <Resume />
         <Education />

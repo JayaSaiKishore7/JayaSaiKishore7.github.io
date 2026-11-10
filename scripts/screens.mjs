@@ -1,11 +1,11 @@
-// Real screenshots of the running site, for before/after reviews and smoke checks.
+﻿// Real screenshots of the running site, for before/after reviews and smoke checks.
 //
 //   npm run dev                                   (in another terminal)
 //   npm run screens -- <outDir> [baseUrl]
 //
 // Uses the Microsoft Edge already installed on the machine (playwright-core,
 // no browser download). Waits on the app's own state attributes
-// (#home[data-phase="ready"]) instead of fixed sleeps, and logs a small report
+// (html[data-app="ready"]) instead of fixed sleeps, and logs a small report
 // per shot: the nav's active section and any horizontal overflow.
 import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
@@ -51,7 +51,7 @@ try {
       await page.goto(new URL(path, baseUrl).href, { waitUntil: "networkidle" });
       await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
       if (path === "/") {
-        await page.waitForSelector('#home[data-phase="ready"]', { timeout: 10000 });
+        await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
         await page.waitForTimeout(800); // hero fade-in
       }
 
