@@ -8,6 +8,7 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
+    "deploy": "npm run lint && npm run build && npx wrangler pages deploy dist --project-name jayasaikishore --branch main",
     "screens": "node scripts/screens.mjs",
     "og-image": "node scripts/og-image.mjs"
   },

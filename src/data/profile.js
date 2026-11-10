@@ -9,7 +9,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/jaya-sai-kishore/",
   github: "https://github.com/JayaSaiKishore7",
   resume: "/resume/JayaSaiKishoreN_Resume.pdf",
-  siteUrl: "https://jayasaikishore7.github.io/",
+  siteUrl: "https://jayasaikishore.pages.dev/",
 };
 
 // Page title, description and link-preview data (rendered by src/data/head.js).
