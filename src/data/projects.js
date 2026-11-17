@@ -12,7 +12,8 @@
 // Fields: featured = listed under "featured" in the split view (the rest under
 // "more"); what = the one-line description; tech = tools shown as tags;
 // thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
-// from `frag`; demo = live demo URL, if any; team = built as a team.
+// from `frag`; demo = live demo URL, if any; huggingface = the project's page on
+// Hugging Face (a Space, model or dataset), if any; team = built as a team.
 //
 // Style: sentences start lowercase; names of tools, datasets and organisations keep their capitals.
 export const projects = [
@@ -27,7 +28,8 @@ export const projects = [
       alt: "the live forecast page: a station map of Provence-Alpes-Côte d'Azur and a chart of measured vs. forecast NO₂",
     },
     link: "https://github.com/JayaSaiKishore7/AirQuality_AnalysisFR",
-    demo: "https://huggingface.co/spaces/JayaSaiKishore/airquality-paca",
+    demo: "https://jayasaikishore-airquality-paca.static.hf.space/",
+    huggingface: "https://huggingface.co/spaces/JayaSaiKishore/airquality-paca",
     notes: {
       problem:
         "a forecasting model trained once and left alone quietly goes stale, and nobody notices until its forecasts are wrong. PACA's air quality needed a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
@@ -132,6 +134,7 @@ answer = llm.invoke(prompt)`,
     },
     link: "https://github.com/JayaSaiKishore7/brain-tumor-classifier",
     demo: "https://jayasaikishore-brain-tumor-classifier.static.hf.space/",
+    huggingface: "https://huggingface.co/spaces/JayaSaiKishore/brain-tumor-classifier",
     notes: {
       problem:
         "sorting brain MRI slices into glioma, meningioma, pituitary tumor or no tumor, using a small dataset (7,023 images) and a CNN trained from scratch, with no pretrained weights to lean on.",

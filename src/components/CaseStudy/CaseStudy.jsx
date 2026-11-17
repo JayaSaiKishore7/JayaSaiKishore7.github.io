@@ -45,6 +45,11 @@ export class CaseStudy extends Component {
                   live demo ↗
                 </a>
               ) : null}
+              {project.huggingface ? (
+                <a href={project.huggingface} target="_blank" rel="noreferrer">
+                  hugging face ↗
+                </a>
+              ) : null}
             </p>
           </header>
 

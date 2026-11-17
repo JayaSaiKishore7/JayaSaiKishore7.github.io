@@ -63,6 +63,11 @@ class ProjectPreview extends Component {
                 live demo ↗
               </a>
             ) : null}
+            {project.huggingface ? (
+              <a href={project.huggingface} target="_blank" rel="noreferrer">
+                hugging face ↗
+              </a>
+            ) : null}
           </p>
         </div>
       </article>
