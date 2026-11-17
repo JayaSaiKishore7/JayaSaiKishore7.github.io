@@ -1,8 +1,11 @@
 name: Deploy to GitHub Pages
 
+# Manual only while the live site is on Cloudflare Pages (see README, Deployment):
+# running on every push to main would publish a second, competing copy at
+# github.io. To move back to GitHub Pages, restore the push trigger:
+#   push:
+#     branches: [main]
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
