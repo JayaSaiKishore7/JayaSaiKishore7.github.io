@@ -32,32 +32,33 @@ export const projects = [
       problem:
         "a forecasting model trained once and left alone quietly goes stale, and nobody notices until its forecasts are wrong. PACA's air quality needed a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
       built:
-        "the whole system, solo: a daily GitHub Actions job that pulls Geod'Air measurements for ~90 station/pollutant series, leakage-safe features, an XGBoost model that forecasts 24 h ahead recursively, scoring of every past forecast against what was measured, Evidently drift checks that open a GitHub issue, and a static page on Hugging Face. plus a FastAPI service, a Streamlit dashboard and 41 pytest tests that run on every push.",
+        "the whole system, solo: a daily GitHub Actions job (with a backup runner on my PC) that runs the tests first, pulls Geod'Air measurements for ~90 station/pollutant series, builds leakage-safe features and forecasts 24 h ahead recursively with XGBoost. it scores every past forecast against what was measured, runs Evidently drift checks that open a GitHub issue, publishes a static page on Hugging Face and checks that the live page shows the new forecast. plus a FastAPI service, a Streamlit dashboard and 51 pytest tests, with CI and a protected main branch.",
       decision:
         "i shipped XGBoost, not the Random Forest, even though the forest scored slightly better (1-hour MAE 3.66 vs 3.69). the forest is 278 MB and XGBoost is 4.8 MB, small enough to run in a free daily job and deploy without paid hosting.",
       tested:
-        "two numbers misled me. my first score was too good: the 3-hour average included the hour being predicted. using only past hours raised the 1-hour error (MAE 3.42 → 3.69) but made training match live forecasting. then the drift alarm fired every day, because live data was compared with the whole year, including stations that weren't reporting. comparing the same season and stations cut the drift share from 0.67 to 0.56.",
+        "two numbers misled me. my first score was too good: the 3-hour average included the hour being predicted. using only past hours raised the 1-hour error (MAE 3.42 → 3.69) but made training match live forecasting. then the drift alarm fired every day, because live data was compared with the whole year, including stations that weren't reporting. comparing the same season and stations cut the drift share from 0.67 to 0.56. and after a 12-day gap with no forecasts (5–16 Nov), a failed or missed run now opens a GitHub issue, the backup runner publishes if GitHub hasn't, and the page warns visitors when its forecast is over 36 hours old.",
     },
     proof:
-      "in all 19 daily checks (17 Oct – 4 Nov 2026), its 24-hour forecasts beat persistence, by 22–56%. over the latest week: 26% lower error on O₃ and NO₂ and 34% on PM10, across 14,468 scored values.",
-    aside: "PM2.5 and CO still only match persistence, and the README says so.",
+      "over 20 daily forecasts (16 Oct – 4 Nov 2026, 40,871 scored values), its 24-hour forecasts had 26% lower error than persistence (30% on PM10, 29% on NO₂, 27% on O₃) and beat it on 18 of the 20 days.",
+    aside: "PM2.5 gains only 10%, and on 2 of the 20 days it did worse than persistence. the README says so.",
     // Drawn by ArchitectureDiagram on the case study page. Nodes sit on a grid
     // (col, row); edges are [from, to, options] and run along a row or a column.
     architecture: {
       caption:
         "top: the daily pipeline on GitHub Actions. bottom: training and serving, run locally with Docker Compose. hover or tab through the steps for details.",
       groups: [
-        { label: "daily · GitHub Actions, 04:30 UTC", from: [1, 0], to: [4, 0] },
+        { label: "daily · GitHub Actions, 04:30 UTC (PC backup)", from: [1, 0], to: [4, 0] },
         { label: "local · Docker Compose", from: [1, 2], to: [4, 2] },
       ],
       nodes: [
         { id: "geodair", col: 0, row: 0, title: "Geod'Air", sub: "hourly measurements", detail: "the French national air quality database: hourly values for ~90 station/pollutant series in PACA." },
-        { id: "fetch", col: 1, row: 0, title: "fetch", sub: "download + clean", detail: "fetch_geodair.py downloads the latest days of measurements and cleans them." },
+        { id: "fetch", col: 1, row: 0, title: "fetch", sub: "tests, then download", detail: "the run starts with the test suite; if it passes, fetch_geodair.py downloads the latest measurements, backfills any missed days and cleans them." },
         { id: "forecast", col: 2, row: 0, title: "forecast", sub: "XGBoost, 24 h", detail: "make_forecasts.py predicts the next 24 hours recursively, one hour at a time, feeding each prediction back in as the next hour's input." },
         { id: "monitor", col: 3, row: 0, title: "monitor", sub: "drift + skill", detail: "monitor_drift.py scores past forecasts against what was measured, and Evidently compares live data with a same-season, same-station reference." },
         { id: "site", col: 4, row: 0, title: "build page", sub: "static HTML", detail: "build_site.py renders the station map and charts (Plotly) into one static page." },
         { id: "hf", col: 5, row: 0, title: "Hugging Face", sub: "live page", detail: "the page is published to a free Hugging Face Space: this is the live demo." },
-        { id: "issue", col: 3, row: 1, title: "GitHub issue", sub: "on drift", detail: "when drift is detected, the job opens a GitHub issue automatically." },
+        { id: "issue", col: 3, row: 1, title: "GitHub issue", sub: "on drift or failure", detail: "detected drift, or any failure in the daily run, opens a GitHub issue automatically. a failed run leaves the previous page online." },
+        { id: "verify", col: 5, row: 1, title: "verify", sub: "live page = new build", detail: "check_deployed_page.py confirms the live page really shows the new forecast. the page itself shows an out-of-date banner if its forecast is more than 36 hours old." },
         { id: "repo", col: 4, row: 1, title: "git history", sub: "data + monitoring", detail: "observations, forecasts and the monitoring history are committed back to the repository every day." },
         { id: "train", col: 1, row: 2, title: "train", sub: "MLflow runs", detail: "preprocess_data.py and train_model.py compare Random Forest and XGBoost on a chronological 80/20 split, logging runs to MLflow." },
         { id: "model", col: 2, row: 2, title: "model", sub: "XGBoost, 4.8 MB", detail: "the deployed model: XGBoost, chosen over a slightly better but 278 MB Random Forest because it is small enough to ship." },
@@ -70,6 +71,7 @@ export const projects = [
         ["forecast", "monitor"],
         ["monitor", "site"],
         ["site", "hf"],
+        ["hf", "verify"],
         ["monitor", "issue", { dashed: true, label: "drift" }],
         ["site", "repo"],
         ["train", "model"],
@@ -97,16 +99,16 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
       alt: "the Streamlit app: a photo of a smiling face uploaded for emotion detection",
     },
     link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
-    demo: "https://emotionragapp-2.streamlit.app/",
+    demo: "https://emotionragapplication-dmj76csbefwfku6hgnchkt.streamlit.app/",
     notes: {
       problem:
         "an emotion label on its own doesn't say why someone feels that way. the app connects a detected emotion to the customer feedback behind it.",
       built:
-        "all of it, solo: a ResNet-50 fine-tuned on FER-2013, an OpenCV face crop so the model sees the largest face, a FAISS index of 500 reviews (via LangChain) that returns the 4 closest to the detected emotion, RoBERTa sentiment scores for each review, and the Streamlit app that ties it together.",
+        "all of it, solo: a ResNet-50 fine-tuned on FER-2013, an OpenCV face crop so the model sees the largest face, a FAISS index of 500 reviews (via LangChain) that returns the 4 closest to the detected emotion, RoBERTa sentiment scores for each review, and the Streamlit app that ties it together. CI lints and smoke-tests every push and only then promotes it to the live app, so a broken commit never goes live.",
       decision:
         "i fine-tuned ResNet-50 rather than a vision transformer: with ~28,700 training images, a proven CNN trains faster and needs less data than a ViT. the vector search stays local in FAISS, because 500 reviews don't need a hosted database.",
       tested:
-        "testing changed two things. Flan-T5 was meant to summarize the retrieved reviews, but under every prompt i tried it copied them word for word, and larger models don't fit in Streamlit Cloud's memory, so i replaced it with a plain sentiment count. and the 62% headline hid the weak classes: disgust, the rarest class, was right only 2 times out of 55. per-class results told me more than the overall score.",
+        "testing changed two things. Flan-T5 was meant to summarize the retrieved reviews, but under every prompt i tried it copied them word for word, and larger models don't fit in Streamlit Cloud's memory, so i replaced it with a plain sentiment count. and the 62% headline hid the weak classes: disgust, the rarest class, was right only 2 times out of 55. per-class results told me more than the overall score. deployment taught me one more: a rebuild broke with no code change because a loosely pinned dependency (pyarrow) stopped installing, so all ~120 packages are now locked.",
     },
     proof: "62.2% accuracy on the 3,589-image FER-2013 test set (happiness 89%), with a live Streamlit demo.",
     aside: "disgust and fear are still the weak classes, and the README says so.",
@@ -122,31 +124,31 @@ answer = llm.invoke(prompt)`,
     id: "brain-tumor",
     featured: true,
     title: "Brain Tumor MRI Classifier",
-    what: "97.53% test accuracy, after augmentation first made it worse.",
-    tech: ["TensorFlow", "Keras", "CNN", "Flask"],
+    what: "97.53% test accuracy, after augmentation first made it worse. it runs in your browser, so scans never leave your device.",
+    tech: ["TensorFlow", "Keras", "ONNX Runtime Web", "Flask", "Playwright", "Hugging Face"],
     thumbnail: {
       src: "/projects/brain-tumor.webp",
       alt: "confusion matrix on the test set: nearly all scans fall on the diagonal for glioma, meningioma, no tumor and pituitary",
     },
     link: "https://github.com/JayaSaiKishore7/brain-tumor-classifier",
+    demo: "https://jayasaikishore-brain-tumor-classifier.static.hf.space/",
     notes: {
       problem:
         "sorting brain MRI slices into glioma, meningioma, pituitary tumor or no tumor, using a small dataset (7,023 images) and a CNN trained from scratch, with no pretrained weights to lean on.",
       built:
-        "everything, solo: the CNN (four conv/pool blocks, 1.3M parameters, trains on a CPU), augmentation tuned for MRI, training with early stopping and checkpointing, and a Flask site that shows the training report and classifies uploaded scans without ever saving them to disk.",
+        "everything, solo: the CNN (four conv/pool blocks, 1.3M parameters, trains on a CPU), augmentation tuned for MRI, and training with early stopping and checkpointing. the public site is a free static Hugging Face Space where the model runs in the visitor's browser, plus a Flask version with a JSON API and Grad-CAM support. CI runs lint, tests and real predictions in a headless browser on every pull request, and the live site is checked every 6 hours.",
       decision:
-        "i put augmentation and rescaling inside the model as Keras layers. Keras switches augmentation off outside training, and the Flask /predict endpoint runs exactly the same preprocessing as training, so predictions can't drift from training through mismatched preprocessing (train/serve skew).",
+        "i run the model in the visitor's browser (ONNX Runtime Web) instead of on a server: hosting is free, there's no cold start, and scans never leave the device. the risk was train/serve skew, so i ported Pillow's resize to JavaScript: on 30 full-size scans the browser's model inputs are pixel-identical to Python's, and the predictions match.",
       tested:
-        "my first augmentation pass dropped accuracy from 95.83% to 92.50%, because MRI orientation and intensity carry diagnostic signal. i checked whether it just needed longer training (it didn't: still 92.50%), then cut rotation, zoom and brightness to roughly a third (±18° → ±7°), which beat the no-augmentation baseline on every class.",
+        "my first augmentation pass dropped accuracy from 95.83% to 92.50%, because MRI orientation and intensity carry diagnostic signal. i checked whether it just needed longer training (it didn't: still 92.50%), then cut rotation, zoom and brightness to roughly a third (±18° → ±7°), which beat the no-augmentation baseline on every class. later, transfer learning with EfficientNetB0 on the same split didn't beat it (96.77% vs 97.53% test, within noise), so the simpler CNN stays.",
     },
     proof: "97.53% test accuracy on 1,054 held-out scans and 95.6% meningioma F1. the most common error: a glioma read as meningioma (9 of 243).",
     aside: "limitations are documented in the README, not claiming clinical validity.",
     frag: {
-      file: "brain-tumor-classifier / src/train.py",
-      code: `layers.RandomRotation(0.02),
-layers.RandomZoom(0.05),
-layers.RandomBrightness(0.05),
-layers.Rescaling(1.0 / 255),`,
+      file: "brain-tumor-classifier / web/static/js/preprocess.js",
+      code: `const w = bicubic((x + xmin - center + 0.5) * ss);
+k[x] = w;
+ww += w;`,
     },
   },
   {
