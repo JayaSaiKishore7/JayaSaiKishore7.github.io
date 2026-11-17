@@ -2,6 +2,13 @@
 // (ProjectSplit) and gets a case study page (/work/<id>/, see src/routes.js)
 // built from `notes`, `proof` and `aside`.
 //
+// Every case study answers four points:
+//   notes.problem   what problem it solves
+//   notes.built     what i personally built (for team projects, only my part)
+//   notes.decision  one technical decision and why
+//   proof           the headline result (also the page's meta description)
+//   notes.tested    what testing showed: surprises, failures, what changed
+//
 // Fields: featured = listed under "featured" in the split view (the rest under
 // "more"); what = the one-line description; tech = tools shown as tags;
 // thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
@@ -22,10 +29,13 @@ export const projects = [
     link: "https://github.com/JayaSaiKishore7/AirQuality_AnalysisFR",
     demo: "https://huggingface.co/spaces/JayaSaiKishore/airquality-paca",
     notes: {
-      why: "a model trained once and left alone quietly goes stale. i wanted a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
-      inside:
-        "a daily GitHub Actions job pulls Geod'Air measurements for ~90 station/pollutant series in PACA, XGBoost forecasts 24 h ahead recursively, every past forecast is scored against the real measurements, Evidently checks for drift and opens an issue, and a static page goes out to Hugging Face. 41 pytest tests run on every push.",
-      learning:
+      problem:
+        "a forecasting model trained once and left alone quietly goes stale, and nobody notices until its forecasts are wrong. PACA's air quality needed a forecaster that keeps running on fresh data and reports when it stops being trustworthy.",
+      built:
+        "the whole system, solo: a daily GitHub Actions job that pulls Geod'Air measurements for ~90 station/pollutant series, leakage-safe features, an XGBoost model that forecasts 24 h ahead recursively, scoring of every past forecast against what was measured, Evidently drift checks that open a GitHub issue, and a static page on Hugging Face. plus a FastAPI service, a Streamlit dashboard and 41 pytest tests that run on every push.",
+      decision:
+        "i shipped XGBoost, not the Random Forest, even though the forest scored slightly better (1-hour MAE 3.66 vs 3.69). the forest is 278 MB and XGBoost is 4.8 MB, small enough to run in a free daily job and deploy without paid hosting.",
+      tested:
         "two numbers misled me. my first score was too good: the 3-hour average included the hour being predicted. using only past hours raised the 1-hour error (MAE 3.42 → 3.69) but made training match live forecasting. then the drift alarm fired every day, because live data was compared with the whole year, including stations that weren't reporting. comparing the same season and stations cut the drift share from 0.67 to 0.56.",
     },
     proof:
@@ -80,8 +90,8 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
     id: "emotion-rag",
     featured: true,
     title: "Emotion-Aware Insight Generator",
-    what: "reads the emotion on a face, then finds and summarizes the reviews that explain it.",
-    tech: ["ResNet-50", "FAISS", "LangChain", "Flan-T5", "RoBERTa", "Streamlit"],
+    what: "reads the emotion on a face, then finds the customer reviews that explain it and scores their sentiment.",
+    tech: ["ResNet-50", "OpenCV", "FAISS", "LangChain", "RoBERTa", "Streamlit"],
     thumbnail: {
       src: "/projects/emotion-rag.webp",
       alt: "the Streamlit app: a photo of a smiling face uploaded for emotion detection",
@@ -89,11 +99,14 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
     link: "https://github.com/JayaSaiKishore7/Emotion_RAG_Application",
     demo: "https://emotionragapp-2.streamlit.app/",
     notes: {
-      why: "an emotion label on its own doesn't say why someone feels that way. i wanted to connect a detected emotion to the feedback behind it.",
-      inside:
-        "a ResNet-50 fine-tuned on FER-2013 labels the face, the emotion becomes a query, FAISS pulls the 4 closest of 500 reviews, Flan-T5 summarizes them and RoBERTa scores each review's sentiment, all in a Streamlit app.",
-      learning:
-        "the overall score hid the weak classes: 62% accuracy, but disgust, the rarest class, was right only 2 times out of 55, and none of the reviews ended up labelled disgust. per-class results told me more than the headline number.",
+      problem:
+        "an emotion label on its own doesn't say why someone feels that way. the app connects a detected emotion to the customer feedback behind it.",
+      built:
+        "all of it, solo: a ResNet-50 fine-tuned on FER-2013, an OpenCV face crop so the model sees the largest face, a FAISS index of 500 reviews (via LangChain) that returns the 4 closest to the detected emotion, RoBERTa sentiment scores for each review, and the Streamlit app that ties it together.",
+      decision:
+        "i fine-tuned ResNet-50 rather than a vision transformer: with ~28,700 training images, a proven CNN trains faster and needs less data than a ViT. the vector search stays local in FAISS, because 500 reviews don't need a hosted database.",
+      tested:
+        "testing changed two things. Flan-T5 was meant to summarize the retrieved reviews, but under every prompt i tried it copied them word for word, and larger models don't fit in Streamlit Cloud's memory, so i replaced it with a plain sentiment count. and the 62% headline hid the weak classes: disgust, the rarest class, was right only 2 times out of 55. per-class results told me more than the overall score.",
     },
     proof: "62.2% accuracy on the 3,589-image FER-2013 test set (happiness 89%), with a live Streamlit demo.",
     aside: "disgust and fear are still the weak classes, and the README says so.",
@@ -109,7 +122,7 @@ answer = llm.invoke(prompt)`,
     id: "brain-tumor",
     featured: true,
     title: "Brain Tumor MRI Classifier",
-    what: "97.15% test accuracy, after augmentation first made it worse.",
+    what: "97.53% test accuracy, after augmentation first made it worse.",
     tech: ["TensorFlow", "Keras", "CNN", "Flask"],
     thumbnail: {
       src: "/projects/brain-tumor.webp",
@@ -117,13 +130,16 @@ answer = llm.invoke(prompt)`,
     },
     link: "https://github.com/JayaSaiKishore7/brain-tumor-classifier",
     notes: {
-      why: "a basic CNN trained from scratch needed augmentation to generalize, but natural-photo-strength augmentation distorted the exact regions MRI diagnosis depends on.",
-      inside:
-        "four conv/pool blocks, mild rotation/zoom/brightness augmentation tuned specifically for MRI, trained with early stopping and checkpointing.",
-      learning:
-        "the first augmentation pass dropped accuracy to 92.5%. turning the strength down to roughly a third fixed it and beat the no-augmentation baseline on every class.",
+      problem:
+        "sorting brain MRI slices into glioma, meningioma, pituitary tumor or no tumor, using a small dataset (7,023 images) and a CNN trained from scratch, with no pretrained weights to lean on.",
+      built:
+        "everything, solo: the CNN (four conv/pool blocks, 1.3M parameters, trains on a CPU), augmentation tuned for MRI, training with early stopping and checkpointing, and a Flask site that shows the training report and classifies uploaded scans without ever saving them to disk.",
+      decision:
+        "i put augmentation and rescaling inside the model as Keras layers. Keras switches augmentation off outside training, and the Flask /predict endpoint runs exactly the same preprocessing as training, so predictions can't drift from training through mismatched preprocessing (train/serve skew).",
+      tested:
+        "my first augmentation pass dropped accuracy from 95.83% to 92.50%, because MRI orientation and intensity carry diagnostic signal. i checked whether it just needed longer training (it didn't: still 92.50%), then cut rotation, zoom and brightness to roughly a third (±18° → ±7°), which beat the no-augmentation baseline on every class.",
     },
-    proof: "97.15% test accuracy, 94.3% meningioma F1, documented end to end in the README.",
+    proof: "97.53% test accuracy on 1,054 held-out scans and 95.6% meningioma F1. the most common error: a glioma read as meningioma (9 of 243).",
     aside: "limitations are documented in the README, not claiming clinical validity.",
     frag: {
       file: "brain-tumor-classifier / src/train.py",
@@ -142,10 +158,14 @@ layers.Rescaling(1.0 / 255),`,
     thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/RagPdfSummarizer",
     notes: {
-      why: "long PDFs blow past context windows, and an LLM answering from memory drifts from the source. i wanted answers grounded in the actual pages.",
-      inside:
-        "the PDF is split into 1,000-character chunks with 200 overlap, embedded with MiniLM into a ChromaDB store per user session, and the 3 closest chunks go to Gemini 2.0 Flash, which answers from that context only.",
-      learning: "chunk size and overlap mattered more to answer quality than which LLM wrote the answer.",
+      problem:
+        "long PDFs overflow an LLM's context window, and an LLM answering from memory drifts away from the source. answers need to come from the actual pages.",
+      built:
+        "the whole app, solo: a Flask upload flow, text extraction with pypdf, 1,000-character chunks with 200 overlap, MiniLM embeddings in ChromaDB, retrieval of the 3 closest chunks, and a Gemini 2.0 Flash prompt that answers from that context only.",
+      decision:
+        "i gave each browser session its own upload folder and vector store, so one visitor's document can never show up in another visitor's answers. chunks are hashed (MD5), so duplicates are only embedded once.",
+      tested:
+        "chunk size and overlap mattered more to answer quality than which LLM wrote the answer. testing also showed that scanned PDFs return nothing, because pypdf only reads a text layer; the README lists this as a limitation.",
     },
     proof: "served through a Flask app with a separate vector store per session, PDF-only uploads and a 16 MB size limit.",
     aside: "chunk size and overlap are still the main levers being tuned.",
@@ -167,10 +187,14 @@ results = vector_store.similarity_search(query, k=3)`,
     thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/Time_Series_Electricity_Forecasting",
     notes: {
-      why: "most demos stop at one-step-ahead forecasts, which hide how error compounds. i wanted a model that still held up 96 steps out.",
-      inside:
-        "exponential smoothing, SARIMA, random forest, XGBoost, SVR, MLP and LSTM are compared with TimeSeriesSplit on lag, rolling and calendar features. the weighted nearest neighbours method (Talavera-Llames et al., 2016) is implemented from the paper as an installable R package.",
-      learning: "recursive multi-step forecasting punishes small early errors, feature engineering mattered more than model choice.",
+      problem:
+        "a building's next day of electricity use, in 15-minute steps (96 of them). most demos stop at one-step-ahead forecasts, which hide how errors build up over a long horizon.",
+      built:
+        "all of it, solo: lag, rolling and calendar features; a benchmark from naive baselines through ETS, SARIMA, random forest, XGBoost, SVR, MLP and LSTM under TimeSeriesSplit; the final 96-step forecast; and the weighted nearest neighbours method (Talavera-Llames et al., 2016), rebuilt from the paper as an installable R package with roxygen docs and a vignette.",
+      decision:
+        "alongside the trained models, i implemented weighted nearest neighbours. instead of fitting parameters, it finds the past windows that most resemble the latest 96 readings and averages what came next, weighted by closeness (k = 10), so every forecast traces back to real past days.",
+      tested:
+        "recursive multi-step forecasting punishes small early errors, so feature engineering mattered more than model choice. SVR had the lowest validation MAE (6.80 kW) and SARIMA the highest (15.96), but not every model was scored on the same folds, so the ranking is only rough.",
     },
     proof: "a final 96-step forecast, plus the wnnforecast R package with roxygen docs and a vignette.",
     aside: "still testing how far the recursive horizon can stretch before error compounds too much.",
@@ -192,10 +216,14 @@ sum(weights * model$y[idx])`,
     thumbnail: null,
     link: "https://github.com/JayaSaiKishore7/diabetes_prediction",
     notes: {
-      why: "a model sitting in a notebook doesn't help anyone. i wanted the prediction to be one form-submit away.",
-      inside:
-        "15,000 clinical records are cleaned down to 10,471, then random forest and XGBoost are compared; XGBoost won (0.993 vs 0.983 AUC) and ships behind a FastAPI endpoint.",
-      learning: "the feature-engineering pass moved the needle more than swapping algorithms did.",
+      problem:
+        "predicting whether a patient is diabetic from eight clinical measurements. a model sitting in a notebook doesn't help anyone, so the prediction had to be one form-submit away.",
+      built:
+        "team project. my part: the random forest and XGBoost models trained on the team's cleaned data (15,000 records cleaned down to 10,471), the comparison between them, and the FastAPI web form that returns a diabetes probability.",
+      decision:
+        "i saved the scaler next to the model and run every form input through it before predicting, exactly as in training, so the web form sees the same features the model learned from. the app won't start if either file is missing.",
+      tested:
+        "XGBoost beat the random forest: 0.993 vs 0.983 AUC, and 0.926 vs 0.906 F1 on the diabetic class. the two notebooks split the data differently, though, so the comparison is close rather than exact.",
     },
     proof: "0.993 AUC and 96.1% accuracy on 2,095 held-out records.",
     aside: "the FastAPI endpoint returns a diabetes probability from the saved XGBoost model.",

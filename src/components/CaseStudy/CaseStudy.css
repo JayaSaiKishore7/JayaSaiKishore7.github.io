@@ -104,6 +104,14 @@
   font-size: 17px;
 }
 
+/* What testing showed: secondary to the headline result above it. */
+.case-note--proof .case-tested {
+  margin-top: 10px;
+  color: var(--soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .case-aside {
   margin-top: 18px;
   color: var(--muted);

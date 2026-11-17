@@ -6,10 +6,12 @@ import { ProjectThumb } from "../Project/ProjectThumb";
 import { TechList } from "../Project/TechList";
 import "./CaseStudy.css";
 
+// The first three of the four points every case study answers; the fourth,
+// "result", is the full-width row below them (`proof` plus `notes.tested`).
 const NOTE_LABELS = [
-  ["why", "why"],
-  ["inside", "how it works"],
-  ["learning", "what i learned"],
+  ["problem", "the problem"],
+  ["built", "what i built"],
+  ["decision", "key decision"],
 ];
 
 /** A project's case study page (/work/<id>/): the decisions behind it, the results and the code. */
@@ -59,8 +61,11 @@ export class CaseStudy extends Component {
               </div>
             ))}
             <div className="case-note case-note--proof">
-              <dt>results</dt>
-              <dd>{project.proof}</dd>
+              <dt>result</dt>
+              <dd>
+                <p>{project.proof}</p>
+                <p className="case-tested">{project.notes.tested}</p>
+              </dd>
             </div>
           </dl>
 
