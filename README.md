@@ -55,15 +55,47 @@ The site is hosted on **Cloudflare Pages** (free) at https://jayasaikishore.page
 
 ```bash
 npx wrangler login   # once per machine; opens the browser to sign in to Cloudflare
-npm run deploy       # lint, build, then upload dist/ to Cloudflare Pages
+npm run deploy       # guard, lint, build, upload dist/ to Cloudflare Pages, then smoke-test the live site
 ```
+
+`npm run deploy` runs, stopping at the first failure:
+
+1. `scripts/predeploy.mjs` refuses to deploy unless you're on `main`, nothing is uncommitted, and
+   `main` isn't behind `origin/main`. So the commit Cloudflare records is exactly what went live.
+2. `oxlint`, then the full build.
+3. `wrangler pages deploy` (wrangler is pinned in `devDependencies`). A failed upload leaves the
+   previous deployment live.
+4. `scripts/smoke.mjs --expect-dist` waits until the live home page matches the `dist/` just built,
+   then checks every page in Edge: pre-rendered HTML, the app starts, no console errors or failed
+   requests, no sideways scrolling at phone and laptop widths, all four case study points, plus
+   the sitemap, robots.txt and the resume PDF. If it fails, the new version **is** live: roll back
+   (below) or fix and deploy again.
+
+Run the smoke test on its own against any copy of the site:
+
+```bash
+npm run smoke                                      # production
+npm run build && npm run preview                   # then, in another terminal:
+npm run smoke -- http://localhost:4173/            # the local build, before deploying
+```
+
+### Rolling back
+
+- **Fastest:** Cloudflare dashboard → Workers & Pages → `jayasaikishore` → Deployments → pick the
+  last good one → *Rollback to this deployment*. Every deployment keeps its own URL
+  (`https://<id>.jayasaikishore.pages.dev`), so check it there first (`npm run smoke -- <that url>`).
+  `npx wrangler pages deployment list --project-name jayasaikishore` lists them with their commits.
+- **From git:** `git switch --detach <good commit>`, `npm run build`,
+  `npx wrangler pages deploy dist --project-name jayasaikishore --branch main`, then
+  `git switch main` and fix forward. (This bypasses the guard on purpose; it's for emergencies.)
 
 Pushing to GitHub does **not** update the live site; run `npm run deploy` after merging. The site's
 own address (canonical links, Open Graph, sitemap) comes from `siteUrl` in `src/data/profile.js`,
 and `public/robots.txt` names the sitemap URL. Update both if the domain changes.
 
-`.github/workflows/deploy.yml` (publishing to GitHub Pages on pushes to `main`) is from the
-previous hosting at `jayasaikishore7.github.io` and is no longer the live site.
+`.github/workflows/deploy.yml` publishes to GitHub Pages (the previous hosting at
+`jayasaikishore7.github.io`). It now runs only when started by hand, so pushes to `main` can't
+publish a second copy of the site; restore its `push` trigger when moving back to GitHub Pages.
 
 ## Structures
 
