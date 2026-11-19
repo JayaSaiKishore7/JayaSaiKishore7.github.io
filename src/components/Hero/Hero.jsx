@@ -1,20 +1,22 @@
 import { Component, createRef } from "react";
-import { profile } from "../../data/profile";
+import { profile, heroInfo } from "../../data/profile";
 import { Clock } from "../../utils/Clock";
+import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import { Magnetic } from "../../utils/Magnetic";
-import { BallGrid } from "./BallGrid";
 import "./Hero.css";
 
 /**
  * The opening section: location and time, the name, the tagline, two buttons
- * and the X-ray ball grid with its detection boxes (BallGrid). Visible
- * immediately: the reveal is a CSS animation that starts with the first paint
- * (only while html.js is set), not something JavaScript has to trigger.
+ * and the info card. Visible immediately: the reveal is a CSS animation that
+ * starts with the first paint (only while html.js is set), not something
+ * JavaScript has to trigger. After it, DetectionBoxes draws its labelled
+ * boxes around the name, tagline and info card.
  */
 export class Hero extends Component {
   constructor(props) {
     super(props);
     this.state = { time: null };
+    this.heroRef = createRef();
     this.buttonRefs = [createRef(), createRef()];
     this.handleTick = this.handleTick.bind(this);
   }
@@ -25,11 +27,23 @@ export class Hero extends Component {
 
     this.magnets = this.buttonRefs.map((ref) => new Magnetic({ element: ref.current }));
     this.magnets.forEach((magnet) => magnet.start());
+
+    this.boxes = new DetectionBoxes({
+      container: this.heroRef.current,
+      startDelay: 1300, // after the text has risen in
+      targets: [
+        { selector: ".hero-name", label: "name 0.99", tight: true },
+        { selector: ".hero-tagline", label: "role 0.97", tight: true },
+        { selector: ".hero-card", label: "info 0.95" },
+      ],
+    });
+    this.boxes.start();
   }
 
   componentWillUnmount() {
     this.clock?.stop();
     this.magnets?.forEach((magnet) => magnet.stop());
+    this.boxes?.stop();
   }
 
   handleTick(time) {
@@ -41,7 +55,7 @@ export class Hero extends Component {
     const words = profile.name.toLowerCase().split(" ");
 
     return (
-      <section id="home" className="hero">
+      <section ref={this.heroRef} id="home" className="hero">
         <div className="container hero-grid">
           <div className="hero-main">
             <p className="hero-meta hero-fade" style={{ "--s": 0 }}>
@@ -86,10 +100,25 @@ export class Hero extends Component {
             </div>
           </div>
 
-          {/* The fade-in runs on this wrapper, never on the SVG inside. */}
-          <div className="hero-visual hero-fade" style={{ "--s": 2 }}>
-            <BallGrid />
-          </div>
+          <aside className="hero-card hero-fade" style={{ "--s": 2 }}>
+            <dl>
+              {heroInfo.map((row) => (
+                <div className="hero-row" key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>
+                    {row.status ? <span className="hero-status-dot" aria-hidden="true" /> : null}
+                    {row.href ? (
+                      <a className="hero-row-link" href={row.href} download={row.download || undefined}>
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
         </div>
       </section>
     );

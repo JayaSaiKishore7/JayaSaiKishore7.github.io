@@ -12,14 +12,9 @@ try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
-  // Wait for the hero fade-in and for both detection boxes on the ball grid to
-  // finish drawing (they stay on screen, so the preview shows them).
+  // Wait for the hero fade-in and for every detection box to finish and remove itself.
   await page.waitForTimeout(1500);
-  await page.waitForFunction(
-    () => [...document.querySelectorAll(".grid-detect")].every((box) => box.getAnimations().every((a) => a.playState === "finished")),
-    null,
-    { timeout: 10000 }
-  );
+  await page.waitForFunction(() => !document.querySelector(".detect-box"), null, { timeout: 10000 });
   await page.screenshot({ path: "public/og-image.png" });
   console.log("og-image: wrote public/og-image.png");
 } finally {

@@ -31,9 +31,6 @@ export const theme = {
       status: "#6fd88f",
       // A paler teal from the accent family.
       highlight: "#8ADCE6",
-      // The hero's "defective" solder balls: a step brighter than the normal
-      // balls (borderStrong). Graphics only, never text.
-      defect: "#5A6E83",
     },
     // Default. Light box: cool film-white and slate ink.
     //   text 14.2 / 16.1 / 13.1    soft 9.2 / 10.5 / 8.5    muted 5.2 / 5.9 / 4.8
@@ -57,9 +54,6 @@ export const theme = {
       status: "#1E9E55",
       // A deeper teal from the accent family.
       highlight: "#095863",
-      // The hero's "defective" solder balls: a step lighter than the normal
-      // balls (borderStrong), like a void showing up paler on an X-ray. Graphics only.
-      defect: "#CDD5DD",
     },
   },
 
