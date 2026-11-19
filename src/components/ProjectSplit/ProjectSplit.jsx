@@ -9,8 +9,6 @@ const HOVER_INTENT_MS = 80; // a hovered item must be rested on this long to tak
 const STAGE_ID = "ps-stage";
 const CHIP_MAX = 3; // chips shown on a slide; the rest become one "+N" chip
 
-const pad = (n) => String(n).padStart(2, "0");
-
 /**
  * One project's slide: its screenshot in a small browser-style window, then a
  * fixed text block (title, two-line description, one row of chips, links).
@@ -100,8 +98,6 @@ export class ProjectSplit extends Component {
     this.state = { active: 0, previous: null, direction: 1, isMobile: false, paused: false, announce: "" };
 
     this.rootRef = createRef();
-    this.navRef = createRef();
-    this.indicatorRef = createRef();
     this.scrollerRef = createRef();
     this.buttons = [];
     this.fills = [];
@@ -113,12 +109,10 @@ export class ProjectSplit extends Component {
     this.scrollFrame = null; // gallery scroll handling, once per frame
     this.inView = false;
     this.reducedMotion = false;
-    this.indicatorPlaced = false;
 
     for (const name of [
       "tick",
       "updatePlayback",
-      "placeIndicator",
       "handleMouseEnter",
       "handleMouseLeave",
       "handleFocus",
@@ -153,18 +147,11 @@ export class ProjectSplit extends Component {
     });
     this.visibility.observe(this.rootRef.current);
 
-    // Re-place the gliding bar whenever the list changes size (resize, fonts loading).
-    this.resize = new ResizeObserver(this.placeIndicator);
-    this.resize.observe(this.navRef.current);
-
     this.preloadNext();
   }
 
   componentDidUpdate(_, previous) {
-    if (previous.active !== this.state.active) {
-      this.placeIndicator();
-      this.preloadNext();
-    }
+    if (previous.active !== this.state.active) this.preloadNext();
     if (previous.paused !== this.state.paused || previous.isMobile !== this.state.isMobile) {
       this.updatePlayback();
     }
@@ -178,7 +165,6 @@ export class ProjectSplit extends Component {
     this.motionQuery?.removeEventListener("change", this.handleMotionChange);
     document.removeEventListener("visibilitychange", this.updatePlayback);
     this.visibility?.disconnect();
-    this.resize?.disconnect();
   }
 
   // ---------- selection ----------
@@ -247,27 +233,6 @@ export class ProjectSplit extends Component {
     const { projects } = this.props;
     const next = projects[(this.state.active + 1) % projects.length];
     if (next?.thumbnail) new Image().src = next.thumbnail.src;
-  }
-
-  // ---------- gliding indicator ----------
-
-  /** Moves the single accent bar to the active button: one transform, measured from the button. */
-  placeIndicator() {
-    const bar = this.indicatorRef.current;
-    const button = this.buttons[this.state.active];
-    if (!bar || !button || !button.offsetHeight) return; // hidden (phone layout)
-
-    // The bar is 1px tall in CSS; scaleY stretches it to the button's height.
-    bar.style.transform = `translateY(${button.offsetTop}px) scaleY(${button.offsetHeight})`;
-
-    if (!this.indicatorPlaced) {
-      // First placement: jump into position instead of gliding from the top.
-      bar.style.transition = "none";
-      void bar.offsetWidth;
-      bar.style.transition = "";
-      bar.classList.add("is-placed");
-      this.indicatorPlaced = true;
-    }
   }
 
   // ---------- auto-play ----------
@@ -373,22 +338,21 @@ export class ProjectSplit extends Component {
 
   // ---------- render ----------
 
-  /** "02 / 06": the current number rolls vertically to its new value. Plus prev/next buttons. */
-  renderControls() {
+  /**
+   * Prev/next buttons. With `count` (phones only), also "2 / 6": a phone shows
+   * one card at a time, so it says where you are. On desktop the list beside
+   * the stage already shows that.
+   */
+  renderControls({ count = false } = {}) {
     const { projects } = this.props;
     const { active } = this.state;
     return (
       <div className="ps-controls">
-        <p className="ps-count" aria-hidden="true">
-          <span className="ps-count-roll">
-            <span className="ps-count-strip" style={{ "--n": active }}>
-              {projects.map((project, i) => (
-                <span key={project.id}>{pad(i + 1)}</span>
-              ))}
-            </span>
-          </span>
-          <span className="ps-count-total"> / {pad(projects.length)}</span>
-        </p>
+        {count ? (
+          <p className="ps-count" aria-hidden="true">
+            {active + 1} / {projects.length}
+          </p>
+        ) : null}
         <div className="ps-arrows">
           <button type="button" aria-label="previous project" aria-controls={STAGE_ID} onClick={() => this.step(-1)}>
             <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -427,7 +391,6 @@ export class ProjectSplit extends Component {
                 onFocus={() => this.select(index)}
                 onClick={() => this.select(index)}
               >
-                <span className="ps-index">{pad(index + 1)}</span>
                 <span className="ps-title">{project.title}</span>
                 <span className="ps-tech">{project.tech.slice(0, 3).join(" · ")}</span>
               </button>
@@ -468,9 +431,7 @@ export class ProjectSplit extends Component {
 
         {/* ---------- desktop: grouped list + slide stage ---------- */}
         <div className="ps-split">
-          {/* The nav box holds the lists plus the one gliding bar. */}
-          <div ref={this.navRef} className="ps-nav" onKeyDown={this.handleListKeyDown}>
-            <span ref={this.indicatorRef} className="ps-indicator" aria-hidden="true" />
+          <div className="ps-nav" onKeyDown={this.handleListKeyDown}>
             {this.renderGroup(
               "featured",
               indexed.filter(({ project }) => project.featured)
@@ -499,7 +460,7 @@ export class ProjectSplit extends Component {
 
         {/* ---------- phones: snap gallery ---------- */}
         <div className="ps-gallery">
-          {this.renderControls()}
+          {this.renderControls({ count: true })}
           <div ref={this.scrollerRef} className="ps-scroller" onScroll={this.handleScroll}>
             {projects.map((project, i) => (
               <div

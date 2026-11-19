@@ -59,8 +59,8 @@ export class Connect extends Component {
           <Reveal as="div">
             <SectionHeader
               id="contact"
-              title="let's connect."
-              sub="open to new opportunities and collaborations, reach out below."
+              title="got a model that needs to leave the notebook?"
+              sub="i'm open to machine learning and computer vision roles. email is the fastest way to reach me."
             />
           </Reveal>
 

@@ -30,14 +30,15 @@
 
 .project-thumb-file {
   color: var(--muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* the file name belongs to the code window */
   font-size: 11px;
+  font-weight: 500;
 }
 
 .project-thumb--code pre {
   margin: 0;
   overflow: hidden;
   color: var(--soft);
-  font: 12px/1.7 var(--font-mono);
+  font: 500 12px/1.7 var(--font-mono); /* code stays monospace */
   white-space: pre;
 }

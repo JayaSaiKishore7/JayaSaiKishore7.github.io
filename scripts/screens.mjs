@@ -1,7 +1,11 @@
 ﻿// Real screenshots of the running site, for before/after reviews and smoke checks.
 //
 //   npm run dev                                   (in another terminal)
-//   npm run screens -- <outDir> [baseUrl]
+//   npm run screens -- <outDir> [baseUrl] [--theme=light|dark|both]
+//
+// Shoots every page in both themes by default; files end in -light / -dark
+// (e.g. phone-top-dark.png). Dark is switched on by clicking the navbar's real
+// theme button, the way a visitor would, so the shots also check that it works.
 //
 // Uses the Microsoft Edge already installed on the machine (playwright-core,
 // no browser download). Waits on the app's own state attributes
@@ -11,7 +15,12 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { chromium } from "playwright-core";
 
-const [outDir = "screens", baseUrl = "http://localhost:5173/"] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const flag = (name) => args.find((arg) => arg.startsWith(`--${name}=`))?.split("=")[1];
+const [outDir = "screens", baseUrl = "http://localhost:5173/"] = args.filter((arg) => !arg.startsWith("--"));
+const themeArg = flag("theme") ?? "both";
+if (!["light", "dark", "both"].includes(themeArg)) throw new Error(`--theme must be light, dark or both (got "${themeArg}")`);
+const themes = themeArg === "both" ? ["light", "dark"] : [themeArg];
 
 const viewports = {
   phone: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
@@ -36,6 +45,14 @@ async function scrollTo(page, stop) {
   await page.waitForTimeout(1200); // let scroll reveals and the nav settle
 }
 
+/** Every visit starts light. For dark, click the theme button while the navbar is on screen (at the top). */
+async function applyTheme(page, theme) {
+  if (theme === "light") return;
+  await page.click(".theme-toggle");
+  await page.waitForSelector('html[data-theme="dark"]');
+  await page.waitForTimeout(400); // the colour transition
+}
+
 await mkdir(outDir, { recursive: true });
 const browser = await chromium.launch({ channel: "msedge" });
 
@@ -48,23 +65,24 @@ try {
     page.on("console", (msg) => msg.type() === "error" && errors.push(msg.text()));
 
     for (const { name, path, stops } of pages) {
-      await page.goto(new URL(path, baseUrl).href, { waitUntil: "networkidle" });
-      await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
-      if (path === "/") {
+      for (const theme of themes) {
+        // A fresh load per theme: the theme only lasts for one visit.
+        await page.goto(new URL(path, baseUrl).href, { waitUntil: "networkidle" });
         await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
-        await page.waitForTimeout(800); // hero fade-in
-      }
+        if (path === "/") await page.waitForTimeout(800); // hero fade-in
+        await applyTheme(page, theme);
 
-      for (const stop of stops) {
-        await scrollTo(page, stop);
-        const shot = `${device}-${name === "home" ? "" : `${name}-`}${stop}`;
-        await page.screenshot({ path: join(outDir, `${shot}.png`) });
+        for (const stop of stops) {
+          await scrollTo(page, stop);
+          const shot = `${device}-${name === "home" ? "" : `${name}-`}${stop}-${theme}`;
+          await page.screenshot({ path: join(outDir, `${shot}.png`) });
 
-        const report = await page.evaluate(() => ({
-          active: document.querySelector('[aria-current="location"]')?.textContent?.replace(/^\d+/, "") ?? "none",
-          overflowX: document.documentElement.scrollWidth - window.innerWidth,
-        }));
-        console.log(`${shot}: active=${report.active} overflowX=${report.overflowX}px`);
+          const report = await page.evaluate(() => ({
+            active: document.querySelector('[aria-current="location"]')?.textContent ?? "none",
+            overflowX: document.documentElement.scrollWidth - window.innerWidth,
+          }));
+          console.log(`${shot}: active=${report.active} overflowX=${report.overflowX}px`);
+        }
       }
     }
 

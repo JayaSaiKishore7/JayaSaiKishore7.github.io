@@ -15,6 +15,14 @@ html {
   background: var(--bg);
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  /* The page scrollbar in the theme's colours: a quiet thumb on the page background. */
+  scrollbar-color: var(--muted-soft) var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance; /* evens out line lengths, so no heading ends on one lonely word */
 }
 
 body {
@@ -106,9 +114,8 @@ button {
 .section-label {
   margin-bottom: 0.8rem;
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 400;
+  font-size: var(--size-small);
+  font-weight: var(--weight-strong);
 }
 
 .section-rule {
@@ -187,8 +194,9 @@ button {
   padding: 1px 6px;
   background: color-mix(in srgb, var(--accent) 45%, transparent);
   color: var(--on-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* detection output: mono belongs here */
   font-size: 10.5px;
+  font-weight: 500;
   line-height: 1.4;
   white-space: nowrap;
 }

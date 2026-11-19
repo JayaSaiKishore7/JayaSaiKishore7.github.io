@@ -13,7 +13,7 @@ export class Education extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            {/* No separate title: the "03 · education" label is the section's heading. */}
+            {/* No separate title: the word "education" is the section's heading. */}
             <SectionHeader id="education" />
           </Reveal>
 

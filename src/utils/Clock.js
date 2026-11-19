@@ -2,7 +2,7 @@ const TICK_MS = 30000;
 
 /**
  * Ticks the current 24h time in a given time zone (the site owner's, so
- * visitors see the local time in Nice) every 30 seconds.
+ * visitors see the local time in Marseille) every 30 seconds.
  * Framework-agnostic; owned by a component's lifecycle methods. start() ticks
  * once immediately, so the owner can render a placeholder until mounted (the
  * pre-rendered HTML can't know the visitor's current time).

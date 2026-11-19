@@ -17,6 +17,16 @@
   min-width: 0;
 }
 
+/* The ball grid: the empty right side, centred against the text block. Its
+   column (and max-width) cap its size, so it can never push the text. */
+.hero-visual {
+  grid-column: 9 / 13;
+  align-self: center;
+  justify-self: end;
+  width: 100%;
+  max-width: 26rem;
+}
+
 .hero-card {
   grid-column: 9 / 13;
 }
@@ -65,8 +75,8 @@
   flex-wrap: wrap;
   gap: 8px;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: var(--size-small);
+  /* No tabular-nums on the clock: in this font it also widens ":" and ",". */
 }
 
 /* The top margin leaves room for the "name 0.99" detection label above the name. */
@@ -75,8 +85,8 @@
   color: var(--text);
   font-family: var(--font-display);
   font-size: var(--size-name);
-  font-weight: 400;
-  letter-spacing: -0.045em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-name);
   line-height: 0.95;
 }
 
@@ -97,14 +107,9 @@
   color: var(--text);
   font-family: var(--font-display);
   font-size: clamp(1.45rem, 2.6vw, 2.2rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-title);
   line-height: 1.2;
-}
-
-.hero-accent {
-  color: var(--accent);
-  font-style: italic;
 }
 
 .hero-note {
@@ -128,8 +133,8 @@
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
   color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: var(--size-ui);
+  font-weight: var(--weight-strong);
   text-decoration: none;
   transition:
     translate var(--dur-move) var(--ease),
@@ -176,8 +181,7 @@
 
 .hero-row dt {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--size-small);
   line-height: 1.7;
 }
 
@@ -241,8 +245,9 @@
   border-radius: 3px;
   background: var(--accent);
   color: var(--on-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* real detection output: the one place mono belongs */
   font-size: 10.5px;
+  font-weight: 500;
   line-height: 1.4;
   white-space: nowrap;
 }
@@ -267,8 +272,14 @@
 
 @media (max-width: 1000px) {
   .hero-main,
-  .hero-card {
+  .hero-card,
+  .hero-visual {
     grid-column: 1 / -1;
+  }
+
+  /* Single column: the grid becomes a strip under the buttons (BallGrid.css). */
+  .hero-visual {
+    max-width: none;
   }
 
   .hero-card {

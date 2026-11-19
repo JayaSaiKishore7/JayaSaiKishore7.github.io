@@ -1,12 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-// Self-hosted fonts (font-display: swap): Geist for body text, Fraunces for the
-// name and headings (upright and italic, with optical sizing), IBM Plex Mono
-// for labels, numbers and links.
-import "@fontsource-variable/geist";
-import "@fontsource-variable/fraunces/opsz.css";
-import "@fontsource-variable/fraunces/opsz-italic.css";
-import "@fontsource/ibm-plex-mono/400.css";
+// Self-hosted fonts (font-display: swap): Schibsted Grotesk for all text
+// (upright and italic), IBM Plex Mono 500 only for detection labels and code.
+import "@fontsource-variable/schibsted-grotesk/wght.css";
+import "@fontsource-variable/schibsted-grotesk/wght-italic.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "virtual:theme.css";
 import "./index.css";

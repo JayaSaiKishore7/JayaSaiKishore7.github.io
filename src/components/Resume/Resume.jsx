@@ -57,7 +57,7 @@ export class Resume extends Component {
             <SectionHeader
               id="experience"
               title="where i've worked"
-              sub="software engineering and data science roles, contributing to ML workflows, automation, and production inference."
+              sub="software engineering and data science roles, from data pipelines to production inference."
             />
           </Reveal>
 

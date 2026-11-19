@@ -12,12 +12,24 @@
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--size-small);
+  font-weight: var(--weight-display);
 }
 
-.hello-skills .k {
-  font-weight: 400;
+/* Languages under the chips: one plain line, label in muted. */
+.hello-line {
+  margin-top: 14px;
+  color: var(--soft);
+}
+
+.hello-line-k {
+  color: var(--muted);
+}
+
+.hello-list {
+  display: grid;
+  gap: 6px;
+  color: var(--soft);
 }
 
 .hello-lead {

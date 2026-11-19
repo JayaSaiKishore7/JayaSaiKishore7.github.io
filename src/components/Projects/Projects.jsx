@@ -13,7 +13,7 @@ export class Projects extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionHeader id="work" title="what does a model need to survive contact with real data?" />
+            <SectionHeader id="work" title="models that made it out of the notebook." />
           </Reveal>
 
           <Reveal as="div">

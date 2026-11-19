@@ -12,7 +12,7 @@ const SHOW_NEAR_TOP = 120; // always show the bar this close to the top
  * The floating pill navbar.
  *
  * Desktop: name, section links with one gliding marker behind the active
- * link, the local time in Nice and the theme toggle. It slides away when you
+ * link, the local time in Marseille and the theme toggle. It slides away when you
  * scroll down and comes back when you scroll up.
  * Phones: name, theme toggle and a menu button that opens a full-screen sheet.
  *

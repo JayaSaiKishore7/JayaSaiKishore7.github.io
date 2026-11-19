@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { theme } from "../../theme/theme";
 import "./ThemeToggle.css";
 
 /**
@@ -6,6 +7,11 @@ import "./ThemeToggle.css";
  * (set on <html> by index.html); this button flips data-theme for the rest of
  * the visit. Both icons are rendered and CSS shows the right one, so the button
  * is correct even before React takes over.
+ *
+ * It also recolours the browser's own bar (<meta name="theme-color">, written
+ * by src/data/head.js) so it always matches the theme on screen. A
+ * prefers-color-scheme media query wouldn't: the site ignores the device
+ * setting and always starts light.
  */
 export class ThemeToggle extends Component {
   constructor(props) {
@@ -17,6 +23,9 @@ export class ThemeToggle extends Component {
   toggle() {
     const dark = !this.state.dark;
     document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", dark ? theme.colors.dark.bg : theme.colors.light.bg);
     this.setState({ dark });
   }
 

@@ -6,15 +6,13 @@ export const experience = [
     date: "Apr 2026 – Oct 2026",
     summary:
       "Part of the Quality, Manufacturing & Technology (QMT) – Data Science team. Improved production-line efficiency by developing a deep learning object detection solution that replaces manual operator inspection of solder-ball defects in semiconductor packages.",
+    // Bullets: English translation of the resume (public/resume/), same numbers.
     points: [
-      "Used SAM3 segmentation to automatically crop the region of interest from raw X-ray images, and generated training labels with a grid-based annotation method.",
-      "Fine-tuned a YOLO11 object detection model to locate defective solder balls, raising accuracy from 70% to 90%, with experiments tracked in MLflow.",
-      "Developed and deployed a modular Python pipeline that automatically processes new images as they arrive and outputs annotated images with the precise location of each defect. Loading all models only once for the entire pipeline cut processing time from 2 seconds per image to milliseconds.",
-      "Pushed inference results to a MariaDB database, with processed images stored on a network storage server (NAS).",
-      "Built a FastAPI backend and a Vue.js web dashboard that display each inspection result in real time.",
-      "Collaborated with data engineering and manufacturing teams to align the solution with production requirements.",
+      "Built a computer vision pipeline (Python, PyTorch, SAM3, OpenCV, YOLO11) for semiconductor inspection, covering preprocessing, segmentation, detection and grid localisation.",
+      "Fine-tuned YOLO11 on an industrial dataset with data augmentation and training optimisation, raising detection accuracy from 70% to 90% and cutting inference time from 2 seconds to a few milliseconds per image.",
+      "Integrated the pipeline with FastAPI, WebSockets, MariaDB, a NAS and Vue.js for automated image monitoring, data management and real-time inspection tracking.",
     ],
-    stack: ["Python", "SAM3", "YOLO11", "MLflow", "FastAPI", "Vue.js", "MariaDB"],
+    stack: ["Python", "PyTorch", "SAM3", "OpenCV", "YOLO11", "MLflow", "FastAPI", "WebSockets", "Vue.js", "MariaDB"],
   },
   {
     role: "Sr. Software Engineer",
@@ -23,10 +21,9 @@ export const experience = [
     date: "Dec 2021 – Dec 2022",
     summary: "Supported ML-driven and data-intensive features within production-grade systems.",
     points: [
-      "Supported data pipelines used for analytics and machine learning workflows.",
-      "Collaborated with data scientists to operationalize preprocessing and feature generation logic.",
-      "Worked on containerized services and CI/CD pipelines to enable consistent and reliable deployments.",
-      "Assisted with monitoring, logging, and debugging of data-driven services in production.",
+      "Automated preprocessing, feature engineering and validation in ML and data pipelines.",
+      "Containerised ML services with Docker, Jenkins and Ansible, cutting deployment time by 40%, with models served through REST APIs.",
+      "Set up end-to-end monitoring and CI/CD with logging, metrics and artifact versioning, improving model reliability by 30%.",
     ],
   },
   {
@@ -36,10 +33,9 @@ export const experience = [
     date: "Jun 2019 – Apr 2020",
     summary: "Supported end-to-end ML experiments from datasets to model evaluation.",
     points: [
-      "Prepared datasets through cleaning, normalization, and feature extraction.",
-      "Trained and evaluated classical ML models using metrics such as accuracy, precision, recall, and AUC.",
-      "Performed exploratory data analysis and error analysis to guide model improvements.",
-      "Documented experiments and results to support iterative model development.",
+      "Built structured preprocessing, feature extraction and validation steps.",
+      "Ran 20+ experiments with cross-validation and hyperparameter tuning, cutting data preparation time by 25% and raising model precision by 18%.",
+      "Used residual analysis, feature attribution and variance diagnostics to reduce overfitting by 20%.",
     ],
   },
 ];

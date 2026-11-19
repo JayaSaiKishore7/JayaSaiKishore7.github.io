@@ -6,53 +6,76 @@
 // alternative the navbar toggle switches to.
 export const theme = {
   colors: {
-    // Text colours reach WCAG AA (4.5:1) on bg, surface and surfaceSoft.
+    // The look comes from X-ray inspection: a light box (light theme) or film
+    // (dark theme) in cool slate, with one teal for annotations.
+    // Every text colour reaches WCAG AA (4.5:1) on bg, surface and surfaceSoft.
+    // Ratios below are listed as bg / surface / surfaceSoft.
+    //
+    // Dark: X-ray film. Blue-black, not neutral black.
+    //   text 15.0 / 13.7 / 12.6    soft 10.1 / 9.2 / 8.5    muted 5.9 / 5.4 / 4.9
+    //   accent 8.9 / 8.2 / 7.5    highlight 11.5 / 10.5 / 9.6
+    //   onAccent on accent: 8.9
     dark: {
-      bg: "#080808",
-      surface: "#111111",
-      surfaceSoft: "#161616",
-      border: "#222224",
-      borderStrong: "#353537",
-      text: "#efeee9",
-      soft: "#c2c1bb",
-      muted: "#86857f",
+      bg: "#0E1822",
+      surface: "#15212C",
+      surfaceSoft: "#1B2835",
+      border: "#26364A",
+      borderStrong: "#3A4C60",
+      text: "#E6ECF1",
+      soft: "#B9C4CE",
+      muted: "#8796A4",
       // Decorative only (bullets, scrollbar): too low contrast for text.
-      mutedSoft: "#5c5b56",
-      accent: "#f2a65a",
-      onAccent: "#080808",
+      mutedSoft: "#4A5B6C",
+      accent: "#4FC7D6",
+      onAccent: "#0E1822",
       status: "#6fd88f",
-      highlight: "#f2c94c",
+      // A paler teal from the accent family.
+      highlight: "#8ADCE6",
     },
-    // Default. Paper and ink. The accent is a darker orange from the same family:
-    // 5.0:1 on bg, 5.5:1 on surface, 4.7:1 on surfaceSoft; white on it is 5.5:1.
+    // Default. Light box: cool film-white and slate ink.
+    //   text 14.2 / 16.1 / 13.1    soft 9.2 / 10.5 / 8.5    muted 5.2 / 5.9 / 4.8
+    //   accent 5.3 / 6.0 / 4.8    highlight 7.2 / 8.1 / 6.6
+    //   onAccent (white) on accent: 6.0
     light: {
-      bg: "#F6F4EE",
+      bg: "#EEF1F4",
       surface: "#FFFFFF",
-      surfaceSoft: "#EFECE3",
-      border: "#DCD8CC",
-      borderStrong: "#BDB8A9",
-      text: "#15171A",
-      soft: "#3A3D40",
-      muted: "#5E625F",
+      surfaceSoft: "#E3E8ED",
+      border: "#CDD5DD",
+      borderStrong: "#A9B4BF",
+      text: "#17222E",
+      soft: "#33414F",
+      // Slightly darker than #5B6B7A, which was only 4.45:1 on surfaceSoft.
+      muted: "#566676",
       // Decorative only, like dark's mutedSoft.
-      mutedSoft: "#BDB8A9",
-      accent: "#A84F06",
+      mutedSoft: "#A9B4BF",
+      accent: "#0C6E7A",
       onAccent: "#FFFFFF",
-      // Graphics only (the status dot): below the 4.5:1 needed for text.
+      // Graphics only (the status dot): 3.0 / 3.5 / 2.8, below the 4.5:1 needed for text.
       status: "#1E9E55",
-      highlight: "#8A5A00",
+      // A deeper teal from the accent family.
+      highlight: "#095863",
     },
   },
 
   typography: {
-    fontDisplay: '"Fraunces Variable", Georgia, "Times New Roman", serif',
-    fontBody: '"Geist Variable", "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif',
+    // One family for name, headings and body: Schibsted Grotesk (upright and italic).
+    fontDisplay: '"Schibsted Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif',
+    fontBody: '"Schibsted Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif',
+    // Only for real data and measurements (detection labels) and code. Weight 500 only.
     fontMono: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
     // Type scale
     sizeName: "clamp(3.2rem, 9vw, 7.5rem)",
     sizeHeading: "clamp(2rem, 4.5vw, 3.4rem)",
     sizeBody: "1rem",
+    sizeUi: "0.9375rem", // 15px: buttons, nav and text links
+    sizeSmall: "0.8125rem", // 13px: labels, dates, captions (the smallest text size)
     lineBody: "1.7",
+    // Letter-spacing: the bigger the text, the tighter.
+    trackingName: "-0.035em", // the hero name and the case-study title
+    trackingHeading: "-0.03em", // section headings, big contact and menu links
+    trackingTitle: "-0.02em", // smaller headings: tagline, project, job and degree titles
+    weightDisplay: "400", // name and headings
+    weightStrong: "500", // emphasis without colour: active project, navbar name, case-study title
   },
 
   radii: {

@@ -39,10 +39,9 @@
 .nav-brand {
   flex-shrink: 0;
   color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: var(--size-ui);
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--tracking-title);
   text-decoration: none;
 }
 
@@ -55,8 +54,7 @@
 .nav-links {
   position: relative;
   display: flex;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: var(--size-ui);
 }
 
 .nav-marker {
@@ -92,11 +90,11 @@
 .nav-time {
   flex-shrink: 0;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--size-small);
   white-space: nowrap;
 }
 
+/* No tabular-nums on the clock: in this font it also widens ":" and ",". */
 .nav-time span {
   color: var(--text);
 }
@@ -141,7 +139,7 @@
   color: var(--text);
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 11vw, 3.6rem);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-heading);
   line-height: 1.1;
   text-decoration: none;
   transform: translateY(100%);
@@ -164,8 +162,7 @@
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
   background: transparent;
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--size-ui);
   cursor: pointer;
 }
 
@@ -195,8 +192,7 @@
     border-radius: var(--radius-pill);
     background: var(--text);
     color: var(--bg);
-    font-family: var(--font-mono);
-    font-size: 12.5px;
+    font-size: var(--size-ui);
     cursor: pointer;
   }
 }

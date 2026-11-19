@@ -2,8 +2,8 @@ export const profile = {
   name: "Jaya Sai Kishore",
   fullName: "Jaya Sai Kishore Neerukonda",
   role: "machine learning engineer",
-  city: "Nice",
-  location: "Nice, France",
+  city: "Marseille",
+  location: "Marseille, France",
   timeZone: "Europe/Paris",
   email: "jayasaikishoren@gmail.com",
   linkedin: "https://www.linkedin.com/in/jaya-sai-kishore/",
@@ -17,14 +17,14 @@ export const seo = {
   title: "Jaya Sai Kishore Neerukonda | Machine Learning Engineer",
   jobTitle: "Machine Learning Engineer",
   description:
-    "Machine learning engineer in Nice, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
+    "Machine learning engineer in Marseille, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
   image: "/og-image.png",
 };
 
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
   { label: "latest", value: "data science intern, STMicroelectronics." },
-  { label: "stack", value: "Python, PyTorch, TensorFlow, Computer Vision, MLflow, MLOps." },
+  { label: "stack", value: "Python, PyTorch, TensorFlow, OpenCV, Docker, MLflow." },
   { label: "status", value: "open to work.", status: true },
   // `href` renders the value as a link; `download` makes the browser save the file.
   { label: "resume", value: "download ↗", href: profile.resume, download: true },
@@ -37,13 +37,18 @@ export const aboutInfo = {
     "i hold a master's in data science & AI (2026), with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale.",
     "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, fine-tuning its YOLO model from 70% to 90% accuracy.",
   ],
-  // Grouped by area, no percentage bars.
+  // Grouped by area, no percentage bars. Matches the resume (public/resume/).
+  // `spoken: true` marks human languages: shown as a line of text, not as tool chips.
   skillGroups: [
     { name: "programming", items: ["Python", "SQL"] },
+    { name: "machine learning", items: ["scikit-learn", "XGBoost", "Pandas", "NumPy"] },
+    { name: "deep learning", items: ["PyTorch", "TensorFlow", "CNN", "ResNet"] },
     { name: "computer vision", items: ["OpenCV", "YOLO", "SAM3"] },
-    { name: "deep learning", items: ["PyTorch", "CNN", "ResNet", "Hugging Face"] },
-    { name: "backend", items: ["FastAPI", "Flask", "WebSockets"] },
-    { name: "data", items: ["NumPy", "scikit-learn", "XGBoost", "MariaDB", "ChromaDB"] },
-    { name: "MLOps", items: ["MLflow", "DVC"] },
+    { name: "LLMs & NLP", items: ["Transformers (Hugging Face)", "LangChain", "ChromaDB"] },
+    { name: "web", items: ["FastAPI", "Flask", "WebSockets", "Vue.js"] },
+    { name: "databases", items: ["MySQL", "MariaDB"] },
+    { name: "MLOps & cloud", items: ["MLflow", "DVC", "Docker", "Git", "CI/CD", "AWS (EC2, S3)"] },
+    { name: "languages", spoken: true, items: ["english (C2)", "french (A2, working towards B1)"] },
   ],
+  credentials: ["Neo4j Certified Professional (2025)", "Hacktoberfest 2025 contributor (several accepted pull requests)"],
 };

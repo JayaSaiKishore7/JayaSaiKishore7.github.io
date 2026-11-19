@@ -10,29 +10,6 @@
 
 /* ================= left: grouped project list ================= */
 
-.ps-nav {
-  position: relative; /* the gliding bar is positioned against this box */
-}
-
-/* One bar for the whole list. It is 1px tall; JavaScript moves it with
-   translateY and stretches it with scaleY to match the active button. */
-.ps-indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 2px;
-  height: 1px;
-  background: var(--accent);
-  transform-origin: top;
-  opacity: 0;
-  transition: transform 550ms var(--ease);
-}
-
-.ps-indicator.is-placed {
-  opacity: 1;
-}
-
 .ps-group + .ps-group {
   margin-top: 22px;
 }
@@ -40,9 +17,7 @@
 .ps-group-label {
   margin: 0 0 6px 20px;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.04em;
+  font-size: var(--size-small);
 }
 
 .ps-select {
@@ -58,8 +33,9 @@
   transition: background-color var(--dur-colour) var(--ease);
 }
 
+/* Hover: a half-strength tint, so it never looks like the selected item. */
 .ps-select:hover {
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 50%, transparent);
 }
 
 .ps-select:focus-visible {
@@ -67,41 +43,33 @@
   outline-offset: -2px;
 }
 
-.ps-index {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  transition: color var(--dur-colour) var(--ease);
+/* Selected: the full tint across the whole item, and a darker, heavier title. */
+.ps-item.is-active .ps-select {
+  background: var(--surface-soft);
 }
 
 .ps-title {
   color: var(--muted);
   font-family: var(--font-display);
   font-size: clamp(17px, 1.6vw, 20px);
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-title);
   line-height: 1.25;
-  transition:
-    color var(--dur-colour) var(--ease),
-    transform var(--dur-move) var(--ease);
+  transition: color var(--dur-colour) var(--ease);
 }
 
 .ps-tech {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: var(--size-small);
 }
 
 .ps-select:hover .ps-title {
   color: var(--soft);
 }
 
-.ps-item.is-active .ps-index {
-  color: var(--accent);
-}
-
 .ps-item.is-active .ps-title {
   color: var(--text);
-  transform: translateX(4px);
+  font-weight: var(--weight-strong);
 }
 
 /* Auto-play progress under each item: a 1px track; the fill is scaled by JS. */
@@ -213,7 +181,7 @@
   }
 }
 
-/* ---------- counter and arrows (stage top-right; phone gallery top) ---------- */
+/* ---------- arrows (stage top-right), plus the counter on phones ---------- */
 
 .ps-controls {
   display: flex;
@@ -223,39 +191,9 @@
 }
 
 .ps-count {
-  --line: 1.15em;
-  display: flex;
-  align-items: flex-end;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 22px;
-  line-height: var(--line);
-  font-variant-numeric: tabular-nums;
-}
-
-/* The current number is a strip of all the numbers behind a one-line window;
-   moving the strip makes the digit roll to its new value. */
-.ps-count-roll {
-  height: var(--line);
-  overflow: hidden;
-  color: var(--text);
-}
-
-.ps-count-strip {
-  display: flex;
-  flex-direction: column;
-  transform: translateY(calc(var(--n, 0) * var(--line) * -1));
-  transition: transform var(--dur-move) var(--ease);
-}
-
-.ps-count-strip span {
-  height: var(--line);
-}
-
-.ps-count-total {
-  font-size: 14px;
-  line-height: 1.9;
-  white-space: pre;
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums; /* "1 / 6" and "2 / 6" stay the same width */
 }
 
 .ps-arrows {
@@ -330,8 +268,7 @@
 
 .ps-window-id {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: var(--size-small);
 }
 
 /* The whole screenshot is shown (contain), never larger than its frame. */
@@ -373,15 +310,14 @@
 
 .ps-team {
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: var(--size-small);
 }
 
 .ps-preview h3 {
   font-family: var(--font-display);
   font-size: clamp(19px, 1.8vw, 24px);
-  font-weight: 400;
-  letter-spacing: -0.025em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-title);
   line-height: 1.2;
 }
 
@@ -412,8 +348,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px 18px;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: var(--size-ui);
 }
 
 .ps-links a {
@@ -519,19 +454,8 @@
     animation: none;
   }
 
-  .ps-title,
-  .ps-item.is-active .ps-title,
   .ps-card,
   .ps-card.is-centered {
     transform: none;
-  }
-
-  /* The counter still shows the right number, it just doesn't roll. */
-  .ps-count-strip {
-    transition: none;
-  }
-
-  .ps-indicator {
-    transition: none;
   }
 }

@@ -14,7 +14,7 @@
   width: 100%;
   min-width: 760px;
   height: auto;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
 }
 
 .arch-group rect {
@@ -109,7 +109,6 @@
 .arch figcaption b {
   margin-right: 6px;
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  font-weight: 400;
+  font-size: var(--size-small);
+  font-weight: var(--weight-strong);
 }

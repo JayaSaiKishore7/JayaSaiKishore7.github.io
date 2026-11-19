@@ -5,6 +5,9 @@ import { TechList } from "../Project/TechList";
 import { SectionHeader } from "../ui/SectionHeader";
 import "./Contact.css";
 
+const tools = aboutInfo.skillGroups.filter((group) => !group.spoken);
+const spoken = aboutInfo.skillGroups.filter((group) => group.spoken);
+
 export class Contact extends Component {
   render() {
     return (
@@ -26,10 +29,25 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          {/* Every skill in one row of chips (wrapping on narrow screens); the data stays grouped. */}
+          {/* Every tool in one row of chips (wrapping on narrow screens); the data stays grouped.
+              Spoken languages aren't tools, so they follow as a plain line of text. */}
           <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
             <h3 className="k">skills</h3>
-            <TechList items={aboutInfo.skillGroups.flatMap((group) => group.items)} label="skills" />
+            <TechList items={tools.flatMap((group) => group.items)} label="skills" />
+            {spoken.map((group) => (
+              <p className="hello-line" key={group.name}>
+                <span className="hello-line-k">{group.name}:</span> {group.items.join(", ")}
+              </p>
+            ))}
+          </Reveal>
+
+          <Reveal as="div" className="hello-skills" style={{ "--i": 3 }}>
+            <h3 className="k">certifications &amp; open source</h3>
+            <ul className="hello-list">
+              {aboutInfo.credentials.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </Reveal>
         </div>
       </section>

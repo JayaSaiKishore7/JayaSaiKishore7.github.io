@@ -3,8 +3,7 @@
   align-items: baseline;
   gap: 6px;
   color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--size-ui);
   text-decoration: none;
   transition: color var(--dur-colour) var(--ease);
 }

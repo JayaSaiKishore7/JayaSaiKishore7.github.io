@@ -1,16 +1,17 @@
 import { Component, createRef } from "react";
-import { profile, heroInfo } from "../../data/profile";
+import { profile } from "../../data/profile";
 import { Clock } from "../../utils/Clock";
 import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import { Magnetic } from "../../utils/Magnetic";
+import { BallGrid } from "./BallGrid";
 import "./Hero.css";
 
 /**
  * The opening section: location and time, the name, the tagline, two buttons
- * and the info card. Visible immediately: the reveal is a CSS animation that
- * starts with the first paint (only while html.js is set), not something
- * JavaScript has to trigger. After it, DetectionBoxes draws its labelled
- * boxes around the name, tagline and info card.
+ * and the X-ray ball grid (BallGrid). Visible immediately: the reveal is a CSS
+ * animation that starts with the first paint (only while html.js is set), not
+ * something JavaScript has to trigger. After it, DetectionBoxes draws its
+ * labelled boxes around the name and tagline.
  */
 export class Hero extends Component {
   constructor(props) {
@@ -34,7 +35,6 @@ export class Hero extends Component {
       targets: [
         { selector: ".hero-name", label: "name 0.99", tight: true },
         { selector: ".hero-tagline", label: "role 0.97", tight: true },
-        { selector: ".hero-card", label: "info 0.95" },
       ],
     });
     this.boxes.start();
@@ -83,7 +83,7 @@ export class Hero extends Component {
             <p className="hero-tagline hero-fade" style={{ "--s": 1 }}>
               {profile.role}.
               <br />
-              lately, computer vision on a <em className="hero-accent">production line</em>.
+              lately, computer vision on a production line.
             </p>
 
             <p className="hero-note hero-fade" style={{ "--s": 2 }}>
@@ -100,25 +100,10 @@ export class Hero extends Component {
             </div>
           </div>
 
-          <aside className="hero-card hero-fade" style={{ "--s": 2 }}>
-            <dl>
-              {heroInfo.map((row) => (
-                <div className="hero-row" key={row.label}>
-                  <dt>{row.label}</dt>
-                  <dd>
-                    {row.status ? <span className="hero-status-dot" aria-hidden="true" /> : null}
-                    {row.href ? (
-                      <a className="hero-row-link" href={row.href} download={row.download || undefined}>
-                        {row.value}
-                      </a>
-                    ) : (
-                      row.value
-                    )}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </aside>
+          {/* The fade-in runs on this wrapper, never on the SVG inside. */}
+          <div className="hero-visual hero-fade" style={{ "--s": 2 }}>
+            <BallGrid />
+          </div>
         </div>
       </section>
     );

@@ -22,7 +22,7 @@ export const projects = [
     featured: true,
     title: "Air Quality Forecasting Platform",
     what: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
-    tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face"],
+    tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face", "MLflow", "Docker", "Streamlit", "LSTM", "GRU"],
     thumbnail: {
       src: "/projects/air-quality.webp",
       alt: "the live forecast page: a station map of Provence-Alpes-Côte d'Azur and a chart of measured vs. forecast NO₂",
@@ -36,7 +36,7 @@ export const projects = [
       built:
         "the whole system, solo: a daily GitHub Actions job (with a backup runner on my PC) that runs the tests first, pulls Geod'Air measurements for ~90 station/pollutant series, builds leakage-safe features and forecasts 24 h ahead recursively with XGBoost. it scores every past forecast against what was measured, runs Evidently drift checks that open a GitHub issue, publishes a static page on Hugging Face and checks that the live page shows the new forecast. plus a FastAPI service, a Streamlit dashboard and 51 pytest tests, with CI and a protected main branch.",
       decision:
-        "i shipped XGBoost, not the Random Forest, even though the forest scored slightly better (1-hour MAE 3.66 vs 3.69). the forest is 278 MB and XGBoost is 4.8 MB, small enough to run in a free daily job and deploy without paid hosting.",
+        "i compared Random Forest and XGBoost on a chronological 80/20 split, so the model is always tested on days after the ones it learned from, and tried LSTM and GRU in a separate notebook. i shipped XGBoost, not the Random Forest, even though the forest scored slightly better (1-hour MAE 3.66 vs 3.69). the forest is 278 MB and XGBoost is 4.8 MB, small enough to run in a free daily job and deploy without paid hosting.",
       tested:
         "two numbers misled me. my first score was too good: the 3-hour average included the hour being predicted. using only past hours raised the 1-hour error (MAE 3.42 → 3.69) but made training match live forecasting. then the drift alarm fired every day, because live data was compared with the whole year, including stations that weren't reporting. comparing the same season and stations cut the drift share from 0.67 to 0.56. and after a 12-day gap with no forecasts (5–16 Nov), a failed or missed run now opens a GitHub issue, the backup runner publishes if GitHub hasn't, and the page warns visitors when its forecast is over 36 hours old.",
     },
@@ -141,9 +141,9 @@ answer = llm.invoke(prompt)`,
       built:
         "everything, solo: the CNN (four conv/pool blocks, 1.3M parameters, trains on a CPU), augmentation tuned for MRI, and training with early stopping and checkpointing. the public site is a free static Hugging Face Space where the model runs in the visitor's browser, plus a Flask version with a JSON API and Grad-CAM support. CI runs lint, tests and real predictions in a headless browser on every pull request, and the live site is checked every 6 hours.",
       decision:
-        "i run the model in the visitor's browser (ONNX Runtime Web) instead of on a server: hosting is free, there's no cold start, and scans never leave the device. the risk was train/serve skew, so i ported Pillow's resize to JavaScript: on 30 full-size scans the browser's model inputs are pixel-identical to Python's, and the predictions match.",
+        "i run the model in the visitor's browser (ONNX Runtime Web) instead of on a server: hosting is free, there's no cold start, and scans never leave the device. the risk was train/serve skew, so i ported Pillow's resize to JavaScript: on 30 full-size scans the browser's model inputs are pixel-identical to Python's, and the predictions match. i also tried transfer learning: EfficientNetB0 with ImageNet weights, on the same split, was slightly better on validation (96.96%) and slightly worse on test (96.77% vs 97.53%). every gap is a handful of images, within run-to-run noise, so there's no evidence it's better, and the simpler CNN stays.",
       tested:
-        "my first augmentation pass dropped accuracy from 95.83% to 92.50%, because MRI orientation and intensity carry diagnostic signal. i checked whether it just needed longer training (it didn't: still 92.50%), then cut rotation, zoom and brightness to roughly a third (±18° → ±7°), which beat the no-augmentation baseline on every class. later, transfer learning with EfficientNetB0 on the same split didn't beat it (96.77% vs 97.53% test, within noise), so the simpler CNN stays.",
+        "my first augmentation pass dropped accuracy from 95.83% to 92.50%, because MRI orientation and intensity carry diagnostic signal. i checked whether it just needed longer training (it didn't: still 92.50%), then cut rotation, zoom and brightness to roughly a third (±18° → ±7°), which beat the no-augmentation baseline on every class.",
     },
     proof: "97.53% test accuracy on 1,054 held-out scans and 95.6% meningioma F1. the most common error: a glioma read as meningioma (9 of 243).",
     aside: "limitations are documented in the README, not claiming clinical validity.",
