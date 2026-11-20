@@ -1,6 +1,12 @@
 /* ---------- the "training log" footer ----------
-   One dark panel, like the contact card (shared --term-* colours in
-   src/styles/terminal.css), the same in both themes. */
+   One dark terminal panel (shared --term-* colours in src/styles/terminal.css),
+   the same in both themes. It is also the page's contact section (#contact). */
+
+/* The terminal run above the exit line: "$ python contact.py" → "running inference…". */
+.footer-terminal {
+  margin-bottom: 2px;
+  font: 500 0.78125rem/1.6 var(--font-mono); /* 12.5px, like the exit line */
+}
 
 .footer-panel {
   margin-bottom: clamp(16px, 3vw, 32px);

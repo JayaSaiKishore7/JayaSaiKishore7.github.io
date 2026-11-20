@@ -1,4 +1,4 @@
-﻿import { Component } from "react";
+import { Component } from "react";
 import { Navbar } from "./components/Navbar/Navbar";
 import { ScrollProgress } from "./components/ScrollProgress/ScrollProgress";
 import { Hero } from "./components/Hero/Hero";
@@ -6,7 +6,6 @@ import { Projects } from "./components/Projects/Projects";
 import { Resume } from "./components/Resume/Resume";
 import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
-import { Connect } from "./components/Connect/Connect";
 import { CaseStudy } from "./components/CaseStudy/CaseStudy";
 import { Footer } from "./components/Footer/Footer";
 import { Loader } from "./components/Loader/Loader";
@@ -85,7 +84,6 @@ class App extends Component {
         <Resume />
         <Education />
         <Contact />
-        <Connect />
         <Footer />
       </>
     );

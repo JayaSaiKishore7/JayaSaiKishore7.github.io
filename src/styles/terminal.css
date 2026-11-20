@@ -1,6 +1,6 @@
 /* ---------- the "terminal" colours ----------
-   Shared by the dark screen-like panels: the contact card (Connect.css) and the
-   footer (Footer.css). They stay dark in BOTH themes, so these don't change
+   The colours of the dark screen-like footer panel (Footer.css), kept here so
+   any other terminal panel can share them. They stay dark in BOTH themes, so these don't change
    with data-theme. The one exception to theme.js holding every colour; nothing
    else uses these hex values. Contrast on --term-bg: text 15.5:1, muted 6.1:1,
    link 12.3:1, accent 7.6:1. */

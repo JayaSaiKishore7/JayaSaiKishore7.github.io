@@ -188,9 +188,18 @@ export class Footer extends PureComponent {
   render() {
     const year = new Date().getFullYear();
     return (
-      <footer className="footer" ref={this.footerRef}>
+      // id="contact": the navbar's "contact" link lands here (the footer holds the contact links).
+      <footer id="contact" className="footer" ref={this.footerRef}>
         <div className="container">
           <div className="footer-panel">
+            {/* The terminal run: the command and its result (decoration), then the exit line. */}
+            <div className="footer-terminal" aria-hidden="true">
+              <p>
+                <span className="footer-muted">$ {footerInfo.command}</span>
+              </p>
+              <p className="footer-accent">{footerInfo.result}</p>
+            </div>
+
             {/* Row 1: the exit line. "$" and the cursor are decoration. */}
             <p className="footer-exit">
               <span className="footer-muted" aria-hidden="true">
