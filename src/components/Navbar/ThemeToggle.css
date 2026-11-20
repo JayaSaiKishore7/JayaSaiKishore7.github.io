@@ -48,6 +48,14 @@
   transform: none;
 }
 
+/* During the whole-page cross-fade (ThemeToggle.jsx), elements switch colour
+   at once: the cross-fade is the only fade. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
 :root[data-theme="dark"] .theme-toggle-moon {
   opacity: 0;
   transform: rotate(45deg) scale(0.6);

@@ -12,6 +12,11 @@ import "./ThemeToggle.css";
  * by src/data/head.js) so it always matches the theme on screen. A
  * prefers-color-scheme media query wouldn't: the site ignores the device
  * setting and always starts light.
+ *
+ * The switch is one soft cross-fade of the whole page (View Transitions API;
+ * the fade itself is styled in index.css). Meanwhile html.theme-switching turns
+ * off the per-element colour transitions, so nothing fades twice. Browsers
+ * without the API, and reduced motion, keep the plain per-element fade.
  */
 export class ThemeToggle extends Component {
   constructor(props) {
@@ -22,10 +27,24 @@ export class ThemeToggle extends Component {
 
   toggle() {
     const dark = !this.state.dark;
-    document.documentElement.dataset.theme = dark ? "dark" : "light";
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", dark ? theme.colors.dark.bg : theme.colors.light.bg);
+    const root = document.documentElement;
+    const apply = () => {
+      root.dataset.theme = dark ? "dark" : "light";
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", dark ? theme.colors.dark.bg : theme.colors.light.bg);
+    };
+
+    const crossFade =
+      typeof document.startViewTransition === "function" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (crossFade) {
+      root.classList.add("theme-switching");
+      const transition = document.startViewTransition(apply);
+      transition.finished.finally(() => root.classList.remove("theme-switching"));
+    } else {
+      apply();
+    }
     this.setState({ dark });
   }
 

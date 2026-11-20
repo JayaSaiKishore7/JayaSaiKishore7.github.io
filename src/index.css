@@ -144,6 +144,15 @@ button {
   transform: translateY(10px);
 }
 
+/* ---------- page cross-fades (View Transitions) ----------
+   One soft cross-fade of the whole page: when the theme switches
+   (ThemeToggle.jsx). Browsers without View Transitions simply skip it. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-move);
+  animation-timing-function: var(--ease);
+}
+
 /* ---------- reduced motion: no movement, only quick fades ---------- */
 
 @media (prefers-reduced-motion: reduce) {
