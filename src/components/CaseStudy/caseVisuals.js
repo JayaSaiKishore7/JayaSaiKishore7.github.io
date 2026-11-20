@@ -15,6 +15,11 @@ export const VISUALS = {
     still: { light: "/projects/emotion-rag-pipeline-light.webp", dark: "/projects/emotion-rag-pipeline-dark.webp" },
     caption: "illustration: a face goes through the cnn, and its top emotion (happy) searches the reviews for the 4 closest.",
   },
+  "brain-tumor": {
+    load: () => import("../../utils/brainCnnGL.js").then((m) => m.BrainCnnGL),
+    still: { light: "/projects/brain-tumor-cnn-light.webp", dark: "/projects/brain-tumor-cnn-dark.webp" },
+    caption: "illustration: mri slices of a brain go through 4 conv/pool blocks, and the predicted class (meningioma) rises.",
+  },
 };
 
 export const hasCaseVisual = (project) => Boolean(VISUALS[project.id]);
