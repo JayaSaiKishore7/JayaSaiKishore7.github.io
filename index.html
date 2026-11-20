@@ -20,7 +20,8 @@
       //
       // Loading screen (src/components/Loader): .loading shows it. Only once per
       // visit (sessionStorage) and never with reduced motion. Fail-safe: whatever
-      // happens, it's removed after 3 s, and "loader:done" lets the page carry on.
+      // happens, it's removed after 4 s (it normally ends at ~3 s), and
+      // "loader:done" lets the page carry on.
       (function () {
         var root = document.documentElement;
         root.dataset.theme = "light";
@@ -46,7 +47,7 @@
             if (!root.classList.contains("loading")) return;
             root.classList.remove("loading");
             window.dispatchEvent(new Event("loader:done"));
-          }, 3000);
+          }, 4000);
         }
       })();
     </script>

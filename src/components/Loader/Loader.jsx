@@ -4,14 +4,14 @@ import "./Loader.css";
 
 const MESSAGES = ["loading weights…", "training model…", "running inference…"];
 // From the moment the loader's CSS animations start (its first paint): three
-// messages of 650 ms each (Loader.css), then the 300 ms fade. ~2 s in all.
-const SHOW_MS = 1700;
-const FADE_MS = 300;
+// messages of 900 ms each (Loader.css), then the 400 ms fade. ~3 s in all.
+const SHOW_MS = 2600;
+const FADE_MS = 400;
 
 /**
  * The once-per-visit loading screen. index.html's inline script decides
  * whether it shows (html.loading: first page of the visit, motion allowed) and
- * removes it after 3 s whatever happens. The messages and progress bar are CSS
+ * removes it after 4 s whatever happens. The messages and progress bar are CSS
  * animations that start with the first paint; this component only ends it:
  * on time, on "skip" or on Escape. It stays in the page afterwards, hidden by
  * CSS (no html.loading), so nothing is unmounted or re-rendered. Ending removes html.loading, so the hero's
