@@ -30,7 +30,8 @@ const LINKS_PER_NEURON = 3;
 const SEED = 20261120; // fixed: the same network and field on every visit
 const WAVE_WIDTH = 0.55; // Gaussian sigma, in layers
 const DOT_COUNT = 14;
-const DOT_EDGE_MS = 2400; // time for a dot to travel one connection
+const DOT_SPREAD = 0.35; // dots run up to ± this many layers ahead of / behind the wave
+const DOT_FADE = 0.5; // in layers: fade in after leaving the first neuron, out before the last
 
 // ---------- the plexus field (layer B) ----------
 
@@ -103,10 +104,11 @@ export function buildScene({ small = false } = {}) {
     };
   });
 
-  const dots = Array.from({ length: DOT_COUNT }, (_, i) => ({
-    edge: Math.floor(random() * edges.length),
-    start: -(i / DOT_COUNT) * DOT_EDGE_MS, // staggered, so they never move in step
-    forward: true,
+  // Each dot rides the wave along a full path through the network (picked anew
+  // for every forward and every backward pass); the offset keeps them a loose group.
+  const dots = Array.from({ length: DOT_COUNT }, () => ({
+    offset: (random() * 2 - 1) * DOT_SPREAD,
+    path: [], // neuron indices, one per layer, in travel order
   }));
 
   return {
@@ -116,6 +118,7 @@ export function buildScene({ small = false } = {}) {
     dots,
     firstLayer: byLayer[0],
     lastLayer: byLayer[LAYERS.length - 1],
+    pass: -1, // which half-cycle the dots' paths were picked for
     lastTime: 0,
     tiltX: 0, // parallax, eased toward the target each frame
     tiltY: 0,
@@ -284,18 +287,28 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     ctx.stroke();
   }
 
-  // Dots travelling along the connections, in the wave's direction (drawn under the neurons)
+  // Dots travel with the wave along whole paths: first layer → last going
+  // forward, last → first going back (drawn under the neurons).
   if (!still) {
+    const pass = Math.floor(time / HALF_MS);
+    if (pass !== scene.pass) {
+      pickPaths(scene, forward);
+      scene.pass = pass;
+    }
+    const steps = LAYERS.length - 1; // connections along a path
     for (const dot of scene.dots) {
-      advanceDot(scene, dot, time, forward);
-      const t = (time - dot.start) / DOT_EDGE_MS;
-      if (t < 0) continue; // staggered start
-      const { from, to } = scene.edges[dot.edge];
-      const [a, b] = dot.forward ? [nodes[from], nodes[to]] : [nodes[to], nodes[from]];
+      // How far along its path the dot is, in layers (0 = first neuron of the path).
+      const along = (forward ? wave : steps - wave) + dot.offset;
+      if (along < 0 || along > steps || !dot.path.length) continue; // not in the network now
+      const k = Math.min(steps - 1, Math.floor(along));
+      const t = along - k;
+      const a = nodes[dot.path[k]];
+      const b = nodes[dot.path[k + 1]];
       const x = a.sx + (b.sx - a.sx) * t;
       const y = a.sy + (b.sy - a.sy) * t;
       const s = a.scale + (b.scale - a.scale) * t;
-      const alpha = Math.sin(Math.PI * t) * depth(s); // fades in and out along the line
+      // Fades in as it leaves its first neuron and out as it reaches its last: no pops.
+      const alpha = Math.min(1, along / DOT_FADE, (steps - along) / DOT_FADE) * depth(s);
       ctx.fillStyle = rgb(glow);
       ctx.globalAlpha = alpha * 0.25; // soft halo
       ctx.beginPath();
@@ -350,22 +363,29 @@ function erase(ctx, mask, amount, width, height) {
   ctx.restore();
 }
 
-/** When a dot reaches the end of its connection, it continues from that neuron in the current direction. */
-function advanceDot(scene, dot, time, forward) {
-  while (time - dot.start >= DOT_EDGE_MS) {
-    const { from, to } = scene.edges[dot.edge];
-    const at = dot.forward ? to : from;
-    const choices = forward ? scene.neurons[at].out : scene.neurons[at].in;
-    if (choices.length) {
-      dot.edge = choices[Math.floor(Math.random() * choices.length)];
-    } else {
-      // End of the network: start again on the side the wave comes from.
-      const side = forward ? scene.firstLayer : scene.lastLayer;
-      const neuron = scene.neurons[side[Math.floor(Math.random() * side.length)]];
-      const fresh = forward ? neuron.out : neuron.in;
-      dot.edge = fresh[Math.floor(Math.random() * fresh.length)];
+/**
+ * Gives every dot a full path for the coming pass: from a first-layer neuron to
+ * the last layer (forward), or from a last-layer neuron back to the first
+ * (backward), following real connections one layer at a time.
+ */
+function pickPaths(scene, forward) {
+  const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const tryPath = () => {
+    let neuron = pick(forward ? scene.firstLayer : scene.lastLayer);
+    const path = [neuron];
+    for (let step = 0; step < LAYERS.length - 1; step++) {
+      // Going back, a neuron may have no incoming connection: that route is a dead end.
+      const choices = forward ? scene.neurons[neuron].out : scene.neurons[neuron].in;
+      if (!choices.length) return null;
+      const edge = scene.edges[pick(choices)];
+      neuron = forward ? edge.to : edge.from;
+      path.push(neuron);
     }
-    dot.forward = forward;
-    dot.start += DOT_EDGE_MS;
+    return path;
+  };
+  for (const dot of scene.dots) {
+    let path = null;
+    for (let attempt = 0; attempt < 20 && !path; attempt++) path = tryPath();
+    dot.path = path ?? []; // an empty path: this dot sits out this pass
   }
 }
