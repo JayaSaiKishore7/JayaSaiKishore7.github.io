@@ -51,7 +51,7 @@ export const aboutInfo = {
   paragraphs: [
     "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
     "i hold a master's in data science & AI (2026), with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale.",
-    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, fine-tuning its YOLO model from 70% to 90% accuracy.",
+    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment.",
   ],
   // Grouped by area, no percentage bars. Matches the resume (public/resume/).
   skillGroups: [
