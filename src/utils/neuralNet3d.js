@@ -1,11 +1,13 @@
 /**
- * Drawing logic for the 3D "plexus depth" neural network (used by NeuralNet.jsx).
+ * Drawing logic for the 3D "rotating layers" neural network (used by NeuralNet.jsx).
  * Plain functions, no React and no libraries: build the scene once, then draw
  * a frame for a given time onto a 2D canvas.
  *
- *   Layer B (behind): a plexus field of slowly drifting particles, joined when close.
- *   Layer A (front):  a 5-layer network of neuron rings, with a propagation wave
- *                     and dots running along its connections.
+ * The scene: 5 layers of neurons along X, each a ring in the Y–Z plane, every
+ * neuron linked to 3 neurons of the next layer (seeded, so the same network on
+ * every visit). A propagation wave runs forward then backward through it, with
+ * dots travelling the whole network along with the wave. The network turns
+ * slowly around Y, one full turn a minute (and tilts a little toward the mouse).
  *
  * "3D" is a small hand-rolled projection: rotate around Y, tilt around X, then
  * perspective (scale = CAMERA / (CAMERA + z)).
@@ -17,7 +19,7 @@
 export const CYCLE_MS = 30000;
 const HALF_MS = CYCLE_MS / 2;
 
-// ---------- the network (layer A) ----------
+// ---------- the network ----------
 
 const LAYERS = [
   { x: -1.6, count: 5, radius: 0.55 },
@@ -27,27 +29,18 @@ const LAYERS = [
   { x: 1.6, count: 4, radius: 0.45 },
 ];
 const LINKS_PER_NEURON = 3;
-const SEED = 20261120; // fixed: the same network and field on every visit
+const SEED = 20261120; // fixed: the same network on every visit
 const WAVE_WIDTH = 0.55; // Gaussian sigma, in layers
 const DOT_COUNT = 14;
 const DOT_SPREAD = 0.35; // dots run up to ± this many layers ahead of / behind the wave
 const DOT_FADE = 0.5; // in layers: fade in after leaving the first neuron, out before the last
 
-// ---------- the plexus field (layer B) ----------
-
-const PARTICLES = 70;
-const PARTICLES_SMALL = 40; // screens narrower than 768px
-const FIELD = { x: 2.5, y: 1.4, z: 1.5 }; // half-sizes of the box
-const LINK_DISTANCE = 0.6;
-const DRIFT_PER_MS = 0.00004; // very slow
-const FIELD_ROTATION = 0.6; // the field turns at 0.6× the camera: it feels farther away
-
 // ---------- camera ----------
 
 const TILT = 0.3; // rad, around X
-const SWAY_CENTRE = 0.55; // rad, around Y
-const SWAY_AMOUNT = 0.45;
-const SWAY_PERIOD_MS = 50000;
+/** One full turn around Y, in ms. Driven by animation time, so pausing freezes it. */
+export const ROTATION_PERIOD_MS = 60000;
+const START_ANGLE = 0.55; // rad around Y: where the turn starts, and the reduced-motion still picture
 const CAMERA = 4;
 
 /** Small, fast, seeded random generator (mulberry32). */
@@ -61,8 +54,8 @@ function seededRandom(seed) {
   };
 }
 
-/** Builds the network, the plexus particles and the moving dots. `small`: fewer particles. */
-export function buildScene({ small = false } = {}) {
+/** Builds the network (neurons, seeded connections) and the moving dots. */
+export function buildScene() {
   const random = seededRandom(SEED);
 
   const neurons = [];
@@ -90,20 +83,6 @@ export function buildScene({ small = false } = {}) {
     }
   }
 
-  const particles = Array.from({ length: small ? PARTICLES_SMALL : PARTICLES }, () => {
-    // A random direction, all at the same slow speed.
-    const a = random() * Math.PI * 2;
-    const b = Math.acos(random() * 2 - 1);
-    return {
-      x: (random() * 2 - 1) * FIELD.x,
-      y: (random() * 2 - 1) * FIELD.y,
-      z: (random() * 2 - 1) * FIELD.z,
-      vx: Math.sin(b) * Math.cos(a) * DRIFT_PER_MS,
-      vy: Math.sin(b) * Math.sin(a) * DRIFT_PER_MS,
-      vz: Math.cos(b) * DRIFT_PER_MS,
-    };
-  });
-
   // Each dot rides the wave along a full path through the network (picked anew
   // for every forward and every backward pass); the offset keeps them a loose group.
   const dots = Array.from({ length: DOT_COUNT }, () => ({
@@ -114,12 +93,10 @@ export function buildScene({ small = false } = {}) {
   return {
     neurons,
     edges,
-    particles,
     dots,
     firstLayer: byLayer[0],
     lastLayer: byLayer[LAYERS.length - 1],
     pass: -1, // which half-cycle the dots' paths were picked for
-    lastTime: 0,
     tiltX: 0, // parallax, eased toward the target each frame
     tiltY: 0,
   };
@@ -141,11 +118,10 @@ export function readColours(element = document.documentElement) {
   const style = getComputedStyle(element);
   const get = (name) => parseColour(style.getPropertyValue(name));
   return {
-    bg: get("--bg"),
-    base: get("--border-strong"), // plexus field
-    line: get("--muted"), // network lines and neuron outlines: darker, in front of the field
-    forward: get("--accent"),
-    backward: get("--muted"),
+    neuron: get("--border-strong"), // neurons at rest
+    line: get("--muted"), // connections at rest
+    forward: get("--accent"), // the wave going forward
+    backward: get("--muted"), // the wave going back
   };
 }
 
@@ -181,10 +157,10 @@ export function makeCalmMask(width, height, rect, dpr) {
 /**
  * Draws the scene at `time` (ms of animation time).
  * options: width/height (CSS px; the context is already scaled for the DPR),
- * colours, still (reduced motion: no drift, rotation, wave or dots),
+ * colours, still (reduced motion: no rotation, wave or dots),
  * pointer (target parallax, -1…1 on each axis, or null), calm ({ mask,
- * field, network, extras }: how much of each layer to erase behind the text
- * block, plus extra masks behind single lines that need more).
+ * network, extras }: how much to erase behind the text block, plus extra
+ * masks behind single lines that need more).
  */
 export function drawFrame(ctx, scene, { width, height, time, colours, still = false, pointer = null, calm = null }) {
   ctx.clearRect(0, 0, width, height);
@@ -194,75 +170,34 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     scene.tiltY += (pointer.x * 0.35 - scene.tiltY) * 0.04; // eased, ~4% per frame
     scene.tiltX += (pointer.y * 0.25 - scene.tiltX) * 0.04;
   }
-  const sway = still ? SWAY_CENTRE : SWAY_CENTRE + SWAY_AMOUNT * Math.sin((time / SWAY_PERIOD_MS) * Math.PI * 2);
-  const yaw = sway + (still ? 0 : scene.tiltY);
+  // A continuous turn: `time` only advances while the animation runs, so a pause
+  // freezes the angle and play continues from it, with no jump.
+  const turn = still ? START_ANGLE : START_ANGLE + ((time % ROTATION_PERIOD_MS) / ROTATION_PERIOD_MS) * Math.PI * 2;
+  const yaw = turn + (still ? 0 : scene.tiltY);
   const pitch = TILT + (still ? 0 : scene.tiltX);
 
-  // Fit: fill the height on wide screens; on tall narrow screens let the outer layers
-  // run past the sides, so the network doesn't shrink to a thin strip.
+  // Fit (sized for the side view, the widest moment of the turn): fill the height on
+  // wide screens; on tall narrow screens let the outer layers run past the sides, so
+  // the network doesn't shrink to a thin strip.
   const portrait = height > width;
   const unit = Math.min(height / 2.6, width / (portrait ? 2.6 : 4));
   const cx = width / 2;
   const cy = height / 2;
 
-  const projector = (yawAngle, pitchAngle) => {
-    const cosY = Math.cos(yawAngle), sinY = Math.sin(yawAngle);
-    const cosX = Math.cos(pitchAngle), sinX = Math.sin(pitchAngle);
-    return (x, y, z) => {
-      const x1 = x * cosY + z * sinY;
-      const z1 = -x * sinY + z * cosY;
-      const y2 = y * cosX - z1 * sinX;
-      const z2 = y * sinX + z1 * cosX;
-      const scale = CAMERA / (CAMERA + z2);
-      return { sx: cx + x1 * scale * unit, sy: cy - y2 * scale * unit, z: z2, scale };
-    };
-  };
+  const cosY = Math.cos(yaw), sinY = Math.sin(yaw);
+  const cosX = Math.cos(pitch), sinX = Math.sin(pitch);
+  const nodes = scene.neurons.map(({ x, y, z }) => {
+    const x1 = x * cosY + z * sinY;
+    const z1 = -x * sinY + z * cosY;
+    const y2 = y * cosX - z1 * sinX;
+    const z2 = y * sinX + z1 * cosX;
+    const scale = CAMERA / (CAMERA + z2);
+    return { sx: cx + x1 * scale * unit, sy: cy - y2 * scale * unit, z: z2, scale };
+  });
   // Depth fade: far things fainter (scale ~0.75 far … ~1.35 near).
   const depth = (scale) => Math.min(1, Math.max(0.25, (scale - 0.7) / 0.55));
 
-  // ----- layer B: plexus field -----
-  const step = still ? 0 : Math.min(time - scene.lastTime, 100);
-  scene.lastTime = time;
-  const fieldProject = projector(yaw * FIELD_ROTATION, pitch * FIELD_ROTATION);
-  const wrap = (v, half) => (v > half ? v - 2 * half : v < -half ? v + 2 * half : v);
-  const pts = scene.particles.map((p) => {
-    p.x = wrap(p.x + p.vx * step, FIELD.x);
-    p.y = wrap(p.y + p.vy * step, FIELD.y);
-    p.z = wrap(p.z + p.vz * step, FIELD.z);
-    return fieldProject(p.x, p.y, p.z);
-  });
-
-  ctx.strokeStyle = rgb(colours.base);
-  ctx.lineWidth = 1;
-  const limit2 = LINK_DISTANCE * LINK_DISTANCE;
-  const ps = scene.particles;
-  for (let i = 0; i < ps.length; i++) {
-    for (let j = i + 1; j < ps.length; j++) {
-      const dx = ps[i].x - ps[j].x, dy = ps[i].y - ps[j].y, dz = ps[i].z - ps[j].z;
-      const d2 = dx * dx + dy * dy + dz * dz;
-      if (d2 >= limit2) continue; // only close pairs need the (slower) square root
-      ctx.globalAlpha = 0.6 * (1 - Math.sqrt(d2) / LINK_DISTANCE) * depth((pts[i].scale + pts[j].scale) / 2);
-      ctx.beginPath();
-      ctx.moveTo(pts[i].sx, pts[i].sy);
-      ctx.lineTo(pts[j].sx, pts[j].sy);
-      ctx.stroke();
-    }
-  }
-  ctx.fillStyle = rgb(colours.base);
-  for (const p of pts) {
-    ctx.globalAlpha = 0.8 * depth(p.scale);
-    ctx.beginPath();
-    ctx.arc(p.sx, p.sy, 1.7 * p.scale, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // The field almost disappears behind the text.
-  if (calm) erase(ctx, calm.mask, calm.field, width, height);
-
-  // ----- layer A: the network -----
-  const project = projector(yaw, pitch);
-  const nodes = scene.neurons.map((n) => project(n.x, n.y, n.z));
-
+  // ----- the wave -----
   const phase = time % CYCLE_MS;
   const forward = phase < HALF_MS;
   const progress = (forward ? phase : phase - HALF_MS) / HALF_MS;
@@ -273,7 +208,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     still ? 0 : Math.exp(-((n.layer - wave) ** 2) / (2 * WAVE_WIDTH * WAVE_WIDTH))
   );
 
-  // Lines
+  // ----- 1. connections: brighter and thicker near the wave -----
   ctx.lineCap = "round";
   for (const { from, to } of scene.edges) {
     const a = nodes[from], b = nodes[to];
@@ -287,8 +222,8 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     ctx.stroke();
   }
 
-  // Dots travel with the wave along whole paths: first layer → last going
-  // forward, last → first going back (drawn under the neurons).
+  // ----- 2. dots travelling with the wave along whole paths: first layer → last
+  // going forward, last → first going back (drawn under the neurons) -----
   if (!still) {
     const pass = Math.floor(time / HALF_MS);
     if (pass !== scene.pass) {
@@ -321,33 +256,21 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     }
   }
 
-  // Neurons, far → near: hollow rings (--bg inside); the centre fills as the wave passes.
+  // ----- 3. neurons, far → near: solid dots, blending toward the wave colour
+  // and growing slightly as it passes; far ones smaller and fainter -----
   const order = nodes.map((_, i) => i).sort((p, q) => nodes[q].z - nodes[p].z);
   for (const idx of order) {
     const p = nodes[idx];
     const i = intensity[idx];
-    const r = (4.2 + 1.4 * i) * p.scale;
-    const d = depth(p.scale);
-    ctx.globalAlpha = d;
-    ctx.fillStyle = rgb(colours.bg);
+    ctx.globalAlpha = (0.7 + 0.3 * i) * depth(p.scale);
+    ctx.fillStyle = mix(colours.neuron, glow, i);
     ctx.beginPath();
-    ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+    ctx.arc(p.sx, p.sy, (3.6 + 1.6 * i) * p.scale, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = mix(colours.line, glow, i);
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-    if (i > 0.02) {
-      ctx.globalAlpha = d * i;
-      ctx.fillStyle = rgb(glow);
-      ctx.beginPath();
-      ctx.arc(p.sx, p.sy, r * 0.6, 0, Math.PI * 2);
-      ctx.fill();
-    }
   }
 
-  // The network fades behind the text block too.
+  // ----- calm behind the text -----
   if (calm) erase(ctx, calm.mask, calm.network, width, height);
-  // And extra, behind single lines that need it (both layers).
   for (const extra of calm?.extras ?? []) erase(ctx, extra.mask, extra.amount, width, height);
 
   ctx.globalAlpha = 1;

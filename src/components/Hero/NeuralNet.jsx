@@ -4,14 +4,13 @@ import "./NeuralNet.css";
 
 const FRAME_MS = 1000 / 30; // ~30 fps is plenty for slow motion, and halves the work
 const MAX_STEP_MS = 100; // after a stall (busy tab), don't jump ahead
-const SMALL_SCREEN = 768; // below this: fewer plexus particles
 
-// How much of each layer to erase behind the hero's text block (0…1), so the
+// How much of the network to erase behind the hero's text block (0…1), so the
 // name, tagline, note and meta line keep at least 4.5:1 contrast (measured).
-const CALM = { field: 0.3, network: 0.85 };
-// Extra fade behind single lines of text that need it (both layers), measured:
+const CALM = { network: 0.85 };
+// Extra fade behind single lines of text that need it, measured:
 // the muted note line was the only one under 4.5:1 at full network strength.
-const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.75 }];
+const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.85 }];
 
 const VARIANTS = {
   // Faint, behind the whole hero, calm behind its text, with a pause button.
@@ -21,7 +20,7 @@ const VARIANTS = {
 };
 
 /**
- * The 3D "plexus depth" neural network on a canvas (drawing logic in
+ * The 3D "rotating layers" neural network on a canvas (drawing logic in
  * src/utils/neuralNet3d.js). Decorative: aria-hidden.
  *
  * Performance: one requestAnimationFrame loop drawing straight to the canvas,
@@ -122,10 +121,7 @@ export class NeuralNet extends PureComponent {
     canvas.height = Math.round(height * dpr);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.size = { width, height, dpr };
-
-    // Fewer particles on small screens (the field is rebuilt only when crossing the threshold).
-    const small = window.innerWidth < SMALL_SCREEN;
-    if (!this.scene || this.scene.small !== small) this.scene = { ...buildScene({ small }), small };
+    if (!this.scene) this.scene = buildScene();
 
     if (this.calmTarget) {
       // Layout position (offset*), so the hero's entrance transform doesn't shift it.
