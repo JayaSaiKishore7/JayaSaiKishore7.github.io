@@ -39,8 +39,13 @@
   color: var(--muted);
   cursor: pointer;
   transition:
+    scale var(--dur-quick) var(--ease),
     border-color var(--dur-colour) var(--ease),
     color var(--dur-colour) var(--ease);
+}
+
+.nn-toggle:active {
+  scale: 0.94; /* a soft press */
 }
 
 .nn-toggle::before {

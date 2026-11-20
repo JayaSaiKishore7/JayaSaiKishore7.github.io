@@ -10,6 +10,7 @@
   color: var(--text);
   cursor: pointer;
   transition:
+    scale var(--dur-quick) var(--ease),
     border-color var(--dur-colour) var(--ease),
     color var(--dur-colour) var(--ease);
 }
@@ -17,6 +18,10 @@
 .theme-toggle:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.theme-toggle:active {
+  scale: 0.94; /* a soft press (a small round button needs a little more to show) */
 }
 
 .theme-toggle svg {

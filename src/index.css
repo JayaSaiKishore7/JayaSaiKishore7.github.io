@@ -130,17 +130,18 @@ button {
 
 /* ---------- scroll reveal ----------
    Visible by default; hidden only while the app runs (html.js, see index.html)
-   and the element hasn't scrolled into view. Staggered by --i. */
+   and the element hasn't scrolled into view. Staggered by --i: a short rise
+   and a tight stagger, so sections appear quietly. */
 .reveal {
   transition:
     opacity var(--dur-reveal) var(--ease),
     transform var(--dur-reveal) var(--ease);
-  transition-delay: calc(var(--i, 0) * 70ms);
+  transition-delay: calc(var(--i, 0) * 50ms);
 }
 
 .js .reveal:not(.is-visible) {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(10px);
 }
 
 /* ---------- reduced motion: no movement, only quick fades ---------- */
@@ -161,6 +162,11 @@ button {
 
   .js .reveal:not(.is-visible) {
     transform: none;
+  }
+
+  /* No press movement either: buttons keep only their colour change. */
+  :active {
+    scale: none !important;
   }
 }
 

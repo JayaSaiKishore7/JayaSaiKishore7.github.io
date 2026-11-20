@@ -12,8 +12,10 @@
   transition: transform var(--dur-move) var(--ease);
 }
 
+/* Hiding is leaving: the exit curve. Coming back uses the soft --ease above. */
 .nav.is-hidden {
   transform: translateY(calc(-100% - 20px));
+  transition-timing-function: var(--ease-exit);
 }
 
 .nav-pill {
@@ -117,8 +119,9 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  /* Closing: the exit curve (the open state below uses the soft --ease). */
   transition:
-    opacity var(--dur-move) var(--ease),
+    opacity var(--dur-move) var(--ease-exit),
     visibility 0s linear var(--dur-move);
 }
 
@@ -143,12 +146,13 @@
   line-height: 1.1;
   text-decoration: none;
   transform: translateY(100%);
-  transition: transform var(--dur-move) var(--ease);
+  transition: transform var(--dur-move) var(--ease-exit);
 }
 
 /* Links rise in one after another when the sheet opens. */
 .nav.is-menu-open .nav-sheet a {
   transform: none;
+  transition-timing-function: var(--ease);
   transition-delay: calc(80ms + var(--i, 0) * 60ms);
 }
 
@@ -164,6 +168,13 @@
   background: transparent;
   font-size: var(--size-ui);
   cursor: pointer;
+  transition: scale var(--dur-quick) var(--ease);
+}
+
+/* A soft press on the phone menu's buttons. */
+.nav-sheet-close:active,
+.nav-menu-button:active {
+  scale: 0.97;
 }
 
 /* ---------- phones and small tablets ---------- */
@@ -194,6 +205,7 @@
     color: var(--bg);
     font-size: var(--size-ui);
     cursor: pointer;
+    transition: scale var(--dur-quick) var(--ease);
   }
 }
 

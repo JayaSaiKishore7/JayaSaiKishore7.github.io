@@ -12,7 +12,7 @@
   display: grid;
   place-items: center;
   background: var(--bg);
-  transition: opacity 400ms var(--ease);
+  transition: opacity 400ms var(--ease-exit); /* leaving: a quiet speed-up */
 }
 
 .loader.is-leaving {

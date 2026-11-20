@@ -102,11 +102,15 @@ export const theme = {
     gutter: "24px",
   },
 
+  // Soft and smooth: things arrive with a long, gentle landing (ease) and leave
+  // with a quiet speed-up (easeExit). Hover and press feedback is quick.
   motion: {
-    ease: "cubic-bezier(0.16, 1, 0.3, 1)",
-    colour: "250ms",
-    move: "500ms",
-    reveal: "700ms",
+    ease: "cubic-bezier(0.22, 1, 0.36, 1)", // arriving / moving: decelerates softly
+    easeExit: "cubic-bezier(0.4, 0, 1, 1)", // leaving: starts gently, then goes
+    quick: "180ms", // press feedback
+    colour: "300ms", // hover colours
+    move: "450ms", // things moving or opening
+    reveal: "650ms", // content appearing
   },
 
   layout: {

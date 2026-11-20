@@ -133,6 +133,7 @@
   text-decoration: none;
   transition:
     translate var(--dur-move) var(--ease),
+    scale var(--dur-quick) var(--ease),
     background-color var(--dur-colour) var(--ease),
     border-color var(--dur-colour) var(--ease),
     color var(--dur-colour) var(--ease);
@@ -140,6 +141,11 @@
 
 .hero-button:hover {
   border-color: var(--text);
+}
+
+/* A soft press: sinks a little while held, settles back on release. */
+.hero-button:active {
+  scale: 0.97;
 }
 
 .hero-button--primary {

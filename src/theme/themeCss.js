@@ -38,6 +38,8 @@ export function cssVariables(t) {
     "--space-section": t.spacing.section,
     "--gut": t.spacing.gutter,
     "--ease": t.motion.ease,
+    "--ease-exit": t.motion.easeExit,
+    "--dur-quick": t.motion.quick,
     "--dur-colour": t.motion.colour,
     "--dur-move": t.motion.move,
     "--dur-reveal": t.motion.reveal,

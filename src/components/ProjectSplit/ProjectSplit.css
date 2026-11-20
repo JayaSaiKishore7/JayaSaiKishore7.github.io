@@ -133,7 +133,7 @@
    24px the other side and settles in 550 ms; its image also wipes in from the
    left. Only while the app runs (html.js); otherwise the active slide just shows. */
 .js .ps-preview--stage.is-leaving {
-  animation: ps-leave 250ms var(--ease) both;
+  animation: ps-leave 250ms var(--ease-exit) both;
 }
 
 .js .ps-preview--stage.is-active {
@@ -211,6 +211,7 @@
   background: transparent;
   cursor: pointer;
   transition:
+    scale var(--dur-quick) var(--ease),
     border-color var(--dur-colour) var(--ease),
     color var(--dur-colour) var(--ease);
 }
@@ -218,6 +219,10 @@
 .ps-arrows button:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.ps-arrows button:active {
+  scale: 0.94; /* a soft press */
 }
 
 .ps-arrows svg {
