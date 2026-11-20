@@ -26,3 +26,8 @@ dist-ssr
 
 # Review screenshots (npm run screens)
 shots/
+
+# Agent skills installed locally (npx skills add), kept out of the site repo
+.agents/
+.claude/skills/
+skills-lock.json
