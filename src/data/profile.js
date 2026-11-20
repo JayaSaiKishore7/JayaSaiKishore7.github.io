@@ -49,7 +49,6 @@ export const aboutInfo = {
     "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment.",
   ],
   // Grouped by area, no percentage bars. Matches the resume (public/resume/).
-  // `spoken: true` marks human languages: shown as a line of text, not as tool chips.
   skillGroups: [
     { name: "programming", items: ["Python", "SQL"] },
     { name: "machine learning", items: ["scikit-learn", "XGBoost", "Pandas", "NumPy"] },
@@ -59,6 +58,5 @@ export const aboutInfo = {
     { name: "web", items: ["FastAPI", "Flask", "WebSockets", "Vue.js"] },
     { name: "databases", items: ["MySQL", "MariaDB"] },
     { name: "MLOps & cloud", items: ["MLflow", "DVC", "Docker", "Git", "CI/CD", "AWS (EC2, S3)"] },
-    { name: "languages", spoken: true, items: ["english (C2)", "french (A2, working towards B1)"] },
   ],
 };

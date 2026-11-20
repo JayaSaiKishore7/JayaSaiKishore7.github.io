@@ -5,8 +5,6 @@ import { SkillCards } from "../SkillCards/SkillCards";
 import { SectionHeader } from "../ui/SectionHeader";
 import "./Contact.css";
 
-const tools = aboutInfo.skillGroups.filter((group) => !group.spoken);
-const spoken = aboutInfo.skillGroups.filter((group) => group.spoken);
 
 export class Contact extends Component {
   render() {
@@ -29,16 +27,10 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          {/* A slow belt of cards, one per tool group (SkillCards).
-              Spoken languages aren't tools, so they follow as a plain line of text. */}
+          {/* A slow belt of cards, one per skill group (SkillCards). */}
           <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
             <h3 className="k">skills</h3>
-            <SkillCards groups={tools} />
-            {spoken.map((group) => (
-              <p className="hello-line" key={group.name}>
-                <span className="hello-line-k">{group.name}:</span> {group.items.join(", ")}
-              </p>
-            ))}
+            <SkillCards groups={aboutInfo.skillGroups} />
           </Reveal>
         </div>
       </section>

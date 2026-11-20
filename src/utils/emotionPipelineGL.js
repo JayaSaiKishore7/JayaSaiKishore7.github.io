@@ -42,8 +42,8 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 // ---------- colours (the hero's palette) ----------
 
 const PALETTE = {
-  light: { metal: "#7F90A1", accent: "#0C6E7A", faceDark: 0.45, mapOpacity: 0.16, lineOpacity: 0.6, pulse: 1 },
-  dark: { metal: "#5E7286", accent: "#4FC7D6", faceDark: 0.35, mapOpacity: 0.14, lineOpacity: 0.55, pulse: 1.4 },
+  light: { metal: "#8C8C88", accent: "#A84300", faceDark: 0.45, mapOpacity: 0.16, lineOpacity: 0.6, pulse: 1 },
+  dark: { metal: "#5E7286", accent: "#FF8A3D", faceDark: 0.35, mapOpacity: 0.14, lineOpacity: 0.55, pulse: 1.4 },
 };
 const ENV_INTENSITY = 0.45;
 const WHITE = new Color(0xffffff);
@@ -146,7 +146,7 @@ export class EmotionPipelineGL {
     this.scene.environment = this.envTarget.texture;
     const key = new DirectionalLight(0xffffff, 0.9);
     key.position.set(3, 4, 5);
-    const rim = new DirectionalLight(0x4fc7d6, 0.55);
+    const rim = new DirectionalLight(0xff8a3d, 0.55);
     rim.position.set(-4, 2, -5);
     this.scene.add(key, rim, new AmbientLight(0xffffff, 0.35));
 

@@ -6,6 +6,7 @@ import { CaseVisual } from "./CaseVisual";
 import { hasCaseVisual } from "./caseVisuals";
 import { ProjectThumb } from "../Project/ProjectThumb";
 import { TechList } from "../Project/TechList";
+import { HeadlineBox } from "../ui/HeadlineBox";
 import "./CaseStudy.css";
 
 // The first three of the four points every case study answers; the fourth,
@@ -36,7 +37,9 @@ export class CaseStudy extends Component {
                 case study {String(index + 1).padStart(2, "0")}
                 {project.team ? " · team project" : ""}
               </p>
-              <h1 className="case-title">{project.title}</h1>
+              <h1 className="case-title">
+                <HeadlineBox label="project">{project.title}</HeadlineBox>
+              </h1>
               <p className="case-what">{project.what}</p>
               <TechList items={project.tech} />
               <p className="case-links">

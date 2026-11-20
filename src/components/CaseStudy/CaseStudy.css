@@ -40,6 +40,7 @@
 }
 
 .case-title {
+  margin-top: 40px; /* room for the detection box's label under "case study 01" */
   font-family: var(--font-display);
   font-size: clamp(30px, 4.6vw, 60px);
   font-weight: var(--weight-strong);

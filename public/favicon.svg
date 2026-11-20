@@ -2,11 +2,11 @@
   <!-- Colours from src/theme/theme.js: light accent, and the dark theme's accent and bg.
        The "j" is drawn with shapes (no font), so it looks the same in every browser. -->
   <style>
-    .tile { fill: #0C6E7A; }
+    .tile { fill: #A84300; }
     .ink { fill: #FFFFFF; }
     .stroke { fill: none; stroke: #FFFFFF; }
     @media (prefers-color-scheme: dark) {
-      .tile { fill: #4FC7D6; }
+      .tile { fill: #FF8A3D; }
       .ink { fill: #0E1822; }
       .stroke { stroke: #0E1822; }
     }

@@ -44,8 +44,8 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 // ---------- colours (the hero's palette) ----------
 
 const PALETTE = {
-  light: { metal: "#7F90A1", forecast: "#0C6E7A", grid: "#C9D2DB", glass: 0.07 },
-  dark: { metal: "#5E7286", forecast: "#4FC7D6", grid: "#22324A", glass: 0.06 },
+  light: { metal: "#8C8C88", forecast: "#A84300", grid: "#D6D6D2", glass: 0.07 },
+  dark: { metal: "#5E7286", forecast: "#FF8A3D", grid: "#22324A", glass: 0.06 },
 };
 const ENV_INTENSITY = 0.45;
 
@@ -151,7 +151,7 @@ export class ForecastCurtainsGL {
     this.scene.environment = this.envTarget.texture;
     const key = new DirectionalLight(0xffffff, 0.9);
     key.position.set(3, 4, 5);
-    const rim = new DirectionalLight(0x4fc7d6, 0.55);
+    const rim = new DirectionalLight(0xff8a3d, 0.55);
     rim.position.set(-4, 2, -5);
     this.scene.add(key, rim, new AmbientLight(0xffffff, 0.35));
 

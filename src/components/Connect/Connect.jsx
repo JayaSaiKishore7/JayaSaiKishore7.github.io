@@ -1,6 +1,7 @@
 import { PureComponent } from "react";
 import { contactInfo, profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
+import { HeadlineBox } from "../ui/HeadlineBox";
 import "./Connect.css";
 
 const GithubIcon = () => (
@@ -114,7 +115,9 @@ export class Connect extends PureComponent {
                 {LINES.map((line, i) => this.renderLine(line, i))}
               </div>
 
-              <h2 className="term-heading">{contactInfo.heading}</h2>
+              <h2 className="term-heading">
+                <HeadlineBox label="contact">{contactInfo.heading}</HeadlineBox>
+              </h2>
               <p className="term-intro">{contactInfo.intro}</p>
 
               <p className="term-email">

@@ -41,8 +41,8 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 // ---------- colours (the hero's palette) ----------
 
 const PALETTE = {
-  light: { metal: "#7F90A1", accent: "#0C6E7A", brainOpacity: 0.62, glassOpacity: 0.16, lineOpacity: 0.6, glow: 0.22, pulse: 1 },
-  dark: { metal: "#5E7286", accent: "#4FC7D6", brainOpacity: 0.55, glassOpacity: 0.14, lineOpacity: 0.55, glow: 0.35, pulse: 1.4 },
+  light: { metal: "#8C8C88", accent: "#A84300", brainOpacity: 0.62, glassOpacity: 0.16, lineOpacity: 0.6, glow: 0.22, pulse: 1 },
+  dark: { metal: "#5E7286", accent: "#FF8A3D", brainOpacity: 0.55, glassOpacity: 0.14, lineOpacity: 0.55, glow: 0.35, pulse: 1.4 },
 };
 const ENV_INTENSITY = 0.45;
 
@@ -174,7 +174,7 @@ export class BrainCnnGL {
     this.scene.environment = this.envTarget.texture;
     const key = new DirectionalLight(0xffffff, 0.9);
     key.position.set(3, 4, 5);
-    const rim = new DirectionalLight(0x4fc7d6, 0.55);
+    const rim = new DirectionalLight(0xff8a3d, 0.55);
     rim.position.set(-4, 2, -5);
     this.scene.add(key, rim, new AmbientLight(0xffffff, 0.35));
 

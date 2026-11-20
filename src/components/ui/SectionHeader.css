@@ -1,17 +1,19 @@
 .section-header {
   max-width: 46rem;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 
-/* A section whose name is its heading (education): small and quiet. */
+/* A section whose name is its heading (education): small and quiet.
+   The top margin leaves room for its detection box's label. */
 .section-header-label {
+  margin-top: 40px;
   color: var(--text);
   font-size: var(--size-ui);
   font-weight: var(--weight-strong);
 }
 
 .section-header-title {
-  margin-top: 30px; /* space between the section's divider line and its heading */
+  margin-top: 40px; /* room for the detection box's label under the section's divider line */
   color: var(--text);
   font-family: var(--font-display);
   font-size: var(--size-heading);

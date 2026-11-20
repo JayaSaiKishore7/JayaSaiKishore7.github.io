@@ -6,15 +6,15 @@
 // alternative the navbar toggle switches to.
 export const theme = {
   colors: {
-    // The look comes from X-ray inspection: a light box (light theme) or film
-    // (dark theme) in cool slate, with one teal for annotations.
+    // Black and orange: near-black ink on a light page (light theme) or X-ray
+    // film in dark slate (dark theme), with one orange for annotations.
     // Every text colour reaches WCAG AA (4.5:1) on bg, surface and surfaceSoft.
     // Ratios below are listed as bg / surface / surfaceSoft.
     //
     // Dark: X-ray film. Blue-black, not neutral black.
     //   text 15.0 / 13.7 / 12.6    soft 10.1 / 9.2 / 8.5    muted 5.9 / 5.4 / 4.9
-    //   accent 8.9 / 8.2 / 7.5    highlight 11.5 / 10.5 / 9.6
-    //   onAccent on accent: 8.9
+    //   accent 7.6 / 7.0 / 6.4    highlight 10.2 / 9.3 / 8.6
+    //   onAccent on accent: 7.6
     dark: {
       bg: "#0E1822",
       surface: "#15212C",
@@ -26,34 +26,33 @@ export const theme = {
       muted: "#8796A4",
       // Decorative only (bullets, scrollbar): too low contrast for text.
       mutedSoft: "#4A5B6C",
-      accent: "#4FC7D6",
+      accent: "#FF8A3D",
       onAccent: "#0E1822",
       status: "#6fd88f",
-      // A paler teal from the accent family.
-      highlight: "#8ADCE6",
+      // A paler orange from the accent family.
+      highlight: "#FFB37D",
     },
-    // Default. Light box: cool film-white and slate ink.
-    //   text 14.2 / 16.1 / 13.1    soft 9.2 / 10.5 / 8.5    muted 5.2 / 5.9 / 4.8
-    //   accent 5.3 / 6.0 / 4.8    highlight 7.2 / 8.1 / 6.6
-    //   onAccent (white) on accent: 6.0
+    // Default. A light page with near-black ink and a deep orange (neutral greys, no blue).
+    //   text 16.8 / 18.9 / 15.5    soft 12.1 / 13.6 / 11.2    muted 6.2 / 6.9 / 5.7
+    //   accent 5.4 / 6.1 / 5.0    highlight 7.1 / 8.0 / 6.6
+    //   onAccent (white) on accent: 6.1
     light: {
-      bg: "#EEF1F4",
+      bg: "#F2F2F0",
       surface: "#FFFFFF",
-      surfaceSoft: "#E3E8ED",
-      border: "#CDD5DD",
-      borderStrong: "#A9B4BF",
-      text: "#17222E",
-      soft: "#33414F",
-      // Slightly darker than #5B6B7A, which was only 4.45:1 on surfaceSoft.
-      muted: "#566676",
+      surfaceSoft: "#E9E9E6",
+      border: "#D6D6D2",
+      borderStrong: "#B5B5B0",
+      text: "#111111",
+      soft: "#2E2E2E",
+      muted: "#5A5A5A",
       // Decorative only, like dark's mutedSoft.
-      mutedSoft: "#A9B4BF",
-      accent: "#0C6E7A",
+      mutedSoft: "#B5B5B0",
+      accent: "#A84300",
       onAccent: "#FFFFFF",
-      // Graphics only (the status dot): 3.0 / 3.5 / 2.8, below the 4.5:1 needed for text.
+      // Graphics only (the status dot): below the 4.5:1 needed for text.
       status: "#1E9E55",
-      // A deeper teal from the accent family.
-      highlight: "#095863",
+      // A deeper orange from the accent family.
+      highlight: "#8A3700",
     },
   },
 
@@ -104,7 +103,7 @@ export const theme = {
   },
 
   spacing: {
-    section: "clamp(36px, 4.5vw, 64px)",
+    section: "clamp(24px, 3vw, 40px)", // top and bottom padding of every section (kept tight)
     gutter: "24px",
   },
 

@@ -45,8 +45,8 @@ import { CYCLE_MS, DOT_FADE, ROTATION_PERIOD_MS, START_ANGLE, WAVE_WIDTH, buildS
 // ---------- look (fixed values, same lighting in light and dark) ----------
 
 const PALETTE = {
-  dark: { neuron: "#5E7286", tube: "#2E3E50", forward: "#4FC7D6", backward: "#8796A4", fogNear: 7, fogFar: 13 },
-  light: { neuron: "#7F90A1", tube: "#A9B4BF", forward: "#0C6E7A", backward: "#536373", fogNear: 7.5, fogFar: 14 },
+  dark: { neuron: "#5E7286", tube: "#2E3E50", forward: "#FF8A3D", backward: "#8796A4", fogNear: 7, fogFar: 13 },
+  light: { neuron: "#8C8C88", tube: "#B5B5B0", forward: "#A84300", backward: "#5A5A5A", fogNear: 7.5, fogFar: 14 },
 };
 const GLOW = {
   dark: { emissive: 1.0, sprite: 0.45, dot: 1.3, blending: AdditiveBlending },
@@ -138,7 +138,7 @@ export class NeuralNetGL {
 
     const key = new DirectionalLight(0xffffff, 0.9);
     key.position.set(3, 4, 5);
-    const rim = new DirectionalLight(0x4fc7d6, 0.55);
+    const rim = new DirectionalLight(0xff8a3d, 0.55);
     rim.position.set(-4, 2, -5);
     this.scene.add(key, rim, new AmbientLight(0xffffff, 0.35));
 

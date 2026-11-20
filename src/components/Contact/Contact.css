@@ -3,7 +3,7 @@
 }
 
 .hello-skills {
-  margin-top: 48px;
+  margin-top: 32px;
 }
 
 .hello-about .k,
@@ -16,23 +16,14 @@
   font-weight: var(--weight-display);
 }
 
-/* Languages under the chips: one plain line, label in muted. */
-.hello-line {
-  margin-top: 14px;
+/* The about paragraphs: one size, colour and rhythm, so they read as one block. */
+.hello-lead,
+.hello-sub {
   color: var(--soft);
-}
-
-.hello-line-k {
-  color: var(--muted);
-}
-
-.hello-lead {
-  color: var(--text);
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: 1.0625rem;
+  line-height: 1.7;
 }
 
 .hello-sub {
-  margin-top: 12px;
-  color: var(--soft);
+  margin-top: 14px;
 }

@@ -1,0 +1,63 @@
+/* ---------- a headline's detection box (HeadlineBox.jsx) ----------
+   Same look as the hero name's box (Hero.css .detect-box): a 1px accent frame
+   8px around the text, nearly square corners, a small mono label on top. */
+
+.headline-box {
+  --box-colour: var(--accent);
+  --box-ink: var(--on-accent);
+
+  position: relative;
+  display: inline-block;
+}
+
+/* The frame. */
+.headline-box::before {
+  position: absolute;
+  inset: -8px;
+  border: 1px solid var(--box-colour);
+  border-radius: 4px; /* kept nearly square: a real bounding box */
+  pointer-events: none;
+  content: "";
+  animation: headline-box-in 0.7s var(--ease) 0.25s both;
+}
+
+.headline-box-label {
+  position: absolute;
+  bottom: calc(100% + 11px); /* 8px frame padding + 3px gap, like the hero's */
+  left: -9px;
+  padding: 1px 6px;
+  border-radius: 4px 4px 4px 0; /* square where it meets its box */
+  background: var(--box-colour);
+  color: var(--box-ink);
+  font-family: var(--font-mono); /* detection output: the one place mono belongs */
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  white-space: nowrap;
+  animation: headline-box-in 0.7s var(--ease) 0.25s both;
+}
+
+@keyframes headline-box-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Inside a Reveal, wait until it scrolls into view, then draw once. */
+.js .reveal:not(.is-visible) .headline-box::before,
+.js .reveal:not(.is-visible) .headline-box-label {
+  animation-play-state: paused;
+}
+
+@media print {
+  .headline-box::before,
+  .headline-box-label {
+    display: none;
+  }
+}
