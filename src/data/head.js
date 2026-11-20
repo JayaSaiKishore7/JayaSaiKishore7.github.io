@@ -30,7 +30,17 @@ export function headTags({ profile, seo, projects, theme, path = "/" }) {
   };
 
   let page;
-  if (route.page === "case-study") {
+  if (route.page === "not-found") {
+    page = {
+      title: `page not found | ${profile.fullName}`,
+      description: seo.description,
+      image: seo.image,
+      imageSize: [1200, 630],
+      type: "website",
+      data: null,
+      noindex: true, // keep it out of search results (and index.html skips the loading screen)
+    };
+  } else if (route.page === "case-study") {
     const { project } = route;
     page = {
       title: `${project.title} | ${profile.fullName}`,
@@ -64,7 +74,8 @@ export function headTags({ profile, seo, projects, theme, path = "/" }) {
   const tags = [
     `<title>${escape(page.title)}</title>`,
     `<meta name="description" content="${escape(page.description)}" />`,
-    `<link rel="canonical" href="${escape(url)}" />`,
+    // A 404 has no address of its own, so no canonical link; noindex instead.
+    page.noindex ? `<meta name="robots" content="noindex" />` : `<link rel="canonical" href="${escape(url)}" />`,
     // Browser UI colour: the light theme's background, since every visit starts
     // light. The theme toggle (ThemeToggle.jsx) switches it to dark's background.
     `<meta name="theme-color" content="${escape(theme.colors.light.bg)}" />`,
@@ -76,7 +87,7 @@ export function headTags({ profile, seo, projects, theme, path = "/" }) {
     `<meta property="og:image:width" content="${page.imageSize[0]}" />`,
     `<meta property="og:image:height" content="${page.imageSize[1]}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
-    jsonLd(page.data),
+    ...(page.data ? [jsonLd(page.data)] : []),
   ];
 
   return [HEAD_START, ...tags, HEAD_END].join("\n    ");

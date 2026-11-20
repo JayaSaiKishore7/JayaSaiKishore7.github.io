@@ -30,9 +30,12 @@
           if (root.dataset.app !== "ready") root.classList.remove("js");
         }, 4000);
 
+        // Never on the 404 page (its head has robots noindex); the visit's loader then
+        // still shows on the first real page.
+        var notFound = !!document.querySelector('meta[name="robots"][content~="noindex"]');
         var show = false;
         try {
-          show = !sessionStorage.getItem("loader-shown") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+          show = !notFound && !sessionStorage.getItem("loader-shown") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (show) sessionStorage.setItem("loader-shown", "1");
         } catch (e) {
           show = false; // storage blocked: skip the loading screen rather than risk showing it every time

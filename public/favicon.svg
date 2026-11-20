@@ -1,10 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffb53b" />
-      <stop offset="100%" stop-color="#ff7a59" />
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="16" fill="#060607" />
-  <text x="32" y="43" font-family="Poppins, system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle" fill="url(#g)">J</text>
+  <!-- Colours from src/theme/theme.js: light accent, and the dark theme's accent and bg.
+       The "j" is drawn with shapes (no font), so it looks the same in every browser. -->
+  <style>
+    .tile { fill: #0C6E7A; }
+    .ink { fill: #FFFFFF; }
+    .stroke { fill: none; stroke: #FFFFFF; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #4FC7D6; }
+      .ink { fill: #0E1822; }
+      .stroke { stroke: #0E1822; }
+    }
+  </style>
+  <rect class="tile" width="64" height="64" rx="14" />
+  <circle class="ink" cx="37" cy="15" r="5.5" />
+  <path class="stroke" d="M37 27v15c0 7-4.5 10.5-12 10.5" stroke-width="9" stroke-linecap="round" />
 </svg>

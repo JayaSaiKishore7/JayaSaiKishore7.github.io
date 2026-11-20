@@ -11,7 +11,7 @@ const SMALL_SCREEN = 768; // below this: fewer plexus particles
 const CALM = { field: 0.3, network: 0.85 };
 // Extra fade behind single lines of text that need it (both layers), measured:
 // the muted note line was the only one under 4.5:1 at full network strength.
-const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.6 }];
+const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.75 }];
 
 const VARIANTS = {
   // Faint, behind the whole hero, calm behind its text, with a pause button.

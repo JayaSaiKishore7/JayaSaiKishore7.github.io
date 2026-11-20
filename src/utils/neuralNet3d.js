@@ -137,7 +137,13 @@ function parseColour(value) {
 export function readColours(element = document.documentElement) {
   const style = getComputedStyle(element);
   const get = (name) => parseColour(style.getPropertyValue(name));
-  return { bg: get("--bg"), base: get("--border-strong"), forward: get("--accent"), backward: get("--muted") };
+  return {
+    bg: get("--bg"),
+    base: get("--border-strong"), // plexus field
+    line: get("--muted"), // network lines and neuron outlines: darker, in front of the field
+    forward: get("--accent"),
+    backward: get("--muted"),
+  };
 }
 
 const rgb = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
@@ -270,7 +276,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     const a = nodes[from], b = nodes[to];
     const i = (intensity[from] + intensity[to]) / 2;
     ctx.globalAlpha = (0.4 + 0.6 * i) * depth((a.scale + b.scale) / 2);
-    ctx.strokeStyle = mix(colours.base, glow, i);
+    ctx.strokeStyle = mix(colours.line, glow, i);
     ctx.lineWidth = 1.2 + 0.8 * i; // 1.2 px at rest, 2 px as the wave passes
     ctx.beginPath();
     ctx.moveTo(a.sx, a.sy);
@@ -314,7 +320,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     ctx.beginPath();
     ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = mix(colours.base, glow, i);
+    ctx.strokeStyle = mix(colours.line, glow, i);
     ctx.lineWidth = 1.2;
     ctx.stroke();
     if (i > 0.02) {

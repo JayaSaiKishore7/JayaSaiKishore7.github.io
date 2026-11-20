@@ -84,7 +84,7 @@ export const theme = {
   effects: {
     // Strength of the hero's 3D network background (NeuralNet), light and dark.
     // Text contrast behind it is protected by NeuralNet's calm masks (measured).
-    netOpacity: "0.8",
+    netOpacity: "1",
   },
 
   radii: {

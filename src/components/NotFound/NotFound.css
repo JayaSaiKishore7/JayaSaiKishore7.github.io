@@ -1,0 +1,26 @@
+/* Theme tokens only. Room at the top for the floating navbar; the page fills
+   most of the screen, so the footer doesn't jump up under the text. */
+.not-found {
+  min-height: 70vh;
+  padding-top: calc(var(--space-section) + 64px);
+}
+
+.not-found-title {
+  max-width: 18ch;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--size-heading);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-heading);
+  line-height: 1.05;
+}
+
+.not-found-sub {
+  max-width: 68ch;
+  margin-top: 16px;
+  color: var(--muted);
+}
+
+.not-found-home {
+  margin-top: 28px;
+}

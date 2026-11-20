@@ -10,6 +10,7 @@ import { Connect } from "./components/Connect/Connect";
 import { CaseStudy } from "./components/CaseStudy/CaseStudy";
 import { Footer } from "./components/Footer/Footer";
 import { Loader } from "./components/Loader/Loader";
+import { NotFound } from "./components/NotFound/NotFound";
 import { navLinks } from "./data/nav";
 import { projects } from "./data/projects";
 import { resolveRoute } from "./routes";
@@ -51,6 +52,16 @@ class App extends Component {
   render() {
     const { active } = this.state;
     const { route } = this;
+
+    if (route.page === "not-found") {
+      return (
+        <>
+          <Navbar onHome={false} />
+          <NotFound />
+          <Footer />
+        </>
+      );
+    }
 
     if (route.page === "case-study") {
       return (

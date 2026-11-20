@@ -4,6 +4,7 @@
 //
 //   /                 -> dist/index.html
 //   /work/<id>/       -> dist/work/<id>/index.html
+//   (not found)       -> dist/404.html (the host serves it, with a 404 status, for unknown URLs)
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -13,23 +14,28 @@ const TEMPLATE = "dist/index.html";
 const ROOT = '<div id="root"></div>';
 const HEAD = /<!--head:start-->[\s\S]*?<!--head:end-->/;
 
-const { paths, render, head, siteUrl } = await import(pathToFileURL(`${SSR_DIR}/entry-server.js`).href);
+const { paths, notFoundPath, render, head, siteUrl } = await import(pathToFileURL(`${SSR_DIR}/entry-server.js`).href);
 const template = await readFile(TEMPLATE, "utf8");
 
 if (!template.includes(ROOT) || !HEAD.test(template)) {
   throw new Error(`prerender: ${TEMPLATE} needs an empty ${ROOT} and a head:start/head:end block`);
 }
 
-for (const path of paths) {
-  const html = template
+const page = (path) =>
+  template
     .replace(HEAD, () => head(path))
     // data-path tells main.jsx which page this HTML is, so it only hydrates a match.
     .replace(ROOT, () => `<div id="root" data-path="${path}">${render(path)}</div>`);
+
+for (const path of paths) {
   const dir = join("dist", path);
   await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, "index.html"), html);
+  await writeFile(join(dir, "index.html"), page(path));
   console.log(`prerender: ${path}`);
 }
+
+await writeFile("dist/404.html", page(notFoundPath));
+console.log("prerender: 404.html");
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -38,4 +44,4 @@ ${paths.map((path) => `  <url><loc>${new URL(path, siteUrl).href}</loc></url>`).
 `;
 await writeFile("dist/sitemap.xml", sitemap);
 await rm(SSR_DIR, { recursive: true, force: true });
-console.log(`prerender: ${paths.length} pages and sitemap.xml`);
+console.log(`prerender: ${paths.length} pages, 404.html and sitemap.xml`);
