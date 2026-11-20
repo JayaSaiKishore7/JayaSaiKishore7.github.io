@@ -146,7 +146,15 @@ button {
 
 /* ---------- page cross-fades (View Transitions) ----------
    One soft cross-fade of the whole page: when the theme switches
-   (ThemeToggle.jsx). Browsers without View Transitions simply skip it. */
+   (ThemeToggle.jsx), and when going between pages of the site (home ↔ case
+   studies, both sides opt in here). Browsers without View Transitions simply
+   cut, as before; with reduced motion there's no page fade. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: var(--dur-move);
