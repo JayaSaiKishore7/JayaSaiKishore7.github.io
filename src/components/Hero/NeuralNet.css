@@ -1,0 +1,78 @@
+/* The network layer. It sits inside the hero (which is position: relative and
+   has no background): z-index -1 paints it behind every hero element, without
+   changing any layout. The info card's solid --surface covers it. */
+.nn {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nn-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Faint behind text. Tuned by measuring the name, tagline and meta line's
+   contrast against the brightest moment of the network (at least 4.5:1). */
+.nn--hero {
+  opacity: 0.35;
+}
+
+:root[data-theme="dark"] .nn--hero {
+  opacity: 0.45;
+}
+
+/* ---------- pause / play ----------
+   Bottom-right corner of the hero, in its bottom padding: absolutely placed,
+   so nothing else moves. 32px button, 44px touch area (the ::before). */
+.nn-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.nn-toggle::before {
+  position: absolute;
+  inset: -6px;
+  content: "";
+}
+
+.nn-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.nn-toggle svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Phones: the info card reaches the bottom-right corner, so the button sits
+   at the top-right instead, beside the location line. */
+@media (max-width: 600px) {
+  .nn-toggle {
+    top: 78px;
+    bottom: auto;
+  }
+}

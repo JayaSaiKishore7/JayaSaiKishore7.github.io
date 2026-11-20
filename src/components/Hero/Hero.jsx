@@ -3,6 +3,7 @@ import { profile, heroInfo } from "../../data/profile";
 import { Clock } from "../../utils/Clock";
 import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import { Magnetic } from "../../utils/Magnetic";
+import { NeuralNet } from "./NeuralNet";
 import "./Hero.css";
 
 /**
@@ -37,13 +38,21 @@ export class Hero extends Component {
         { selector: ".hero-card", label: "info 0.95" },
       ],
     });
-    this.boxes.start();
+    // While the loading screen shows, wait for it: the boxes then start their
+    // usual countdown when the hero becomes visible.
+    this.startBoxes = () => this.boxes.start();
+    if (document.documentElement.classList.contains("loading")) {
+      window.addEventListener("loader:done", this.startBoxes, { once: true });
+    } else {
+      this.startBoxes();
+    }
   }
 
   componentWillUnmount() {
     this.clock?.stop();
     this.magnets?.forEach((magnet) => magnet.stop());
     this.boxes?.stop();
+    window.removeEventListener("loader:done", this.startBoxes);
   }
 
   handleTick(time) {
@@ -56,6 +65,8 @@ export class Hero extends Component {
 
     return (
       <section ref={this.heroRef} id="home" className="hero">
+        {/* Behind everything in the hero (see NeuralNet.css); adds no layout. */}
+        <NeuralNet />
         <div className="container hero-grid">
           <div className="hero-main">
             <p className="hero-meta hero-fade" style={{ "--s": 0 }}>

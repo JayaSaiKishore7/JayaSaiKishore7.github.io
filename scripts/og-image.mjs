@@ -10,6 +10,8 @@ const browser = await chromium.launch({ channel: "msedge" });
 
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
+  // The preview shows the page, not the once-per-visit loading screen (see index.html).
+  await page.addInitScript(() => sessionStorage.setItem("loader-shown", "1"));
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.waitForSelector('html[data-app="ready"]', { timeout: 10000 });
   // Wait for the hero fade-in and for every detection box to finish and remove itself.

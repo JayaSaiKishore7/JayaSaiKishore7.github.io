@@ -1,0 +1,150 @@
+/* The loading screen. Shown only while <html> has .loading (set by index.html's
+   inline script), so without JavaScript, on later pages of the visit and with
+   reduced motion it never appears. Theme colours only. */
+.loader {
+  display: none;
+}
+
+.loading .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100; /* above the navbar */
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  transition: opacity 300ms var(--ease);
+}
+
+.loader.is-leaving {
+  opacity: 0;
+}
+
+/* While it shows, the page underneath can't scroll. scrollbar-gutter keeps the
+   scrollbar's space, so the page width (and layout) doesn't change. */
+.loading {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* The hero's own entrance waits, frozen at its first frame, until the loading
+   screen is gone: then it plays exactly as before. */
+.loading .hero-word-inner,
+.loading .hero-fade {
+  animation-play-state: paused;
+}
+
+/* The network behind the messages: stronger than in the hero. */
+.nn--loader {
+  opacity: 0.6;
+}
+
+.loader-box {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+/* Three messages in one spot, shown in turn: 0–0.65 s, 0.65–1.3 s, 1.3 s → end (1.7 s). */
+.loader-messages {
+  display: grid;
+  color: var(--text);
+  font-family: var(--font-mono); /* the "inference log" look you asked for */
+  font-size: var(--size-small);
+  font-weight: 500;
+}
+
+.loader-messages span {
+  grid-area: 1 / 1;
+  justify-self: center;
+  opacity: 0;
+  animation: loader-message 650ms var(--ease) forwards;
+}
+
+.loader-messages span:nth-child(2) {
+  animation-delay: 650ms;
+}
+
+.loader-messages span:nth-child(3) {
+  animation-name: loader-message-last; /* stays until the screen fades */
+  animation-duration: 300ms; /* a quicker fade-in, so it's readable for longer */
+  animation-delay: 1300ms;
+}
+
+@keyframes loader-message {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  15%,
+  85% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes loader-message-last {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Thin progress bar: fills (scaleX) at an even pace over the 1.7 s the screen is up. */
+.loader-bar {
+  width: 160px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+}
+
+.loader-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: loader-fill 1700ms linear forwards;
+}
+
+@keyframes loader-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* "skip": bottom-right, small, 44px touch area. */
+.loader-skip {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--size-small);
+  cursor: pointer;
+}
+
+.loader-skip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Belt and braces: index.html never shows it with reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .loading .loader {
+    display: none;
+  }
+}

@@ -11,7 +11,7 @@
 }
 
 .section-header-title {
-  margin-top: 30px; /* room above for the heading detection label (src/utils/NmsReveal.js) */
+  margin-top: 30px; /* space between the section's divider line and its heading */
   color: var(--text);
   font-family: var(--font-display);
   font-size: var(--size-heading);

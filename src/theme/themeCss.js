@@ -28,6 +28,7 @@ export function cssVariables(t) {
     "--tracking-name": t.typography.trackingName,
     "--tracking-heading": t.typography.trackingHeading,
     "--tracking-title": t.typography.trackingTitle,
+    "--weight-name": t.typography.weightName,
     "--weight-display": t.typography.weightDisplay,
     "--weight-strong": t.typography.weightStrong,
     "--radius-card": t.radii.card,

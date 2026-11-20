@@ -9,10 +9,10 @@ import { Contact } from "./components/Contact/Contact";
 import { Connect } from "./components/Connect/Connect";
 import { CaseStudy } from "./components/CaseStudy/CaseStudy";
 import { Footer } from "./components/Footer/Footer";
+import { Loader } from "./components/Loader/Loader";
 import { navLinks } from "./data/nav";
 import { projects } from "./data/projects";
 import { resolveRoute } from "./routes";
-import { NmsReveal } from "./utils/NmsReveal";
 import { ScrollSpy } from "./utils/ScrollSpy";
 
 const sectionIds = navLinks.map((link) => link.id);
@@ -34,9 +34,6 @@ class App extends Component {
     // Page boot state for index.html's fallback timer, tests and tools.
     document.documentElement.dataset.app = "ready";
 
-    this.nms = new NmsReveal({ selector: ".section-header-title" });
-    this.nms.start();
-
     if (this.route.page === "home") {
       this.scrollSpy = new ScrollSpy({ sectionIds, initial: this.state.active, onChange: this.handleActive });
       this.scrollSpy.start();
@@ -44,7 +41,6 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    this.nms?.stop();
     this.scrollSpy?.stop();
   }
 
@@ -59,6 +55,7 @@ class App extends Component {
     if (route.page === "case-study") {
       return (
         <>
+          <Loader />
           <ScrollProgress />
           <Navbar onHome={false} />
           <CaseStudy project={route.project} />
@@ -69,6 +66,7 @@ class App extends Component {
 
     return (
       <>
+        <Loader />
         <ScrollProgress />
         <Navbar onHome active={active} />
         <Hero />

@@ -59,6 +59,8 @@ const browser = await chromium.launch({ channel: "msedge" });
 try {
   for (const [device, options] of Object.entries(viewports)) {
     const context = await browser.newContext({ ...options, reducedMotion: "no-preference" });
+    // Shoot the page, not the once-per-visit loading screen (see index.html).
+    await context.addInitScript(() => sessionStorage.setItem("loader-shown", "1"));
     const page = await context.newPage();
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));

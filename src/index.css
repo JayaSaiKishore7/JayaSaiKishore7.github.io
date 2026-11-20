@@ -25,6 +25,10 @@ h3 {
   text-wrap: balance; /* evens out line lengths, so no heading ends on one lonely word */
 }
 
+p {
+  text-wrap: pretty; /* paragraphs never end with a single word on the last line */
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -167,40 +171,4 @@ button {
     opacity: 1 !important;
     transform: none !important;
   }
-
-  .nms-box {
-    display: none !important;
-  }
-}
-
-/* ---------- heading detection boxes (see src/utils/NmsReveal.js) ---------- */
-
-.nms-box {
-  position: absolute;
-  z-index: 40;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  pointer-events: none;
-}
-
-.nms-box--winner {
-  border-color: var(--accent);
-}
-
-/* Label outside the box, above its top-left corner, so it never covers the heading. */
-.nms-tag {
-  position: absolute;
-  bottom: calc(100% + 2px);
-  left: -1px;
-  padding: 1px 6px;
-  background: color-mix(in srgb, var(--accent) 45%, transparent);
-  color: var(--on-accent);
-  font-family: var(--font-mono); /* detection output: mono belongs here */
-  font-size: 10.5px;
-  font-weight: 500;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.nms-box--winner .nms-tag {
-  background: var(--accent);
 }

@@ -64,7 +64,9 @@ export const theme = {
     // Only for real data and measurements (detection labels) and code. Weight 500 only.
     fontMono: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
     // Type scale
-    sizeName: "clamp(3.2rem, 9vw, 7.5rem)",
+    // Sized so the name stays on one line at 600 weight and its detection box keeps
+    // 40px+ from the info card (measured: 73px at 1024, 46px at 1440).
+    sizeName: "clamp(3rem, 8.4vw, 7rem)",
     sizeHeading: "clamp(2rem, 4.5vw, 3.4rem)",
     sizeBody: "1rem",
     sizeUi: "0.9375rem", // 15px: buttons, nav and text links
@@ -74,7 +76,8 @@ export const theme = {
     trackingName: "-0.035em", // the hero name and the case-study title
     trackingHeading: "-0.03em", // section headings, big contact and menu links
     trackingTitle: "-0.02em", // smaller headings: tagline, project, job and degree titles
-    weightDisplay: "400", // name and headings
+    weightName: "600", // the hero name
+    weightDisplay: "400", // headings
     weightStrong: "500", // emphasis without colour: active project, navbar name, case-study title
   },
 

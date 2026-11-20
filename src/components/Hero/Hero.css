@@ -78,7 +78,7 @@
   color: var(--text);
   font-family: var(--font-display);
   font-size: var(--size-name);
-  font-weight: var(--weight-display);
+  font-weight: var(--weight-name);
   letter-spacing: var(--tracking-name);
   line-height: 0.95;
 }
@@ -96,7 +96,9 @@
 }
 
 .hero-tagline {
-  margin-top: 34px; /* room for the "role 0.97" label */
+  /* Room for the "role 0.97" label above the tagline's box, clear of the
+     name's box (measured: 6–12px clear at 375–1440px). */
+  margin-top: 50px;
   color: var(--text);
   font-family: var(--font-display);
   font-size: clamp(1.45rem, 2.6vw, 2.2rem);

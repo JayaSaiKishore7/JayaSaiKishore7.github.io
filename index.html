@@ -17,6 +17,10 @@
       //   [data-app=ready] React has mounted (set in App.jsx)
       // If the app hasn't mounted within 4 s (script blocked, failed or very slow),
       // drop .js so the pre-rendered content simply stays visible.
+      //
+      // Loading screen (src/components/Loader): .loading shows it. Only once per
+      // visit (sessionStorage) and never with reduced motion. Fail-safe: whatever
+      // happens, it's removed after 3 s, and "loader:done" lets the page carry on.
       (function () {
         var root = document.documentElement;
         root.dataset.theme = "light";
@@ -25,6 +29,22 @@
         setTimeout(function () {
           if (root.dataset.app !== "ready") root.classList.remove("js");
         }, 4000);
+
+        var show = false;
+        try {
+          show = !sessionStorage.getItem("loader-shown") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (show) sessionStorage.setItem("loader-shown", "1");
+        } catch (e) {
+          show = false; // storage blocked: skip the loading screen rather than risk showing it every time
+        }
+        if (show) {
+          root.classList.add("loading");
+          setTimeout(function () {
+            if (!root.classList.contains("loading")) return;
+            root.classList.remove("loading");
+            window.dispatchEvent(new Event("loader:done"));
+          }, 3000);
+        }
       })();
     </script>
   </head>
