@@ -1,0 +1,163 @@
+/* ---------- skills: a slow belt of group cards ---------- */
+
+.skill-cards {
+  position: relative;
+}
+
+/* Pause / play: same look as the hero's .nn-toggle, at the right end of the
+   "skills" heading line just above (heading text ≈ 18–50px above the belt). */
+.skill-cards-toggle {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 18px);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    scale var(--dur-quick) var(--ease),
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.skill-cards-toggle::before {
+  position: absolute;
+  inset: -6px; /* a 44px touch area */
+  content: "";
+}
+
+.skill-cards-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.skill-cards-toggle:active {
+  scale: 0.94; /* a soft press */
+}
+
+.skill-cards-toggle svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- the belt ---------- */
+
+.skill-cards-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Two identical sets side by side: -50% is exactly one set, so the loop is seamless. */
+.skill-cards-track {
+  display: flex;
+  width: max-content;
+  animation: skill-belt 80s linear infinite;
+  will-change: transform;
+}
+
+/* The gap after every card (also the last) lives inside the set, so both sets are equally wide. */
+.skill-cards-set {
+  display: flex;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+@keyframes skill-belt {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.skill-card {
+  width: 220px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.skill-card-name {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: var(--size-small);
+  font-weight: var(--weight-display);
+  line-height: 1.3;
+}
+
+/* The chips drift a little against their card (stays inside the card's padding). */
+.skill-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  animation: skill-drift 12s ease-in-out infinite;
+  animation-delay: var(--drift-delay, 0s);
+}
+
+@keyframes skill-drift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+/* Paused: while hovered or focused, and with the button. */
+.skill-cards-viewport:hover .skill-cards-track,
+.skill-cards-viewport:hover .skill-card-chips,
+.skill-cards-viewport:focus-within .skill-cards-track,
+.skill-cards-viewport:focus-within .skill-card-chips,
+.skill-cards.is-paused .skill-cards-track,
+.skill-cards.is-paused .skill-card-chips {
+  animation-play-state: paused;
+}
+
+@media (max-width: 600px) {
+  .skill-card {
+    width: 180px;
+  }
+}
+
+/* ---------- reduced motion: one still set, wrapping ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-cards-toggle,
+  .skill-cards-set--copy {
+    display: none;
+  }
+
+  .skill-cards-viewport {
+    overflow: visible;
+    mask-image: none;
+  }
+
+  /* !important: beats the site-wide reduced-motion rule (index.css). */
+  .skill-cards-track,
+  .skill-card-chips {
+    animation: none !important;
+  }
+
+  .skill-cards-track {
+    width: auto;
+    will-change: auto;
+  }
+
+  .skill-cards-set {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+}

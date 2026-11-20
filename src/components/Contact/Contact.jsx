@@ -1,8 +1,8 @@
 import { Component } from "react";
 import { aboutInfo } from "../../data/profile";
 import { Reveal } from "../Reveal";
+import { SkillCards } from "../SkillCards/SkillCards";
 import { SectionHeader } from "../ui/SectionHeader";
-import { SkillRows } from "./SkillRows";
 import "./Contact.css";
 
 const tools = aboutInfo.skillGroups.filter((group) => !group.spoken);
@@ -29,11 +29,11 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          {/* One slowly gliding row per tool group (SkillRows).
+          {/* A slow belt of cards, one per tool group (SkillCards).
               Spoken languages aren't tools, so they follow as a plain line of text. */}
           <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
             <h3 className="k">skills</h3>
-            <SkillRows groups={tools} />
+            <SkillCards groups={tools} />
             {spoken.map((group) => (
               <p className="hello-line" key={group.name}>
                 <span className="hello-line-k">{group.name}:</span> {group.items.join(", ")}
