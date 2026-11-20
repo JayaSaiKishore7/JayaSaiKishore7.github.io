@@ -17,6 +17,28 @@
   margin-top: clamp(20px, 3vw, 36px);
 }
 
+/* Projects with a 3D header visual (CaseVisual): the title block keeps its
+   width on the left, the visual takes the space on its right. Below that
+   width, the visual sits under the title block. */
+.case-top--visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+@media (min-width: 1100px) {
+  .case-top--visual {
+    grid-template-columns: minmax(0, 46em) minmax(0, 1fr);
+    align-items: start; /* not centre: centring would move the title down */
+    gap: var(--gut);
+  }
+
+  .case-top--visual .case-visual {
+    justify-self: end;
+    margin-top: clamp(20px, 3vw, 36px); /* level with .case-head */
+  }
+}
+
 .case-title {
   font-family: var(--font-display);
   font-size: clamp(30px, 4.6vw, 60px);

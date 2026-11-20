@@ -2,6 +2,8 @@ import { Component } from "react";
 import { projects } from "../../data/projects";
 import { caseStudyPath } from "../../routes";
 import { ArchitectureDiagram } from "../ArchitectureDiagram/ArchitectureDiagram";
+import { CaseVisual } from "./CaseVisual";
+import { hasCaseVisual } from "./caseVisuals";
 import { ProjectThumb } from "../Project/ProjectThumb";
 import { TechList } from "../Project/TechList";
 import "./CaseStudy.css";
@@ -28,30 +30,33 @@ export class CaseStudy extends Component {
             ← all work
           </a>
 
-          <header className="case-head">
-            <p className="section-label">
-              case study {String(index + 1).padStart(2, "0")}
-              {project.team ? " · team project" : ""}
-            </p>
-            <h1 className="case-title">{project.title}</h1>
-            <p className="case-what">{project.what}</p>
-            <TechList items={project.tech} />
-            <p className="case-links">
-              <a href={project.link} target="_blank" rel="noreferrer">
-                github ↗
-              </a>
-              {project.demo ? (
-                <a href={project.demo} target="_blank" rel="noreferrer">
-                  live demo ↗
+          <div className={hasCaseVisual(project) ? "case-top case-top--visual" : "case-top"}>
+            <header className="case-head">
+              <p className="section-label">
+                case study {String(index + 1).padStart(2, "0")}
+                {project.team ? " · team project" : ""}
+              </p>
+              <h1 className="case-title">{project.title}</h1>
+              <p className="case-what">{project.what}</p>
+              <TechList items={project.tech} />
+              <p className="case-links">
+                <a href={project.link} target="_blank" rel="noreferrer">
+                  github ↗
                 </a>
-              ) : null}
-              {project.huggingface ? (
-                <a href={project.huggingface} target="_blank" rel="noreferrer">
-                  hugging face ↗
-                </a>
-              ) : null}
-            </p>
-          </header>
+                {project.demo ? (
+                  <a href={project.demo} target="_blank" rel="noreferrer">
+                    live demo ↗
+                  </a>
+                ) : null}
+                {project.huggingface ? (
+                  <a href={project.huggingface} target="_blank" rel="noreferrer">
+                    hugging face ↗
+                  </a>
+                ) : null}
+              </p>
+            </header>
+            {hasCaseVisual(project) ? <CaseVisual key={project.id} project={project} /> : null}
+          </div>
 
           <figure className="case-figure">
             <ProjectThumb project={project} eager />

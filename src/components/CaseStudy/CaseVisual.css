@@ -1,0 +1,113 @@
+/* A case study's 3D header visual (CaseVisual.jsx). On wide screens it sits
+   to the right of the title block (.case-top in CaseStudy.css); below that,
+   under it. A still picture first; the live canvas fades in over it. */
+
+.case-visual {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0;
+}
+
+.case-visual-box {
+  position: relative;
+  aspect-ratio: 16 / 10;
+}
+
+.case-visual-still,
+.case-visual-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.case-visual-still {
+  object-fit: contain;
+  transition: opacity var(--dur-reveal) var(--ease);
+}
+
+/* The picture that matches the theme (data-theme on <html>). */
+.case-visual-still--dark,
+:root[data-theme="dark"] .case-visual-still--light {
+  display: none;
+}
+
+:root[data-theme="dark"] .case-visual-still--dark {
+  display: block;
+}
+
+.case-visual-canvas {
+  opacity: 0;
+  transition: opacity var(--dur-reveal) var(--ease);
+}
+
+.case-visual.is-live .case-visual-canvas {
+  opacity: 1;
+}
+
+.case-visual.is-live .case-visual-still {
+  opacity: 0;
+}
+
+.case-visual figcaption {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: var(--size-small);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* ---------- pause / play (same look as the hero's .nn-toggle) ----------
+   32px button, 44px touch area (the ::before), a soft press. */
+.case-visual-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    scale var(--dur-quick) var(--ease),
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.case-visual-toggle::before {
+  position: absolute;
+  inset: -6px;
+  content: "";
+}
+
+.case-visual-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.case-visual-toggle:active {
+  scale: 0.94; /* a soft press */
+}
+
+.case-visual-toggle svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-visual-still,
+  .case-visual-canvas {
+    transition: none;
+  }
+}
