@@ -8,7 +8,10 @@ const SMALL_SCREEN = 768; // below this: fewer plexus particles
 
 // How much of each layer to erase behind the hero's text block (0…1), so the
 // name, tagline, note and meta line keep at least 4.5:1 contrast (measured).
-const CALM = { field: 0.95, network: 0.85 };
+const CALM = { field: 0.3, network: 0.85 };
+// Extra fade behind single lines of text that need it (both layers), measured:
+// the muted note line was the only one under 4.5:1 at full network strength.
+const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.6 }];
 
 const VARIANTS = {
   // Faint, behind the whole hero, calm behind its text, with a pause button.
@@ -126,12 +129,23 @@ export class NeuralNet extends PureComponent {
 
     if (this.calmTarget) {
       // Layout position (offset*), so the hero's entrance transform doesn't shift it.
-      const rect = { x: 0, y: 0, width: this.calmTarget.offsetWidth, height: this.calmTarget.offsetHeight };
-      for (let el = this.calmTarget; el && el !== root.offsetParent; el = el.offsetParent) {
-        rect.x += el.offsetLeft;
-        rect.y += el.offsetTop;
-      }
-      this.calm = { mask: makeCalmMask(width, height, rect, dpr), ...CALM };
+      const layoutRect = (target) => {
+        const rect = { x: 0, y: 0, width: target.offsetWidth, height: target.offsetHeight };
+        for (let el = target; el && el !== root.offsetParent; el = el.offsetParent) {
+          rect.x += el.offsetLeft;
+          rect.y += el.offsetTop;
+        }
+        return rect;
+      };
+      const hero = root.parentElement;
+      this.calm = {
+        mask: makeCalmMask(width, height, layoutRect(this.calmTarget), dpr),
+        ...CALM,
+        extras: CALM_EXTRA.flatMap(({ selector, amount }) => {
+          const el = hero.querySelector(selector);
+          return el ? [{ mask: makeCalmMask(width, height, layoutRect(el), dpr), amount }] : [];
+        }),
+      };
     }
     this.draw();
   }

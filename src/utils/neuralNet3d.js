@@ -174,7 +174,8 @@ export function makeCalmMask(width, height, rect, dpr) {
  * options: width/height (CSS px; the context is already scaled for the DPR),
  * colours, still (reduced motion: no drift, rotation, wave or dots),
  * pointer (target parallax, -1…1 on each axis, or null), calm ({ mask,
- * field, network }: how much of each layer to erase behind the text), dpr.
+ * field, network, extras }: how much of each layer to erase behind the text
+ * block, plus extra masks behind single lines that need more).
  */
 export function drawFrame(ctx, scene, { width, height, time, colours, still = false, pointer = null, calm = null }) {
   ctx.clearRect(0, 0, width, height);
@@ -223,7 +224,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
   });
 
   ctx.strokeStyle = rgb(colours.base);
-  ctx.lineWidth = 0.6;
+  ctx.lineWidth = 1;
   const limit2 = LINK_DISTANCE * LINK_DISTANCE;
   const ps = scene.particles;
   for (let i = 0; i < ps.length; i++) {
@@ -242,7 +243,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
   for (const p of pts) {
     ctx.globalAlpha = 0.8 * depth(p.scale);
     ctx.beginPath();
-    ctx.arc(p.sx, p.sy, 1.3 * p.scale, 0, Math.PI * 2);
+    ctx.arc(p.sx, p.sy, 1.7 * p.scale, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -270,7 +271,7 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     const i = (intensity[from] + intensity[to]) / 2;
     ctx.globalAlpha = (0.4 + 0.6 * i) * depth((a.scale + b.scale) / 2);
     ctx.strokeStyle = mix(colours.base, glow, i);
-    ctx.lineWidth = 0.9 + 0.7 * i;
+    ctx.lineWidth = 1.2 + 0.8 * i; // 1.2 px at rest, 2 px as the wave passes
     ctx.beginPath();
     ctx.moveTo(a.sx, a.sy);
     ctx.lineTo(b.sx, b.sy);
@@ -292,11 +293,11 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
       ctx.fillStyle = rgb(glow);
       ctx.globalAlpha = alpha * 0.25; // soft halo
       ctx.beginPath();
-      ctx.arc(x, y, 5.5 * s, 0, Math.PI * 2);
+      ctx.arc(x, y, 7.2 * s, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = alpha; // core
       ctx.beginPath();
-      ctx.arc(x, y, 2.2 * s, 0, Math.PI * 2);
+      ctx.arc(x, y, 2.9 * s, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -325,8 +326,10 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     }
   }
 
-  // The network fades behind the text too, less than the field.
+  // The network fades behind the text block too.
   if (calm) erase(ctx, calm.mask, calm.network, width, height);
+  // And extra, behind single lines that need it (both layers).
+  for (const extra of calm?.extras ?? []) erase(ctx, extra.mask, extra.amount, width, height);
 
   ctx.globalAlpha = 1;
 }

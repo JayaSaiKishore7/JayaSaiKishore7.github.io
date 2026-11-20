@@ -15,14 +15,10 @@
   height: 100%;
 }
 
-/* Faint behind text. Tuned by measuring the name, tagline and meta line's
-   contrast against the brightest moment of the network (at least 4.5:1). */
+/* Strength: one token for light and dark (theme.js → effects.netOpacity).
+   The text stays readable through NeuralNet's calm masks (measured ≥ 4.5:1). */
 .nn--hero {
-  opacity: 0.35;
-}
-
-:root[data-theme="dark"] .nn--hero {
-  opacity: 0.45;
+  opacity: var(--net-opacity);
 }
 
 /* ---------- pause / play ----------

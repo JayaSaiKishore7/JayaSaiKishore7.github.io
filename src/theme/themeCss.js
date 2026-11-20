@@ -31,6 +31,7 @@ export function cssVariables(t) {
     "--weight-name": t.typography.weightName,
     "--weight-display": t.typography.weightDisplay,
     "--weight-strong": t.typography.weightStrong,
+    "--net-opacity": t.effects.netOpacity,
     "--radius-card": t.radii.card,
     "--radius-pill": t.radii.pill,
     "--shadow-nav": t.shadows.nav,
