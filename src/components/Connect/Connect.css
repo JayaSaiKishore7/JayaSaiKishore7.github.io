@@ -1,93 +1,165 @@
-.credits {
-  margin-top: clamp(28px, 3.4vw, 48px);
-  padding-top: 18px;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gut);
-  row-gap: 32px;
-  align-items: start;
-  border-top: 1px solid var(--border-strong);
+/* ---------- contact: the "inference terminal" card ----------
+   A screen, so it stays dark in BOTH themes. Its colours live here as custom
+   properties (asked for this card), the one exception to theme.js holding every
+   colour; nothing below uses a raw hex value. Contrast on --term-bg:
+   text 15.5:1, muted 6.1:1, link grey 12.9:1, accent on the say-hi fill 7.0:1. */
+.term {
+  --term-bg: #0b141c;
+  --term-border: #26364a;
+  --term-text: #e6ecf1;
+  --term-muted: #8796a4;
+  --term-accent: #4fc7d6;
+  --term-link: #c9d4dd;
+  --term-accent-rgb: 79, 199, 214;
+
+  padding: clamp(20px, 4vw, 40px);
+  border: 1px solid var(--term-border);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(var(--term-accent-rgb), 0.18), transparent 50%),
+    var(--term-bg);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--term-accent-rgb), 0.08),
+    0 24px 48px -24px rgba(0, 0, 0, 0.55);
+  color: var(--term-text);
 }
 
-.cr-say {
-  grid-column: 1 / 7;
+/* Light theme (the default, no data-theme): a softer outer shadow on the pale page. */
+:root:not([data-theme="dark"]) .term {
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--term-accent-rgb), 0.08),
+    0 24px 48px -24px rgba(23, 34, 46, 0.35);
 }
 
-.cr-links {
-  grid-column: 7 / 9;
+.term :focus-visible {
+  outline: 2px solid var(--term-accent);
+  outline-offset: 3px;
 }
 
-.cr-resume {
-  grid-column: 9 / 13;
+/* ---------- the two typed lines (decoration) ---------- */
+
+.term-line {
+  font: 500 0.8125rem/1.7 var(--font-mono);
+  white-space: pre-wrap;
 }
 
-.cr .k {
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: var(--size-small);
+.term-line--command {
+  color: var(--term-muted);
 }
 
-.sign-sub {
-  max-width: 68ch;
-  color: var(--soft);
+.term-line--result {
+  color: var(--term-accent);
 }
 
-.mail-row {
-  margin-top: 14px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
+.term-ghost {
+  visibility: hidden;
 }
 
-.email-link {
-  padding-bottom: 3px;
-  border-bottom: 1px solid var(--border-strong);
-  color: var(--text);
-  font-size: var(--size-ui);
-  text-decoration: none;
+.term-cursor {
+  margin-left: 2px;
+  animation: term-blink 1s steps(1) infinite;
+}
+
+@keyframes term-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- content ---------- */
+
+.term-heading {
+  margin: 16px 0 10px;
+  color: var(--term-text);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.2;
+}
+
+.term-intro {
+  color: var(--term-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.term-email {
+  margin-top: 18px;
+  font: 500 0.875rem/1.6 var(--font-mono);
   overflow-wrap: anywhere;
-  transition:
-    border-color var(--dur-colour) var(--ease),
-    color var(--dur-colour) var(--ease);
 }
 
-.email-link:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.copy {
-  padding: 2px 0;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font-size: var(--size-small);
-  cursor: pointer;
+.term-email a {
+  color: var(--term-accent);
+  text-decoration: none;
   transition: color var(--dur-colour) var(--ease);
 }
 
-.copy:hover {
-  color: var(--accent);
+.term-email a:hover,
+.term-email a:focus-visible {
+  color: var(--term-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.socials {
-  margin: 0;
-  margin-top: 8px;
-  display: grid;
-  gap: 8px;
-  font-size: var(--size-ui);
+/* ---------- pill buttons ---------- */
+
+.term-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.socials a {
+.term-btn {
+  min-height: 44px;
+  padding: 0 18px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--soft);
+  border: 1px solid var(--term-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--term-link);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
   text-decoration: none;
+  cursor: pointer;
   transition:
+    scale var(--dur-quick) var(--ease),
+    background-color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease),
     color var(--dur-colour) var(--ease),
-    transform var(--dur-move) var(--ease);
+    box-shadow var(--dur-colour) var(--ease);
+}
+
+.term-btn:hover {
+  border-color: var(--term-accent);
+  color: var(--term-text);
+}
+
+.term-btn:active {
+  scale: 0.97; /* a soft press */
+}
+
+.term-btn--primary {
+  border-color: var(--term-accent);
+  background: rgba(var(--term-accent-rgb), 0.15);
+  box-shadow: 0 0 0 4px rgba(var(--term-accent-rgb), 0.08);
+  color: var(--term-accent);
+}
+
+.term-btn--primary:hover,
+.term-btn--primary:focus-visible {
+  background: rgba(var(--term-accent-rgb), 0.25);
+  box-shadow: 0 0 0 4px rgba(var(--term-accent-rgb), 0.18);
+  color: var(--term-accent);
+}
+
+.term-btn[data-state="copied"] {
+  border-color: var(--term-accent);
+  color: var(--term-accent);
 }
 
 .social-icon {
@@ -95,20 +167,25 @@
   height: 14px;
 }
 
-.socials a:hover {
-  color: var(--accent);
-  transform: translateX(4px);
+/* ---------- closing line ---------- */
+
+.term-closing {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--term-border);
+  color: var(--term-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
-.resume-link {
-  display: inline-block;
-  margin-top: 14px;
+.term-prompt {
+  color: var(--term-accent);
+  font-family: var(--font-mono);
+  font-weight: 500;
 }
 
-@media (max-width: 700px) {
-  .cr-say,
-  .cr-links,
-  .cr-resume {
-    grid-column: 1 / -1;
+@media (prefers-reduced-motion: reduce) {
+  .term-cursor {
+    animation: none !important;
   }
 }

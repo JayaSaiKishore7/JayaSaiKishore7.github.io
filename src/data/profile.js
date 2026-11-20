@@ -12,6 +12,17 @@ export const profile = {
   siteUrl: "https://jayasaikishore.pages.dev/",
 };
 
+// The contact section's "inference terminal" card (Connect.jsx). All lowercase on purpose.
+export const contactInfo = {
+  // Decoration typed in when the card scrolls into view (echoes the loading screen).
+  terminal: ["$ python contact.py", "running inference… match found"],
+  heading: "got a model that needs to leave the notebook?",
+  intro: "i'm open to data scientist and computer vision roles.",
+  email: profile.email,
+  emailLabel: "say hi",
+  closing: "send me the interesting problem. machine learning, computer vision, mlops, anything worth building",
+};
+
 // Page title, description and link-preview data (rendered by src/data/head.js).
 export const seo = {
   title: "Jaya Sai Kishore Neerukonda | Machine Learning Engineer",

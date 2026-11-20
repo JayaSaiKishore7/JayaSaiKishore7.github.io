@@ -1,7 +1,6 @@
-import { Component } from "react";
-import { profile } from "../../data/profile";
+import { PureComponent } from "react";
+import { contactInfo, profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
-import { SectionHeader } from "../ui/SectionHeader";
 import "./Connect.css";
 
 const GithubIcon = () => (
@@ -17,39 +16,114 @@ const LinkedinIcon = () => (
 );
 
 // Copy-button states: idle → copied | failed → (after a moment) idle.
-const COPY_LABELS = { idle: "copy", copied: "copied", failed: "copy failed" };
+const COPY_LABELS = { idle: "copy email", copied: "copied", failed: "copy failed" };
 const COPY_RESET_MS = 1800;
 
-export class Connect extends Component {
+// Typing the two terminal lines (decoration): like the loading screen's log.
+const TYPE_MS = 28; // per character
+const LINE_PAUSE_MS = 300; // before each line
+const CURSOR_MS = 3000; // the block cursor blinks this long, then goes
+const LINES = contactInfo.terminal;
+
+/**
+ * The contact section: an "inference terminal" card (the same dark screen in
+ * both themes). The two terminal lines are typed once when the card scrolls
+ * into view; everything real (heading, intro, email, buttons, closing line) is
+ * in the pre-rendered HTML and visible from the start. Without JavaScript, or
+ * with reduced motion, the lines simply show in full.
+ */
+export class Connect extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { copy: "idle" };
-    this.copyTimeout = null;
-    this.handleCopy = this.handleCopy.bind(this);
+    // typed: null = both lines in full; otherwise characters shown per line.
+    this.state = { copy: "idle", typed: null, cursor: false };
+    this.cardRef = null;
+    this.timers = [];
+  }
+
+  setCardRef = (node) => {
+    this.cardRef = node;
+  };
+
+  componentDidMount() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    // Two thresholds: as soon as the card peeks in, the lines clear; at 40% they start typing.
+    this.observer = new IntersectionObserver(this.handleIntersect, { threshold: [0, 0.4] });
+    this.observer.observe(this.cardRef);
   }
 
   componentWillUnmount() {
+    this.observer?.disconnect();
+    this.timers.forEach(clearTimeout);
     clearTimeout(this.copyTimeout);
   }
 
-  async handleCopy() {
-    try {
-      // Throws if the Clipboard API is missing (non-HTTPS) or permission is denied.
-      await navigator.clipboard.writeText(profile.email);
-      this._setCopy("copied");
-    } catch {
-      this._setCopy("failed");
+  handleIntersect = (entries) => {
+    const entry = entries[entries.length - 1];
+    if (!entry.isIntersecting) return;
+    if (this.state.typed === null) this.setState({ typed: [0, 0] });
+    if (entry.intersectionRatio >= 0.4) {
+      this.observer.disconnect(); // once
+      this.typeLine(0);
     }
+  };
+
+  later(fn, ms) {
+    this.timers.push(setTimeout(fn, ms));
   }
 
-  _setCopy(copy) {
+  /** Types line `index` one character at a time, then the next line, then the cursor. */
+  typeLine(index) {
+    const text = LINES[index];
+    const step = (count) => {
+      this.setState(({ typed }) => {
+        const next = [...typed];
+        next[index] = count;
+        return { typed: next };
+      });
+      if (count < text.length) this.later(() => step(count + 1), TYPE_MS);
+      else if (index + 1 < LINES.length) this.typeLine(index + 1);
+      else {
+        this.setState({ cursor: true });
+        this.later(() => this.setState({ cursor: false }), CURSOR_MS);
+      }
+    };
+    this.later(() => step(1), LINE_PAUSE_MS);
+  }
+
+  handleCopy = async () => {
+    try {
+      // Throws if the Clipboard API is missing (non-HTTPS) or permission is denied.
+      await navigator.clipboard.writeText(contactInfo.email);
+      this.setCopy("copied");
+    } catch {
+      this.setCopy("failed");
+    }
+  };
+
+  setCopy(copy) {
     this.setState({ copy });
     clearTimeout(this.copyTimeout);
     this.copyTimeout = setTimeout(() => this.setState({ copy: "idle" }), COPY_RESET_MS);
   }
 
+  renderLine(text, index) {
+    const { typed, cursor } = this.state;
+    const shown = typed === null ? text.length : typed[index];
+    const last = index === LINES.length - 1;
+    return (
+      <p className={`term-line term-line--${index === 0 ? "command" : "result"}`} key={text}>
+        {text.slice(0, shown)}
+        {last && cursor ? <span className="term-cursor">▋</span> : null}
+        {/* The rest stays in place, invisible, so the card never changes height while typing. */}
+        <span className="term-ghost">{text.slice(shown)}</span>
+      </p>
+    );
+  }
+
   render() {
     const { copy } = this.state;
+    const mailto = `mailto:${contactInfo.email}`;
 
     return (
       <section id="contact" className="section">
@@ -57,53 +131,45 @@ export class Connect extends Component {
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionHeader
-              id="contact"
-              title="got a model that needs to leave the notebook?"
-              sub="i'm open to machine learning and computer vision roles. email is the fastest way to reach me."
-            />
-          </Reveal>
+            <div className="term" ref={this.setCardRef}>
+              <div className="term-lines" aria-hidden="true">
+                {LINES.map((line, i) => this.renderLine(line, i))}
+              </div>
 
-          <Reveal as="div" className="credits" style={{ "--i": 1 }}>
-            <div className="cr cr-say">
-              <p className="k">say hi</p>
-              <p className="sign-sub">
-                send me the interesting problem. machine learning, computer vision, mlops, anything worth building.
+              <h2 className="term-heading">{contactInfo.heading}</h2>
+              <p className="term-intro">{contactInfo.intro}</p>
+
+              <p className="term-email">
+                <a href={mailto}>{contactInfo.email}</a>
               </p>
-              <p className="mail-row">
-                <a href={`mailto:${profile.email}`} className="email-link">
-                  {profile.email} ↗
+
+              <div className="term-actions">
+                {/* The accessible name starts with the visible words (WCAG 2.5.3). */}
+                <a href={mailto} className="term-btn term-btn--primary" aria-label={`${contactInfo.emailLabel}, email me`}>
+                  {contactInfo.emailLabel}
                 </a>
-                <button type="button" className="copy" data-state={copy} onClick={this.handleCopy}>
+                <a href={profile.linkedin} className="term-btn" target="_blank" rel="noopener noreferrer">
+                  <LinkedinIcon />
+                  linkedin
+                </a>
+                <a href={profile.github} className="term-btn" target="_blank" rel="noopener noreferrer">
+                  <GithubIcon />
+                  github
+                </a>
+                <button type="button" className="term-btn" data-state={copy} onClick={this.handleCopy}>
                   <span aria-live="polite">{COPY_LABELS[copy]}</span>
                 </button>
+                <a href={profile.resume} download className="term-btn">
+                  resume ↓
+                </a>
+              </div>
+
+              <p className="term-closing">
+                <span className="term-prompt" aria-hidden="true">
+                  &gt;
+                </span>{" "}
+                {contactInfo.closing}
               </p>
-            </div>
-
-            <div className="cr cr-links">
-              <p className="k">elsewhere</p>
-              <ul className="socials">
-                <li>
-                  <a href={profile.github} target="_blank" rel="noreferrer">
-                    <GithubIcon />
-                    github
-                  </a>
-                </li>
-                <li>
-                  <a href={profile.linkedin} target="_blank" rel="noreferrer">
-                    <LinkedinIcon />
-                    linkedin
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="cr cr-resume">
-              <p className="k">resume</p>
-              <p className="sign-sub">the full breakdown, one click away.</p>
-              <a href={profile.resume} download className="email-link resume-link">
-                download ↗
-              </a>
             </div>
           </Reveal>
         </div>
