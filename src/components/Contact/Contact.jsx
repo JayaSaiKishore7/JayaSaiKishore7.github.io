@@ -1,8 +1,8 @@
 import { Component } from "react";
 import { aboutInfo } from "../../data/profile";
 import { Reveal } from "../Reveal";
-import { TechList } from "../Project/TechList";
 import { SectionHeader } from "../ui/SectionHeader";
+import { SkillRows } from "./SkillRows";
 import "./Contact.css";
 
 const tools = aboutInfo.skillGroups.filter((group) => !group.spoken);
@@ -29,11 +29,11 @@ export class Contact extends Component {
             ))}
           </Reveal>
 
-          {/* Every tool in one row of chips (wrapping on narrow screens); the data stays grouped.
+          {/* One slowly gliding row per tool group (SkillRows).
               Spoken languages aren't tools, so they follow as a plain line of text. */}
           <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
             <h3 className="k">skills</h3>
-            <TechList items={tools.flatMap((group) => group.items)} label="skills" />
+            <SkillRows groups={tools} />
             {spoken.map((group) => (
               <p className="hello-line" key={group.name}>
                 <span className="hello-line-k">{group.name}:</span> {group.items.join(", ")}
