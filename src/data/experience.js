@@ -63,19 +63,3 @@ export const education = [
     ],
   },
 ];
-
-// Shown after the degrees in the education carousel (only what's on the resume).
-// The same two are also listed in the hello section (aboutInfo.credentials).
-export const achievements = [
-  {
-    kind: "certification",
-    title: "Neo4j Certified Professional",
-    meta: "Neo4j • 2025",
-  },
-  {
-    kind: "open source",
-    title: "Hacktoberfest contributor",
-    meta: "2025",
-    points: ["Several pull requests accepted in open-source projects."],
-  },
-];

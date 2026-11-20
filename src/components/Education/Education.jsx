@@ -1,14 +1,11 @@
 import { Component, createRef } from "react";
-import { achievements, education } from "../../data/experience";
+import { education } from "../../data/experience";
 import { Reveal } from "../Reveal";
 import { SectionHeader } from "../ui/SectionHeader";
 import "./Education.css";
 
-/** The 4 cards: both degrees, then the certification and the open-source work. */
-const CARDS = [
-  ...education.map(({ kind, degree, meta, points }) => ({ kind, title: degree, meta, points })),
-  ...achievements,
-];
+/** One card per degree. (The certification and open-source work live in the hello section.) */
+const CARDS = education.map(({ kind, degree, meta, points }) => ({ kind, title: degree, meta, points }));
 const LAST = CARDS.length - 1;
 
 const SWIPE_PX = 50; // a release past this many pixels moves one card
