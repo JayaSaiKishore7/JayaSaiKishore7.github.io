@@ -1,0 +1,15 @@
+/* ---------- the "terminal" colours ----------
+   Shared by the dark screen-like panels: the contact card (Connect.css) and the
+   footer (Footer.css). They stay dark in BOTH themes, so these don't change
+   with data-theme. The one exception to theme.js holding every colour; nothing
+   else uses these hex values. Contrast on --term-bg: text 15.5:1, muted 6.1:1,
+   link 12.3:1, accent 7.6:1. */
+:root {
+  --term-bg: #0b141c;
+  --term-border: #26364a;
+  --term-text: #e6ecf1;
+  --term-muted: #8796a4;
+  --term-accent: #ff8a3d;
+  --term-link: #c9d4dd;
+  --term-accent-rgb: 255, 138, 61; /* the accent as r, g, b for rgba() glows */
+}

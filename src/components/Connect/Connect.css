@@ -1,18 +1,8 @@
 /* ---------- contact: the "inference terminal" card ----------
-   A screen, so it stays dark in BOTH themes. Its colours live here as custom
-   properties (asked for this card), the one exception to theme.js holding every
-   colour; nothing below uses a raw hex value. Contrast on --term-bg:
-   text 15.5:1, muted 6.1:1, link grey 12.3:1, orange accent on the say-hi fill 6.3:1
-   (5.1:1 on hover). */
+   A screen, so it stays dark in BOTH themes. Its --term-* colours are shared
+   with the footer (src/styles/terminal.css); nothing below uses a raw hex value.
+   Orange accent on the say-hi fill: 6.3:1 (5.1:1 on hover). */
 .term {
-  --term-bg: #0b141c;
-  --term-border: #26364a;
-  --term-text: #e6ecf1;
-  --term-muted: #8796a4;
-  --term-accent: #ff8a3d;
-  --term-link: #c9d4dd;
-  --term-accent-rgb: 255, 138, 61;
-
   padding: clamp(20px, 4vw, 40px);
   border: 1px solid var(--term-border);
   border-radius: 16px;

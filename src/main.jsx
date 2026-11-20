@@ -7,6 +7,7 @@ import "@fontsource-variable/schibsted-grotesk/wght-italic.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "virtual:theme.css";
 import "./index.css";
+import "./styles/terminal.css";
 import App from "./App.jsx";
 import { projects } from "./data/projects";
 import { NOT_FOUND_PATH, resolveRoute } from "./routes";

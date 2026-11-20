@@ -23,6 +23,18 @@ export const contactInfo = {
   closing: "send me the interesting problem. machine learning, computer vision, mlops, anything worth building",
 };
 
+// The "training log" footer (Footer.jsx). All lowercase on purpose.
+export const footerInfo = {
+  exitLine: "process finished with exit code",
+  tagline: "still learning, always shipping",
+  copyright: (year) => `© ${year} ${profile.fullName.toLowerCase()}`,
+  links: [
+    { label: "github", href: profile.github, external: true },
+    { label: "linkedin", href: profile.linkedin, external: true },
+    { label: "email", href: `mailto:${profile.email}` },
+  ],
+};
+
 // Page title, description and link-preview data (rendered by src/data/head.js).
 export const seo = {
   title: "Jaya Sai Kishore Neerukonda | Machine Learning Engineer",
