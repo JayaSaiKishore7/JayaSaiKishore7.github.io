@@ -43,10 +43,11 @@ export const heroInfo = [
 
 export const aboutInfo = {
   statement: "i build things that have to survive the real world, not just the demo.",
-  lead: "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
-  sub: [
+  // The about text, one <p> each; the first in the normal text colour, the rest muted.
+  paragraphs: [
+    "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
     "i hold a master's in data science & AI (2026), with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale.",
-    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment.",
+    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, fine-tuning its YOLO model from 70% to 90% accuracy.",
   ],
   // Grouped by area, no percentage bars. Matches the resume (public/resume/).
   skillGroups: [

@@ -1,0 +1,73 @@
+/* ---------- about: the "signal flow" network (AboutLayers.jsx) ----------
+   No border or card: it floats in the section background. */
+
+.about-layers {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 32vw, 380px);
+}
+
+.about-layers-canvas,
+.about-layers-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 899px) {
+  .about-layers {
+    height: 260px;
+  }
+}
+
+/* Pause / play: same look as the hero's .nn-toggle (32px, 44px touch area). */
+.about-layers-toggle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    scale var(--dur-quick) var(--ease),
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.about-layers-toggle::before {
+  position: absolute;
+  inset: -6px;
+  content: "";
+}
+
+.about-layers-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.about-layers-toggle:active {
+  scale: 0.94; /* a soft press */
+}
+
+.about-layers-toggle svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Reduced motion: one still frame, so nothing to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .about-layers-toggle {
+    display: none;
+  }
+}

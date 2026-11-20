@@ -1,6 +1,9 @@
 /* ---------- a headline's detection box (HeadlineBox.jsx) ----------
    Same look as the hero name's box (Hero.css .detect-box): a 1px accent frame
-   8px around the text, nearly square corners, a small mono label on top. */
+   8px around the text, nearly square corners, a small mono label on top.
+   Shown once: it draws in when the heading first scrolls into view, holds,
+   then fades away; and only on the first page of a visit (html.boxes-seen,
+   set in index.html, hides it after that). */
 
 .headline-box {
   --box-colour: var(--accent);
@@ -18,7 +21,7 @@
   border-radius: 4px; /* kept nearly square: a real bounding box */
   pointer-events: none;
   content: "";
-  animation: headline-box-in 0.7s var(--ease) 0.25s both;
+  animation: headline-box 2.6s var(--ease) 0.25s both;
 }
 
 .headline-box-label {
@@ -35,18 +38,29 @@
   letter-spacing: 0;
   line-height: 1.4;
   white-space: nowrap;
-  animation: headline-box-in 0.7s var(--ease) 0.25s both;
+  animation: headline-box 2.6s var(--ease) 0.25s both;
 }
 
-@keyframes headline-box-in {
-  from {
+/* Like the hero's box: draw in, hold, fade out (and stay gone). */
+@keyframes headline-box {
+  0% {
     opacity: 0;
     transform: scale(1.03);
   }
-  to {
+  15%,
+  80% {
     opacity: 1;
     transform: scale(1);
   }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.boxes-seen .headline-box::before,
+.boxes-seen .headline-box-label {
+  display: none;
 }
 
 /* Inside a Reveal, wait until it scrolls into view, then draw once. */

@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { aboutInfo } from "../../data/profile";
+import { AboutLayers } from "../AboutLayers/AboutLayers";
 import { Reveal } from "../Reveal";
 import { SkillCards } from "../SkillCards/SkillCards";
 import { SectionHeader } from "../ui/SectionHeader";
@@ -17,15 +18,20 @@ export class Contact extends Component {
             <SectionHeader id="hello" title={aboutInfo.statement} />
           </Reveal>
 
-          <Reveal as="div" className="hello-about" style={{ "--i": 1 }}>
-            <p className="k">about</p>
-            <p className="hello-lead">{aboutInfo.lead}</p>
-            {aboutInfo.sub.map((line, i) => (
-              <p className="hello-sub" key={i}>
-                {line}
-              </p>
-            ))}
-          </Reveal>
+          {/* The about text on the left, the "signal flow" network on the right (below on phones). */}
+          <div className="hello-about-grid">
+            <Reveal as="div" className="hello-about" style={{ "--i": 1 }}>
+              <p className="k">about</p>
+              {aboutInfo.paragraphs.map((line, i) => (
+                <p className={i === 0 ? "hello-para hello-para--lead" : "hello-para"} key={line}>
+                  {line}
+                </p>
+              ))}
+            </Reveal>
+            <Reveal as="div" className="hello-about-visual" style={{ "--i": 2 }}>
+              <AboutLayers />
+            </Reveal>
+          </div>
 
           {/* A slow belt of cards, one per skill group (SkillCards). */}
           <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>

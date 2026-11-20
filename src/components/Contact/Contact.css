@@ -1,5 +1,15 @@
-.hello-about {
-  max-width: 68ch;
+/* The about text, with the "signal flow" network (AboutLayers) beside it on
+   laptops and below it on phones. */
+.hello-about-grid {
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+@media (min-width: 900px) {
+  .hello-about-grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+  }
 }
 
 .hello-skills {
@@ -16,14 +26,18 @@
   font-weight: var(--weight-display);
 }
 
-/* The about paragraphs: one size, colour and rhythm, so they read as one block. */
-.hello-lead,
-.hello-sub {
-  color: var(--soft);
+/* About paragraphs: the first in the normal text colour, the rest muted. */
+.hello-para {
+  max-width: 60ch;
+  color: var(--muted);
   font-size: 1.0625rem;
   line-height: 1.7;
 }
 
-.hello-sub {
+.hello-para + .hello-para {
   margin-top: 14px;
+}
+
+.hello-para--lead {
+  color: var(--text);
 }

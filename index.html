@@ -49,6 +49,15 @@
             window.dispatchEvent(new Event("loader:done"));
           }, 4000);
         }
+
+        // Headline detection boxes (src/components/ui/HeadlineBox): only on the first
+        // page of a visit; .boxes-seen hides them on every page after that.
+        try {
+          if (sessionStorage.getItem("boxes-shown")) root.classList.add("boxes-seen");
+          else sessionStorage.setItem("boxes-shown", "1");
+        } catch (e) {
+          root.classList.add("boxes-seen"); // storage blocked: rather none than on every page
+        }
       })();
     </script>
   </head>
