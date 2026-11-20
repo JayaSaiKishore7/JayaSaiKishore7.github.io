@@ -1,9 +1,18 @@
 import { PureComponent, createRef } from "react";
-import { buildScene, drawFrame, makeCalmMask, readColours } from "../../utils/neuralNet3d";
+import { applyCalm, buildScene, drawFrame, makeCalmMask, readColours } from "../../utils/neuralNet3d";
+import { webglWanted, whenIdleAfterLoader } from "../../utils/webglUpgrade";
 import "./NeuralNet.css";
 
 const FRAME_MS = 1000 / 30; // ~30 fps is plenty for slow motion, and halves the work
 const MAX_STEP_MS = 100; // after a stall (busy tab), don't jump ahead
+
+// The WebGL upgrade (hero only): cross-fade length, and the slow-device guard.
+const WEBGL_FADE_MS = 600; // of animation time, so a pause freezes the fade too
+const GUARD = {
+  skip: 2, // the first frames are slow everywhere (uploads, warm-up): not timed
+  quick: { frames: 3, maxMs: 48 }, // clearly too slow: back to 2D almost at once
+  settled: { frames: 15, maxMs: 16 }, // not keeping up with 60 fps: back to 2D
+};
 
 // How much of the network to erase behind the hero's text block (0…1), so the
 // name, tagline, note and meta line keep at least 4.5:1 contrast (measured).
@@ -13,10 +22,11 @@ const CALM = { network: 0.85 };
 const CALM_EXTRA = [{ selector: ".hero-note", amount: 0.85 }];
 
 const VARIANTS = {
-  // Faint, behind the whole hero, calm behind its text, with a pause button.
-  hero: { calmSelector: ".hero-main", button: true },
-  // Stronger, behind the loading screen.
-  loader: { calmSelector: null, button: false },
+  // Faint, behind the whole hero, calm behind its text, with a pause button,
+  // upgraded to real 3D (WebGL) where the device can take it.
+  hero: { calmSelector: ".hero-main", button: true, webgl: true },
+  // Stronger, behind the loading screen. Always the 2D canvas.
+  loader: { calmSelector: null, button: false, webgl: false },
 };
 
 /**
@@ -28,6 +38,13 @@ const VARIANTS = {
  * it doesn't re-render when the Hero's clock ticks. The loop stops while
  * paused, off screen or in a hidden tab; with reduced motion it draws one
  * still frame.
+ *
+ * WebGL upgrade (hero only): once the loading screen is gone and the browser
+ * is idle, and only on devices with a real GPU (src/utils/webglUpgrade.js),
+ * three.js and the WebGL scene (src/utils/neuralNet3dGL.js) load as their own
+ * chunk. The scene draws offscreen; each frame is copied onto this same canvas
+ * and the calm area is erased as before, cross-fading from the 2D picture.
+ * Too slow, reduced motion, a lost context or any error: back to 2D for good.
  */
 export class NeuralNet extends PureComponent {
   static defaultProps = { variant: "hero" };
@@ -44,7 +61,11 @@ export class NeuralNet extends PureComponent {
     this.size = { width: 0, height: 0, dpr: 1 };
     this.pointer = null; // parallax target, only on devices with a mouse
     this.calm = null;
-    for (const name of ["loop", "resize", "updatePlayback", "handleMotionChange", "handlePointer", "toggle"]) {
+    this.gl = null; // the WebGL scene while it's in use
+    this.glOff = false; // set once WebGL was dropped (or never wanted): stays 2D
+    this.cancelUpgrade = null;
+    this.unmounted = false;
+    for (const name of ["loop", "resize", "updatePlayback", "handleMotionChange", "handlePointer", "toggle", "upgrade", "dropWebGL"]) {
       this[name] = this[name].bind(this);
     }
   }
@@ -79,11 +100,14 @@ export class NeuralNet extends PureComponent {
     // Light/dark: the toggle changes data-theme on <html>; re-read the colours then.
     this.themeWatcher = new MutationObserver(() => {
       this.colours = readColours();
+      this.gl?.setColours(this.colours);
       this.draw();
     });
     this.themeWatcher.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     this.handleMotionChange(this.motionQuery);
+
+    if (VARIANTS[this.props.variant].webgl) this.cancelUpgrade = whenIdleAfterLoader(this.upgrade);
   }
 
   componentDidUpdate() {
@@ -91,6 +115,9 @@ export class NeuralNet extends PureComponent {
   }
 
   componentWillUnmount() {
+    this.unmounted = true; // a WebGL load still in flight is thrown away when it lands
+    this.cancelUpgrade?.();
+    this.dropWebGL();
     cancelAnimationFrame(this.frame);
     this.motionQuery?.removeEventListener("change", this.handleMotionChange);
     window.removeEventListener("pointermove", this.handlePointer);
@@ -101,6 +128,7 @@ export class NeuralNet extends PureComponent {
   }
 
   handleMotionChange({ matches }) {
+    if (matches) this.dropWebGL(); // reduced motion: the still 2D picture
     this.setState({ reducedMotion: matches }, () => {
       this.draw(); // with reduced motion: the one still picture
       this.updatePlayback();
@@ -143,19 +171,118 @@ export class NeuralNet extends PureComponent {
         }),
       };
     }
+    this.gl?.resize(width, height);
     this.draw();
   }
 
   draw() {
     if (!this.scene || !this.size.width) return;
+    if (this.gl) {
+      this.drawWebGL();
+      return;
+    }
+    this.drawCanvas2D(this.calm);
+  }
+
+  drawCanvas2D(calm) {
     drawFrame(this.ctx, this.scene, {
       ...this.size,
       time: this.time,
       colours: this.colours,
       still: this.state.reducedMotion,
       pointer: this.pointer,
-      calm: this.calm,
+      calm,
     });
+  }
+
+  // ---------- the WebGL upgrade ----------
+
+  /** Loads and starts the WebGL scene, if this device should have it. Any failure: stays 2D. */
+  async upgrade() {
+    this.cancelUpgrade = null;
+    const stillWanted = () => !this.unmounted && !this.glOff && !this.state.reducedMotion;
+    if (!stillWanted() || !webglWanted()) return;
+    let gl = null;
+    try {
+      const { NeuralNetGL } = await import("../../utils/neuralNet3dGL.js");
+      if (!stillWanted()) return;
+      gl = new NeuralNetGL({ colours: this.colours, onContextLost: this.dropWebGL });
+      await gl.init(this.size.width, this.size.height); // compiles every shader before the first frame
+      if (!stillWanted()) {
+        gl.dispose();
+        return;
+      }
+      gl.resize(this.size.width, this.size.height); // in case the hero changed size meanwhile
+      this.gl = gl;
+      this.fadeFrom = this.time;
+      this.guard = { seen: 0, timed: 0, totalMs: 0 };
+      this.draw();
+    } catch {
+      try {
+        gl?.dispose();
+      } catch {
+        // already gone: nothing more to free
+      }
+      this.glOff = true;
+    }
+  }
+
+  /** Back to the 2D canvas for good (slow device, reduced motion, lost context, unmount). */
+  dropWebGL() {
+    this.glOff = true;
+    const gl = this.gl;
+    if (!gl) return;
+    this.gl = null;
+    try {
+      gl.dispose();
+    } catch {
+      // a lost context can't free anything more
+    }
+    if (!this.unmounted) this.draw();
+  }
+
+  /**
+   * One WebGL frame onto the visible canvas: render offscreen, copy it over,
+   * then the calm area as before. During the first WEBGL_FADE_MS, the 2D
+   * picture (without calm) fades out underneath while the WebGL one fades in.
+   */
+  drawWebGL() {
+    const { ctx, gl } = this;
+    const { width, height } = this.size;
+    const fade = Math.min(1, (this.time - this.fadeFrom) / WEBGL_FADE_MS);
+    const started = performance.now();
+
+    gl.render(this.time, this.pointer);
+    if (fade < 1) {
+      this.drawCanvas2D(null);
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.globalAlpha = fade;
+      ctx.fillRect(0, 0, width, height);
+      ctx.restore();
+    } else {
+      ctx.clearRect(0, 0, width, height);
+    }
+    ctx.globalAlpha = fade;
+    ctx.drawImage(gl.canvas, 0, 0, width, height);
+    ctx.globalAlpha = 1;
+    applyCalm(ctx, this.calm, width, height);
+
+    this.checkSpeed(performance.now() - started);
+  }
+
+  /** The slow-device guard: average frame time (render + copy) after 3 and after 15 timed frames. */
+  checkSpeed(ms) {
+    const guard = this.guard;
+    if (guard.timed >= GUARD.settled.frames) return; // passed: no more timing
+    if (++guard.seen <= GUARD.skip) return;
+    guard.timed += 1;
+    guard.totalMs += ms;
+    const average = guard.totalMs / guard.timed;
+    const tooSlow =
+      (guard.timed === GUARD.quick.frames && average > GUARD.quick.maxMs) ||
+      (guard.timed === GUARD.settled.frames && average > GUARD.settled.maxMs);
+    if (tooSlow) this.dropWebGL();
   }
 
   /** Runs the loop only when it should: not paused, on screen, tab visible, motion allowed. */

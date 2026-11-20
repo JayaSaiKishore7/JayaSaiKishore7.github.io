@@ -30,17 +30,18 @@ const LAYERS = [
 ];
 const LINKS_PER_NEURON = 3;
 const SEED = 20261120; // fixed: the same network on every visit
-const WAVE_WIDTH = 0.55; // Gaussian sigma, in layers
+// Exported values are shared with the WebGL version (neuralNet3dGL.js).
+export const WAVE_WIDTH = 0.55; // Gaussian sigma, in layers
 const DOT_COUNT = 14;
 const DOT_SPREAD = 0.35; // dots run up to ± this many layers ahead of / behind the wave
-const DOT_FADE = 0.5; // in layers: fade in after leaving the first neuron, out before the last
+export const DOT_FADE = 0.5; // in layers: fade in after leaving the first neuron, out before the last
 
 // ---------- camera ----------
 
 const TILT = 0.3; // rad, around X
 /** One full turn around Y, in ms. Driven by animation time, so pausing freezes it. */
 export const ROTATION_PERIOD_MS = 60000;
-const START_ANGLE = 0.55; // rad around Y: where the turn starts, and the reduced-motion still picture
+export const START_ANGLE = 0.55; // rad: where the turn starts, and the reduced-motion still picture
 const CAMERA = 4;
 
 /** Small, fast, seeded random generator (mulberry32). */
@@ -54,12 +55,15 @@ function seededRandom(seed) {
   };
 }
 
-/** Builds the network (neurons, seeded connections) and the moving dots. */
-export function buildScene() {
+/**
+ * Builds the network (neurons, seeded connections) and the moving dots.
+ * layers: [{ x, count, radius }] (the WebGL version passes its own, wider set).
+ */
+export function buildScene(layers = LAYERS, dotCount = DOT_COUNT) {
   const random = seededRandom(SEED);
 
   const neurons = [];
-  const byLayer = LAYERS.map((layer, li) =>
+  const byLayer = layers.map((layer, li) =>
     Array.from({ length: layer.count }, (_, i) => {
       const angle = (i / layer.count) * Math.PI * 2 + li * 0.4; // rings offset so they don't line up
       neurons.push({ layer: li, x: layer.x, y: layer.radius * Math.cos(angle), z: layer.radius * Math.sin(angle), out: [], in: [] });
@@ -68,7 +72,7 @@ export function buildScene() {
   );
 
   const edges = [];
-  for (let li = 0; li < LAYERS.length - 1; li++) {
+  for (let li = 0; li < layers.length - 1; li++) {
     for (const from of byLayer[li]) {
       const next = [...byLayer[li + 1]]; // seeded shuffle, then the first 3: 3 different neurons
       for (let i = next.length - 1; i > 0; i--) {
@@ -85,7 +89,7 @@ export function buildScene() {
 
   // Each dot rides the wave along a full path through the network (picked anew
   // for every forward and every backward pass); the offset keeps them a loose group.
-  const dots = Array.from({ length: DOT_COUNT }, () => ({
+  const dots = Array.from({ length: dotCount }, () => ({
     offset: (random() * 2 - 1) * DOT_SPREAD,
     path: [], // neuron indices, one per layer, in travel order
   }));
@@ -94,8 +98,9 @@ export function buildScene() {
     neurons,
     edges,
     dots,
+    layerCount: layers.length,
     firstLayer: byLayer[0],
-    lastLayer: byLayer[LAYERS.length - 1],
+    lastLayer: byLayer[layers.length - 1],
     pass: -1, // which half-cycle the dots' paths were picked for
     tiltX: 0, // parallax, eased toward the target each frame
     tiltY: 0,
@@ -122,6 +127,7 @@ export function readColours(element = document.documentElement) {
     line: get("--muted"), // connections at rest
     forward: get("--accent"), // the wave going forward
     backward: get("--muted"), // the wave going back
+    background: get("--bg"), // the WebGL version's fog, and its light/dark switch
   };
 }
 
@@ -269,11 +275,19 @@ export function drawFrame(ctx, scene, { width, height, time, colours, still = fa
     ctx.fill();
   }
 
-  // ----- calm behind the text -----
-  if (calm) erase(ctx, calm.mask, calm.network, width, height);
-  for (const extra of calm?.extras ?? []) erase(ctx, extra.mask, extra.amount, width, height);
-
   ctx.globalAlpha = 1;
+  applyCalm(ctx, calm, width, height);
+}
+
+/**
+ * The calm behind the text: erases part of whatever is on the canvas through
+ * the soft masks (also used on the WebGL picture, see NeuralNet.jsx).
+ * calm: { mask, network, extras } or null.
+ */
+export function applyCalm(ctx, calm, width, height) {
+  if (!calm) return;
+  erase(ctx, calm.mask, calm.network, width, height);
+  for (const extra of calm.extras ?? []) erase(ctx, extra.mask, extra.amount, width, height);
 }
 
 /** Erases `amount` (0…1) of what's drawn, through the soft mask. */
@@ -290,13 +304,14 @@ function erase(ctx, mask, amount, width, height) {
  * Gives every dot a full path for the coming pass: from a first-layer neuron to
  * the last layer (forward), or from a last-layer neuron back to the first
  * (backward), following real connections one layer at a time.
+ * scene: { neurons, edges, dots, firstLayer, lastLayer, layerCount }.
  */
-function pickPaths(scene, forward) {
+export function pickPaths(scene, forward) {
   const pick = (list) => list[Math.floor(Math.random() * list.length)];
   const tryPath = () => {
     let neuron = pick(forward ? scene.firstLayer : scene.lastLayer);
     const path = [neuron];
-    for (let step = 0; step < LAYERS.length - 1; step++) {
+    for (let step = 0; step < scene.layerCount - 1; step++) {
       // Going back, a neuron may have no incoming connection: that route is a dead end.
       const choices = forward ? scene.neurons[neuron].out : scene.neurons[neuron].in;
       if (!choices.length) return null;

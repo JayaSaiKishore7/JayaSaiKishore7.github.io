@@ -51,4 +51,9 @@ function siteHead() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), themeCss(), siteHead()],
+  build: {
+    // three.js is its own on-demand chunk (the hero's WebGL network, loaded
+    // after the page is up), so it's over Vite's default 500 kB warning.
+    chunkSizeWarningLimit: 600,
+  },
 })
