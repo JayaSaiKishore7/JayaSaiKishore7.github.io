@@ -167,6 +167,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   background: var(--surface);
+  box-shadow: var(--shadow-soft); /* the card sits softly above the network */
 }
 
 /* Label | value. Baseline alignment: each label sits on the same line as the
@@ -235,7 +236,7 @@
   position: absolute;
   z-index: 2;
   border: 1px solid var(--accent);
-  border-radius: 4px;
+  border-radius: 4px; /* kept nearly square: a real bounding box */
   pointer-events: none;
   animation: detect-box 2.6s var(--ease) forwards;
 }
@@ -245,7 +246,7 @@
   bottom: calc(100% + 3px);
   left: -1px;
   padding: 1px 6px;
-  border-radius: 3px;
+  border-radius: 4px 4px 4px 0; /* square where it meets its box */
   background: var(--accent);
   color: var(--on-accent);
   font-family: var(--font-mono); /* real detection output: the one place mono belongs */

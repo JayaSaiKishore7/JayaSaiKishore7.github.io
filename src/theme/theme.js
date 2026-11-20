@@ -88,13 +88,19 @@ export const theme = {
   },
 
   radii: {
-    card: "14px",
+    // Small things and boxes nested inside a card (a nested corner is tighter
+    // than the card's, so the gap between them stays even). Detection boxes
+    // keep a nearly square corner so they still read as real bounding boxes.
+    small: "6px",
+    card: "18px",
     pill: "999px",
   },
 
+  // Soft, slate-tinted depth (not grey), and only on the two raised things:
+  // the floating navbar and the hero's info card.
   shadows: {
-    // The one shadow on the site: under the floating navbar.
-    nav: "0 8px 30px rgba(0, 0, 0, 0.18)",
+    nav: "0 1px 2px rgba(14, 24, 34, 0.06), 0 12px 34px -8px rgba(14, 24, 34, 0.2)",
+    soft: "0 1px 2px rgba(14, 24, 34, 0.04), 0 14px 36px -14px rgba(14, 24, 34, 0.16)",
   },
 
   spacing: {

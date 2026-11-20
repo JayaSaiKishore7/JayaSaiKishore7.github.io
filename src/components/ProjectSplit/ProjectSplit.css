@@ -242,7 +242,7 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-small); /* nested in the stage/card: a tighter corner */
   background: var(--surface-soft);
   color: inherit;
   text-decoration: none;

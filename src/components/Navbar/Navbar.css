@@ -14,7 +14,8 @@
 
 /* Hiding is leaving: the exit curve. Coming back uses the soft --ease above. */
 .nav.is-hidden {
-  transform: translateY(calc(-100% - 20px));
+  /* Far enough above the top that its soft shadow (about 40px) is gone too. */
+  transform: translateY(calc(-100% - 60px));
   transition-timing-function: var(--ease-exit);
 }
 
