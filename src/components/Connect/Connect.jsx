@@ -15,10 +15,6 @@ const LinkedinIcon = () => (
   </svg>
 );
 
-// Copy-button states: idle → copied | failed → (after a moment) idle.
-const COPY_LABELS = { idle: "copy email", copied: "copied", failed: "copy failed" };
-const COPY_RESET_MS = 1800;
-
 // Typing the two terminal lines (decoration): like the loading screen's log.
 const TYPE_MS = 28; // per character
 const LINE_PAUSE_MS = 300; // before each line
@@ -36,7 +32,7 @@ export class Connect extends PureComponent {
   constructor(props) {
     super(props);
     // typed: null = both lines in full; otherwise characters shown per line.
-    this.state = { copy: "idle", typed: null, cursor: false };
+    this.state = { typed: null, cursor: false };
     this.cardRef = null;
     this.timers = [];
   }
@@ -55,7 +51,6 @@ export class Connect extends PureComponent {
   componentWillUnmount() {
     this.observer?.disconnect();
     this.timers.forEach(clearTimeout);
-    clearTimeout(this.copyTimeout);
   }
 
   handleIntersect = (entries) => {
@@ -91,22 +86,6 @@ export class Connect extends PureComponent {
     this.later(() => step(1), LINE_PAUSE_MS);
   }
 
-  handleCopy = async () => {
-    try {
-      // Throws if the Clipboard API is missing (non-HTTPS) or permission is denied.
-      await navigator.clipboard.writeText(contactInfo.email);
-      this.setCopy("copied");
-    } catch {
-      this.setCopy("failed");
-    }
-  };
-
-  setCopy(copy) {
-    this.setState({ copy });
-    clearTimeout(this.copyTimeout);
-    this.copyTimeout = setTimeout(() => this.setState({ copy: "idle" }), COPY_RESET_MS);
-  }
-
   renderLine(text, index) {
     const { typed, cursor } = this.state;
     const shown = typed === null ? text.length : typed[index];
@@ -122,7 +101,6 @@ export class Connect extends PureComponent {
   }
 
   render() {
-    const { copy } = this.state;
     const mailto = `mailto:${contactInfo.email}`;
 
     return (
@@ -156,9 +134,6 @@ export class Connect extends PureComponent {
                   <GithubIcon />
                   github
                 </a>
-                <button type="button" className="term-btn" data-state={copy} onClick={this.handleCopy}>
-                  <span aria-live="polite">{COPY_LABELS[copy]}</span>
-                </button>
                 <a href={profile.resume} download className="term-btn">
                   resume ↓
                 </a>

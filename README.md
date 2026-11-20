@@ -113,7 +113,6 @@ Each stateful piece has a small set of named states, visible in the DOM for test
 | Where | States | Exposed as |
 | --- | --- | --- |
 | Page boot (`index.html` + `App`) | `.js` on `<html>` while scripts run, which enables the hidden "before reveal" styles. `data-app="ready"` once React has mounted. If the app hasn't mounted within 4 s, `.js` is removed and all content stays visible. | `html.js`, `html[data-app]` |
-| Copy-email button (`Connect`) | `idle` → `copied` or `failed` → `idle` | `.term-btn[data-state]`, announced through `aria-live` |
 | Nav active section (`ScrollSpy`, owned by `App`) | `null` on the hero, then one of the nav section ids. At the page bottom the last section wins. | `aria-current="location"` on the active navbar link |
 | Scroll reveal (`Reveal`) | hidden → visible (one way). On cards, `Reveal` wraps the card in a `.card-slot`, so scroll-in and hover motion stay separate. | `.reveal.is-visible`. Print shows everything. |
 | Architecture diagram (`ArchitectureDiagram`) | `none` ↔ a step id (hover or keyboard focus) | `.arch[data-active]`, caption announced through `aria-live` |

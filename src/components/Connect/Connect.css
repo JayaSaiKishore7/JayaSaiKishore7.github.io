@@ -157,11 +157,6 @@
   color: var(--term-accent);
 }
 
-.term-btn[data-state="copied"] {
-  border-color: var(--term-accent);
-  color: var(--term-accent);
-}
-
 .social-icon {
   width: 14px;
   height: 14px;

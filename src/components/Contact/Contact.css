@@ -26,12 +26,6 @@
   color: var(--muted);
 }
 
-.hello-list {
-  display: grid;
-  gap: 6px;
-  color: var(--soft);
-}
-
 .hello-lead {
   color: var(--text);
   font-size: 1.125rem;

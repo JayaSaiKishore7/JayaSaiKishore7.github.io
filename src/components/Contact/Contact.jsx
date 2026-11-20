@@ -40,15 +40,6 @@ export class Contact extends Component {
               </p>
             ))}
           </Reveal>
-
-          <Reveal as="div" className="hello-skills" style={{ "--i": 3 }}>
-            <h3 className="k">certifications &amp; open source</h3>
-            <ul className="hello-list">
-              {aboutInfo.credentials.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </Reveal>
         </div>
       </section>
     );

@@ -46,7 +46,7 @@ export const aboutInfo = {
   lead: "a machine learning engineer and data scientist working across computer vision, NLP and LLMs/RAG.",
   sub: [
     "i hold a master's in data science & AI (2026), with a focus on rigorous experimentation, model evaluation, and production-grade MLOps pipelines that scale.",
-    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment, fine-tuning its YOLO model from 70% to 90% accuracy.",
+    "most recently, i took an AI-based X-ray inspection system at STMicroelectronics from prototype to production deployment.",
   ],
   // Grouped by area, no percentage bars. Matches the resume (public/resume/).
   // `spoken: true` marks human languages: shown as a line of text, not as tool chips.
@@ -54,12 +54,11 @@ export const aboutInfo = {
     { name: "programming", items: ["Python", "SQL"] },
     { name: "machine learning", items: ["scikit-learn", "XGBoost", "Pandas", "NumPy"] },
     { name: "deep learning", items: ["PyTorch", "TensorFlow", "CNN", "ResNet"] },
-    { name: "computer vision", items: ["OpenCV", "YOLO", "SAM3"] },
+    { name: "computer vision", items: ["OpenCV", "YOLO", "SAM3", "object detection"] },
     { name: "LLMs & NLP", items: ["Transformers (Hugging Face)", "LangChain", "ChromaDB"] },
     { name: "web", items: ["FastAPI", "Flask", "WebSockets", "Vue.js"] },
     { name: "databases", items: ["MySQL", "MariaDB"] },
     { name: "MLOps & cloud", items: ["MLflow", "DVC", "Docker", "Git", "CI/CD", "AWS (EC2, S3)"] },
     { name: "languages", spoken: true, items: ["english (C2)", "french (A2, working towards B1)"] },
   ],
-  credentials: ["Neo4j Certified Professional (2025)", "Hacktoberfest 2025 contributor (several accepted pull requests)"],
 };
