@@ -7,8 +7,8 @@
  * Same network idea as the 2D version (src/utils/neuralNet3d.js, whose
  * builder, wave and dot paths it reuses): layers of neurons along X, each a
  * ring, seeded links, a wave running forward then back, dots riding the wave.
- * Here the network spans the hero's full width and spins around its own long
- * axis (X).
+ * Here the network sits in the middle of the hero at a fixed size and spins
+ * around its own long axis (X).
  *
  * Drawn into an OFFSCREEN canvas with a transparent background. No
  * post-processing (bloom would break the transparency and shift colours):
@@ -61,10 +61,10 @@ const DOT_OPACITY = 0.85;
 const FOV = 34;
 const CAMERA_Z = 7.4;
 const OUTER_TURN = 0.24; // rad around Y: the network seen slightly from the side
-const WIDE_ASPECT = 1.4;
-const WIDE_LAYERS = [5, 8, 8, 9, 8, 8, 4];
-const NARROW_LAYERS = [5, 8, 8, 8, 4];
-const REBUILD_ASPECT_CHANGE = 0.05;
+// A fixed size in the middle of the hero (not the full width): layers from -SPAN to +SPAN.
+const SPAN = 2.0;
+const LAYERS = [5, 8, 8, 8, 4]; // neurons per layer
+const DOT_COUNT = 10;
 
 const NEURON_RADIUS = 0.1;
 const TUBE_RADIUS = 0.009;
@@ -158,7 +158,6 @@ export class NeuralNetGL {
     this.dotGeometry = new SphereGeometry(DOT_RADIUS, 12, 8);
     this.glowTexture = makeGlowTexture();
     this.built = null;
-    this.aspect = 0;
 
     this.colour = { wave: new Color() };
     this.setColours(colours);
@@ -173,29 +172,24 @@ export class NeuralNetGL {
   resize(width, height) {
     if (!width || !height) return;
     this.renderer.setSize(width, height, false);
-    const aspect = width / height;
-    this.camera.aspect = aspect;
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    if (!this.built || Math.abs(aspect - this.aspect) > REBUILD_ASPECT_CHANGE) this.build(aspect);
+    if (!this.built) this.build(); // a fixed size: built once, whatever the screen shape
   }
 
-  /** The network for this aspect ratio: as wide as the view (see the spec in the header). */
-  build(aspect) {
+  /** The network: 5 layers evenly from -SPAN to +SPAN, centred in the view. */
+  build() {
     this.disposeBuilt();
-    this.aspect = aspect;
 
     const halfH = Math.tan(((FOV / 2) * Math.PI) / 180) * CAMERA_Z;
-    const halfW = halfH * aspect;
-    const span = Math.max(1.65, (halfW * 1.08) / Math.cos(OUTER_TURN));
-    const counts = aspect > WIDE_ASPECT ? WIDE_LAYERS : NARROW_LAYERS;
     const ring = Math.min(1.4, halfH * 0.6);
-    const last = counts.length - 1;
-    const layers = counts.map((count, li) => ({
-      x: -span + (li * 2 * span) / last,
+    const last = LAYERS.length - 1;
+    const layers = LAYERS.map((count, li) => ({
+      x: -SPAN + (li * 2 * SPAN) / last,
       count,
       radius: li === 0 || li === last ? ring * 0.55 : ring,
     }));
-    const net = buildScene(layers, counts.length > 5 ? 14 : 10);
+    const net = buildScene(layers, DOT_COUNT);
 
     const built = { net, geometries: [], materials: [], layerMaterials: [], layerSprites: [], gapMaterials: [], neurons: [], dots: [] };
     const group = new Group();
