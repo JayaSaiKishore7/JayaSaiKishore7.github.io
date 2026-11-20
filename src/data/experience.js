@@ -40,8 +40,10 @@ export const experience = [
   },
 ];
 
+// kind: the small label above each education card's title.
 export const education = [
   {
+    kind: "master's degree",
     degree: "Master's in Data Science & Artificial Intelligence",
     meta: "DataScienceTech Institute • 2024 – 2026 • Sophia Antipolis, France",
     points: [
@@ -51,6 +53,7 @@ export const education = [
     ],
   },
   {
+    kind: "bachelor's degree",
     degree: "Bachelor's in Electronics and Communication Engineering",
     meta: "Gudlavalleru Engineering College • 2015 – 2019 • Andhra Pradesh, India",
     points: [
@@ -58,5 +61,21 @@ export const education = [
       "Developed core programming, problem-solving and engineering skills.",
       "Academic projects that sparked interest in data-driven systems and ML.",
     ],
+  },
+];
+
+// Shown after the degrees in the education carousel (only what's on the resume).
+// The same two are also listed in the hello section (aboutInfo.credentials).
+export const achievements = [
+  {
+    kind: "certification",
+    title: "Neo4j Certified Professional",
+    meta: "Neo4j • 2025",
+  },
+  {
+    kind: "open source",
+    title: "Hacktoberfest contributor",
+    meta: "2025",
+    points: ["Several pull requests accepted in open-source projects."],
   },
 ];
