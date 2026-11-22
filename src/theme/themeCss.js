@@ -38,6 +38,7 @@ export function cssVariables(t) {
     "--shadow-nav": t.shadows.nav,
     "--shadow-soft": t.shadows.soft,
     "--space-section": t.spacing.section,
+    "--space-gap": t.spacing.sectionGap,
     "--gut": t.spacing.gutter,
     "--ease": t.motion.ease,
     "--ease-exit": t.motion.easeExit,

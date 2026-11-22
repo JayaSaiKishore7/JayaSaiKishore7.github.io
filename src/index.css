@@ -100,6 +100,11 @@ button {
   padding: var(--space-section) 0;
 }
 
+/* A little room after a section (work, experience, about, contact). */
+.section.section--gap-after {
+  padding-bottom: var(--space-gap);
+}
+
 /* 12-column grid; children place themselves with grid-column. */
 .grid-12 {
   display: grid;

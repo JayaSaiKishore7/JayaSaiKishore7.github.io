@@ -8,7 +8,7 @@ import { ProjectSplit } from "../ProjectSplit/ProjectSplit";
 export class Projects extends Component {
   render() {
     return (
-      <section id="work" className="section">
+      <section id="work" className="section section--gap-after">
         <div className="container">
           <Reveal as="div">
             <SectionHeader id="work" title="models that made it out of the notebook." />

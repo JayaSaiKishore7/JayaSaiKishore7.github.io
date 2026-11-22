@@ -107,6 +107,7 @@ export const theme = {
 
   spacing: {
     section: "0px", // top and bottom padding of every section: none, sections follow straight on
+    sectionGap: "clamp(20px, 3vw, 36px)", // a little room after some sections (.section--gap-after)
     gutter: "24px",
   },
 

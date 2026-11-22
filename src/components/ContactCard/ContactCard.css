@@ -5,7 +5,6 @@
   /* No space between sections, but the card (which has no heading above it)
      must not touch the section before it, like education's arrow buttons. */
   padding-top: 12px;
-  padding-bottom: clamp(16px, 3vw, 32px);
 }
 
 .contact-card {

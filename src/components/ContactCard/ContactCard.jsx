@@ -111,7 +111,7 @@ export class ContactCard extends PureComponent {
     const exitChars = typed === null ? null : typed[TYPED.length - 1];
 
     return (
-      <footer id="contact" className="section contact">
+      <footer id="contact" className="section section--gap-after contact">
         <div className="container">
           <Reveal as="div">
             <div className="contact-card" ref={this.setCardRef}>
