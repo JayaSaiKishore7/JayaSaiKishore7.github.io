@@ -43,17 +43,8 @@
 
 /* ---------- content ---------- */
 
-.contact-heading {
-  margin: 40px 0 10px; /* room for the detection box's label above it */
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: var(--weight-strong);
-  letter-spacing: var(--tracking-title);
-  line-height: 1.2;
-}
-
 .contact-intro {
+  margin-top: 28px;
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.6;

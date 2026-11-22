@@ -2,7 +2,6 @@ import { PureComponent } from "react";
 import { contactInfo, profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
 import { TrainingLog } from "../TrainingLog/TrainingLog";
-import { HeadlineBox } from "../ui/HeadlineBox";
 import "./ContactCard.css";
 
 const GithubIcon = () => (
@@ -30,7 +29,7 @@ const LINES = contactInfo.terminal;
  * with the © line.
  *
  * The two opening lines are typed once when the card scrolls into view;
- * everything real (heading, intro, buttons) is in the
+ * everything real (intro, buttons) is in the
  * prerendered HTML and visible from the start. Without JavaScript, or with
  * reduced motion, the lines simply show in full.
  *
@@ -131,9 +130,8 @@ export class ContactCard extends PureComponent {
                 <TrainingLog />
               </div>
 
-              <h2 className="contact-heading">
-                <HeadlineBox label="contact">{contactInfo.heading}</HeadlineBox>
-              </h2>
+              {/* No visible heading; screen readers still get one for the section. */}
+              <h2 className="sr-only">contact</h2>
               <p className="contact-intro">{contactInfo.intro}</p>
 
               <div className="contact-actions">

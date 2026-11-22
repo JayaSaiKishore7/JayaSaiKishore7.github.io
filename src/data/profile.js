@@ -16,7 +16,6 @@ export const profile = {
 export const contactInfo = {
   // Decoration typed in when the card scrolls into view (echoes the loading screen).
   terminal: ["$ python contact.py", "running inference… match found"],
-  heading: "got a model that needs to leave the notebook?",
   intro: "i'm open to data scientist and computer vision roles across france and europe.",
   email: profile.email,
   emailLabel: "say hi",
