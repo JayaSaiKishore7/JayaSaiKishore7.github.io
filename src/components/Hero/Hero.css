@@ -1,49 +1,128 @@
+/* The hero: a "stage" (the loss landscape, its readability overlay, the
+   status line and the text) plus the info card. Desktop: the card floats
+   over the stage on the right. Phones: the card follows the stage.
+
+   Layers inside the stage: landscape 0 · overlay 1 · text 2 · detection box 4. */
+
 .hero {
+  --hero-card-top: 96px; /* desktop: the card's top, from the hero's top */
+  --hero-card-w: clamp(320px, 30vw, 400px);
   position: relative;
-  /* Just clears the floating navbar (about 64px tall), plus a little air. */
-  padding: clamp(86px, 8vw, 92px) 0 clamp(24px, 3vw, 40px);
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gut);
-  row-gap: 48px;
-  align-items: end;
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  display: flow-root; /* keeps .hero-main's margin inside the stage */
+  min-height: max(680px, calc(100svh - var(--nav-height)));
+  padding: 0 48px 56px;
 }
+
+/* Keeps the text readable over the moving surface: the page colour on the
+   left, fading out towards the right. */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 40%, transparent) 40%,
+    transparent 62%
+  );
+}
+
+/* ---------- status line ---------- */
+
+.hero-status {
+  position: absolute;
+  top: 28px;
+  right: 48px;
+  left: 48px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.hero-status-run {
+  color: var(--muted);
+}
+
+.hero-status-end {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-status-loss {
+  color: var(--accent);
+}
+
+/* ---------- text ----------
+   Desktop: the first line (the role) is moved level with the card's "latest"
+   row. AlignToAnchor (Hero.jsx) sets the exact --hero-text-top; before that
+   (prerender, no JavaScript) the fallback puts it within a few pixels:
+   the row's middle sits about 98px below the card's top. */
 
 .hero-main {
-  grid-column: 1 / 9;
-  min-width: 0;
+  position: relative;
+  z-index: 2;
+  width: min(640px, 100% - var(--hero-card-w) - 64px);
+  margin-top: var(--hero-text-top, calc(var(--hero-card-top) + 98px));
 }
 
-/* Centred against the text block (name, tagline, buttons) instead of sinking
-   to the bottom with the buttons, so the two halves of the hero balance. */
-.hero-card {
-  grid-column: 9 / 13;
-  align-self: center;
+.hero-role {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
-/* Desktop: both columns start at the top, and the card is pushed down until
-   its "latest" row is level with the tagline. AlignToAnchor (Hero.jsx)
-   measures the exact shift and sets --hero-card-shift on .hero; the fallback
-   here (tagline offset minus the row's offset in the card, about 82–102px at
-   1100–1440px) is what the prerendered page uses before that. */
-@media (min-width: 1000.02px) {
-  /* The shifted card now reaches the hero's bottom: more room under it, so it
-     clears the network's pause button (NeuralNet.css, ~36px from the bottom). */
-  .hero {
-    padding-bottom: 52px;
-  }
+/* The top margin leaves room for the detection tag above the name. */
+.hero-name {
+  margin: 22px 0 0 -0.04em;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
 
-  .hero-main {
-    align-self: start;
-  }
+/* The mask: a word's box clips its own text while it slides up into place. */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* room for descenders inside the mask */
+  vertical-align: top;
+}
 
-  .hero-card {
-    align-self: start;
-    margin-top: var(--hero-card-shift, calc(var(--size-name) * 1.03 - 13px));
-  }
+.hero-word-inner {
+  display: inline-block;
+}
+
+.hero-headline {
+  margin-top: 18px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
+  font-weight: var(--weight-strong);
+  line-height: 1.6;
+}
+
+.hero-subline {
+  max-width: 560px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  line-height: 1.75;
 }
 
 /* ---------- reveal ----------
@@ -73,73 +152,10 @@
   }
 }
 
-/* ---------- text ---------- */
-
-/* Phones only: on desktop the navbar shows the location and time. */
-.hero-meta {
-  display: none;
-}
-
-@media (max-width: 899.98px) {
-  .hero-meta {
-    display: flex;
-  }
-}
-
-.hero-meta {
-  flex-wrap: wrap;
-  gap: 8px;
-  color: var(--muted);
-  font-size: var(--size-small);
-  /* No tabular-nums on the clock: in this font it also widens ":" and ",". */
-}
-
-/* The top margin leaves room for the "name 0.99" detection label above the name. */
-.hero-name {
-  margin: 34px 0 0 -0.04em;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: var(--size-name);
-  font-weight: var(--weight-name);
-  letter-spacing: var(--tracking-name);
-  line-height: 0.95;
-}
-
-/* The mask: a word's box clips its own text while it slides up into place. */
-.hero-word {
-  display: inline-block;
-  overflow: hidden;
-  padding-bottom: 0.08em; /* room for descenders inside the mask */
-  vertical-align: top;
-}
-
-.hero-word-inner {
-  display: inline-block;
-}
-
-.hero-tagline {
-  /* Room for the "role 0.97" label above the tagline's box, clear of the
-     name's box (measured: 6–12px clear at 375–1440px). */
-  margin-top: 50px;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: clamp(1.45rem, 2.6vw, 2.2rem);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--tracking-title);
-  line-height: 1.2;
-}
-
-.hero-note {
-  max-width: 36rem;
-  margin-top: 14px;
-  color: var(--muted);
-  font-size: 1rem;
-}
-
 /* ---------- buttons ---------- */
 
 .hero-actions {
-  margin-top: clamp(28px, 3vw, 40px);
+  margin-top: 28px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -183,6 +199,15 @@
 }
 
 /* ---------- info card ---------- */
+
+/* Desktop: over the stage, on the right. */
+.hero-card {
+  position: absolute;
+  top: var(--hero-card-top);
+  right: 48px;
+  z-index: 3;
+  width: var(--hero-card-w);
+}
 
 .hero-card {
   padding: 8px 24px;
@@ -252,58 +277,83 @@
   }
 }
 
-/* ---------- detection boxes (src/utils/DetectionBoxes.js) ---------- */
+/* ---------- detection box (src/utils/DetectionCycle.js) ----------
+   One box that glides from phrase to phrase; its tag shows the phrase's label. */
 
-.detect-box {
+.det-box {
   position: absolute;
-  z-index: 2;
-  border: 1px solid var(--accent);
-  border-radius: 4px; /* kept nearly square: a real bounding box */
+  z-index: 4;
+  border: 1.5px solid var(--accent);
+  border-radius: 3px; /* kept nearly square: a real bounding box */
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 25%, transparent);
+  opacity: 0;
   pointer-events: none;
-  animation: detect-box 2.6s var(--ease) forwards;
+  transition:
+    left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity var(--dur-colour) var(--ease);
 }
 
-.detect-label {
+.det-box.is-shown {
+  opacity: 1;
+}
+
+.det-tag {
   position: absolute;
-  bottom: calc(100% + 3px);
-  left: -1px;
-  padding: 1px 6px;
-  border-radius: 4px 4px 4px 0; /* square where it meets its box */
+  bottom: 100%;
+  left: -1.5px;
+  padding: 2px 5px;
+  border-radius: 3px 3px 0 0;
   background: var(--accent);
-  color: var(--on-accent);
+  color: var(--bg);
   font-family: var(--font-mono); /* real detection output: the one place mono belongs */
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
-@keyframes detect-box {
-  0% {
-    opacity: 0;
-    transform: scale(1.04);
-  }
-  15%,
-  80% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
-}
+/* ---------- phones and tablets ---------- */
 
-/* ---------- layout changes ---------- */
+@media (max-width: 999.98px) {
+  .hero {
+    padding-bottom: var(--space-section);
+  }
 
-@media (max-width: 1000px) {
-  .hero-main,
+  .hero-stage {
+    min-height: max(620px, calc(100svh - var(--nav-height)));
+    padding: 0 16px;
+  }
+
+  /* The page colour at the top, where the text is; the surface shows below. */
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 55%, transparent) 55%,
+      transparent 85%
+    );
+  }
+
+  .hero-status {
+    top: 18px;
+    right: 16px;
+    left: 16px;
+  }
+
+  /* About 110px from the page top: under the 56px bar and the status line. */
+  .hero-main {
+    width: auto;
+    margin-top: 56px;
+  }
+
   .hero-card {
-    grid-column: 1 / -1;
-  }
-
-  .hero-card {
+    position: static;
+    width: auto;
     max-width: 30rem;
+    margin: 0 16px;
   }
 }
 
@@ -311,10 +361,15 @@
   .hero-status-dot {
     animation: none;
   }
+
+  .det-box {
+    transition: none;
+  }
 }
 
 @media print {
-  .detect-box {
+  .det-box,
+  .hero-overlay {
     display: none !important;
   }
 }

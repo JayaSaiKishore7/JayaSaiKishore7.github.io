@@ -1,127 +1,39 @@
-import { Component, createRef } from "react";
+import { PureComponent, createRef } from "react";
 import { navLinks } from "../../data/nav";
 import { profile } from "../../data/profile";
-import { Clock } from "../../utils/Clock";
-import { ThemeToggle } from "./ThemeToggle";
 import "./Navbar.css";
 
-const SCROLL_DELTA = 6; // ignore tiny scroll jitters when deciding hide/show
-const SHOW_NEAR_TOP = 120; // always show the bar this close to the top
-
 /**
- * The floating pill navbar.
+ * The menu bar: sticky at the top, a see-through strip of the page
+ * background. The name on the left is the home link.
  *
- * Desktop: name, section links with one gliding marker behind the active
- * link, the local time in Marseille and the theme toggle. It slides away when you
- * scroll down and comes back when you scroll up.
- * Phones: name, theme toggle and a menu button that opens a full-screen sheet.
+ * Desktop: the section links on the right; the one in view (`active`, from
+ * App's ScrollSpy) is underlined in the accent.
+ * Phones (< 1000px): a menu button opens a full-height panel under the bar.
+ * While it's open, Tab stays inside it; Escape or a link closes it and focus
+ * returns to the button.
  *
- * State
- *   time      clock text, null until mounted (the pre-rendered page can't know it)
- *   hidden    slid away after scrolling down
- *   menuOpen  the phone menu sheet is open
+ * State: `menuOpen`, the phone panel is open.
  */
-export class Navbar extends Component {
+export class Navbar extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { time: null, hidden: false, menuOpen: false };
-
-    this.linksRef = createRef();
-    this.markerRef = createRef();
+    this.state = { menuOpen: false };
     this.menuButtonRef = createRef();
-    this.sheetRef = createRef();
-    this.linkEls = {};
-    this.clock = null;
-    this.lastY = 0;
-    this.scrollFrame = null;
-    this.markerPlaced = false;
-
-    for (const name of ["handleTick", "handleScroll", "placeMarker", "toggleMenu", "closeMenu", "handleSheetKeyDown"]) {
+    this.panelRef = createRef();
+    for (const name of ["toggleMenu", "closeMenu", "handleKeyDown"]) {
       this[name] = this[name].bind(this);
     }
   }
 
-  // ---------- lifecycle ----------
-
-  componentDidMount() {
-    this.clock = new Clock({ timeZone: profile.timeZone, onTick: this.handleTick });
-    this.clock.start();
-
-    this.lastY = window.scrollY;
-    window.addEventListener("scroll", this.handleScroll, { passive: true });
-
-    // Re-place the marker whenever the links change size (fonts loading, resize).
-    this.resize = new ResizeObserver(this.placeMarker);
-    this.resize.observe(this.linksRef.current);
-  }
-
-  componentDidUpdate(previous, previousState) {
-    if (previous.active !== this.props.active) this.placeMarker();
+  componentDidUpdate(previousProps, previousState) {
     if (previousState.menuOpen !== this.state.menuOpen) this.onMenuChange();
   }
 
   componentWillUnmount() {
-    this.clock?.stop();
-    window.removeEventListener("scroll", this.handleScroll);
-    cancelAnimationFrame(this.scrollFrame);
-    this.resize?.disconnect();
+    document.removeEventListener("keydown", this.handleKeyDown);
     document.documentElement.style.overflow = "";
   }
-
-  handleTick(time) {
-    this.setState({ time });
-  }
-
-  // ---------- hide on scroll down, show on scroll up ----------
-
-  handleScroll() {
-    if (this.scrollFrame !== null) return;
-    this.scrollFrame = requestAnimationFrame(() => {
-      this.scrollFrame = null;
-      const y = window.scrollY;
-      const delta = y - this.lastY;
-      if (Math.abs(delta) < SCROLL_DELTA) return;
-      this.lastY = y;
-
-      const focusInside = this.linksRef.current?.contains(document.activeElement);
-      const hidden = delta > 0 && y > SHOW_NEAR_TOP && !this.state.menuOpen && !focusInside;
-      if (hidden !== this.state.hidden) this.setState({ hidden });
-    });
-  }
-
-  // ---------- gliding marker ----------
-
-  /**
-   * Shows the marker behind the active link. The marker spans all the links;
-   * a rounded clip-path reveals just the active link's area, so moving and
-   * resizing is one smooth clip-path transition with perfectly round ends.
-   */
-  placeMarker() {
-    const marker = this.markerRef.current;
-    const nav = this.linksRef.current;
-    const link = this.linkEls[this.props.active];
-    if (!marker || !nav) return;
-
-    if (!link || !link.offsetWidth) {
-      marker.classList.remove("is-shown");
-      return;
-    }
-
-    const left = link.offsetLeft;
-    const right = nav.clientWidth - (link.offsetLeft + link.offsetWidth);
-    marker.style.clipPath = `inset(0 ${right}px 0 ${left}px round 999px)`;
-
-    if (!this.markerPlaced) {
-      // First appearance: fade in at its place instead of sliding from the edge.
-      marker.style.transition = "none";
-      void marker.offsetWidth;
-      marker.style.transition = "";
-      this.markerPlaced = true;
-    }
-    marker.classList.add("is-shown");
-  }
-
-  // ---------- phone menu ----------
 
   toggleMenu() {
     this.setState((state) => ({ menuOpen: !state.menuOpen }));
@@ -133,58 +45,57 @@ export class Navbar extends Component {
 
   onMenuChange() {
     const open = this.state.menuOpen;
-    // Stop the page scrolling behind the open sheet.
+    // The page doesn't scroll behind the open panel.
     document.documentElement.style.overflow = open ? "hidden" : "";
-    if (open) this.sheetRef.current?.querySelector("a, button")?.focus();
-    else this.menuButtonRef.current?.focus();
+    if (open) {
+      document.addEventListener("keydown", this.handleKeyDown);
+      this.panelRef.current?.querySelector("a")?.focus();
+    } else {
+      document.removeEventListener("keydown", this.handleKeyDown);
+      this.menuButtonRef.current?.focus();
+    }
   }
 
-  /** Keeps Tab inside the open sheet and closes it on Escape. */
-  handleSheetKeyDown(event) {
+  /** While the panel is open: Escape closes it; Tab cycles through the button and the links. */
+  handleKeyDown(event) {
     if (event.key === "Escape") {
       event.preventDefault();
       this.closeMenu();
       return;
     }
     if (event.key !== "Tab") return;
-    const focusable = [...this.sheetRef.current.querySelectorAll("a, button")];
+    const focusable = [this.menuButtonRef.current, ...this.panelRef.current.querySelectorAll("a")];
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
-    if (event.shiftKey && document.activeElement === first) {
+    const inside = focusable.includes(document.activeElement);
+    if (event.shiftKey && (document.activeElement === first || !inside)) {
       event.preventDefault();
       last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
+    } else if (!event.shiftKey && (document.activeElement === last || !inside)) {
       event.preventDefault();
       first.focus();
     }
   }
 
-  // ---------- render ----------
-
   render() {
     // On case study pages the links lead back to the home page's sections.
     const { active = null, onHome = true } = this.props;
-    const { time, hidden, menuOpen } = this.state;
+    const { menuOpen } = this.state;
     const home = onHome ? "" : "/";
 
     return (
-      <header className={`nav${hidden ? " is-hidden" : ""}${menuOpen ? " is-menu-open" : ""}`}>
-        <div className="nav-pill">
-          <a href={onHome ? "#home" : "/"} className="nav-brand">
-            {profile.name.toLowerCase()}
-            <span>.</span>
+      <>
+        <header className="nav">
+          <a href={onHome ? "#home" : "/"} className="nav-name">
+            {profile.name}
           </a>
 
-          <nav ref={this.linksRef} className="nav-links" aria-label="Sections">
-            <span ref={this.markerRef} className="nav-marker" aria-hidden="true" />
+          <nav className="nav-links" aria-label="Sections">
             {navLinks.map((link) => (
               <a
                 key={link.id}
-                ref={(el) => {
-                  this.linkEls[link.id] = el;
-                }}
                 href={`${home}#${link.id}`}
-                className={active === link.id ? "is-active" : ""}
+                className={active === link.id ? "is-active" : undefined}
                 aria-current={active === link.id ? "location" : undefined}
               >
                 {link.label}
@@ -192,50 +103,48 @@ export class Navbar extends Component {
             ))}
           </nav>
 
-          {/* Location and local time, next to the section links (desktop). */}
-          <p className="nav-time">
-            {profile.location.toLowerCase()} · <span>{time ?? "--:--"}</span>
-          </p>
-
-          <ThemeToggle />
-
           <button
             ref={this.menuButtonRef}
             type="button"
             className="nav-menu-button"
             aria-expanded={menuOpen}
-            aria-controls="nav-sheet"
+            aria-controls="nav-panel"
+            aria-label={menuOpen ? "close menu" : "open menu"}
             onClick={this.toggleMenu}
           >
-            {menuOpen ? "close" : "menu"}
+            <span aria-hidden="true">{menuOpen ? "✕" : "☰"}</span>
           </button>
-        </div>
+        </header>
 
-        {/* Phones: full-screen menu. Hidden and out of reach (inert) while closed. */}
+        {/* Phones: the menu panel. Out of reach (inert) while closed. A sibling of
+            the bar, not inside it: the bar's backdrop-filter would make it the
+            panel's containing block and squash the panel into the bar. */}
         <div
-          ref={this.sheetRef}
-          id="nav-sheet"
-          className="nav-sheet"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu"
+          ref={this.panelRef}
+          id="nav-panel"
+          className={`nav-panel${menuOpen ? " is-open" : ""}`}
           inert={!menuOpen}
-          onKeyDown={this.handleSheetKeyDown}
         >
-          <ul>
-            {navLinks.map((link, i) => (
-              <li key={link.id} style={{ "--i": i }}>
-                <a href={`${home}#${link.id}`} onClick={this.closeMenu}>
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <button type="button" className="nav-sheet-close" onClick={this.closeMenu}>
-            close menu
-          </button>
+          <p className="nav-panel-prompt" aria-hidden="true">
+            $ ls ./portfolio
+          </p>
+          <nav aria-label="Sections">
+            <ul>
+              {navLinks.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={`${home}#${link.id}`}
+                    aria-current={active === link.id ? "location" : undefined}
+                    onClick={this.closeMenu}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
-      </header>
+      </>
     );
   }
 }

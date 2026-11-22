@@ -45,7 +45,7 @@ async function scrollTo(page, stop) {
   await page.waitForTimeout(1200); // let scroll reveals and the nav settle
 }
 
-/** Every visit starts light. For dark, click the theme button while the navbar is on screen (at the top). */
+/** Every visit starts light. For dark, click the first theme button (the hero's on home, the footer's elsewhere). */
 async function applyTheme(page, theme) {
   if (theme === "light") return;
   await page.click(".theme-toggle");

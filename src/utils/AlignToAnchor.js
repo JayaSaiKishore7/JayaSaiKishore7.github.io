@@ -1,22 +1,24 @@
 /**
- * Lines `anchor`'s top up with `target`'s by moving `shifted` (an ancestor of
- * the anchor) down: it writes a CSS variable on the container that the CSS
- * uses as `shifted`'s margin-top.
+ * Lines `target` (a one-line element) up with `anchor` (another one-line
+ * element) by moving `shifted`, the block that carries the target: it writes
+ * a CSS variable on the container that the CSS uses as `shifted`'s margin-top.
+ * The two lines' centres are matched, so they sit level even when their
+ * fonts and line heights differ.
  *
  * Measures layout positions (offsetTop), not getBoundingClientRect, so a
  * reveal animation's transform mid-flight can't skew the result. Each run
  * corrects the margin in use (the CSS fallback at first) by the gap still
- * left, so the fallback only has to be close. Re-measures on resize, fonts
- * loading and theme changes, at most once per frame; outside `media`, the
- * variable is removed.
+ * left, so the fallback only has to be close. Re-measures on resize (of the
+ * container and anything in `observe`), fonts loading and theme changes, at
+ * most once per frame; outside `media`, the variable is removed.
  */
 export class AlignToAnchor {
-  constructor({ container, target, anchor, shifted, variable, media, onChange }) {
+  constructor({ container, target, anchor, shifted, observe = [], variable, media, onChange }) {
     this.container = container;
-    this.target = target; // the line that stays put
-    this.anchor = anchor; // the line that moves to meet it
-    this.shifted = shifted; // the box that moves, carrying the anchor
-    this.observe = [shifted];
+    this.target = target; // the line that moves
+    this.anchor = anchor; // the line it moves to meet
+    this.shifted = shifted; // the block that moves, carrying the target
+    this.observe = observe;
     this.variable = variable;
     this.media = window.matchMedia(media);
     this.onChange = onChange;
@@ -34,7 +36,6 @@ export class AlignToAnchor {
     this.themeObserver = new MutationObserver(this.schedule);
     this.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-    window.addEventListener("resize", this.schedule);
     this.media.addEventListener("change", this.schedule);
     document.fonts?.ready.then(() => this.resizeObserver && this.schedule());
 
@@ -46,7 +47,6 @@ export class AlignToAnchor {
     this.resizeObserver?.disconnect();
     this.themeObserver?.disconnect();
     this.resizeObserver = null;
-    window.removeEventListener("resize", this.schedule);
     this.media.removeEventListener("change", this.schedule);
   }
 
@@ -65,12 +65,17 @@ export class AlignToAnchor {
     } else {
       // The margin in use now: the one set here earlier, or the CSS fallback.
       const current = parseFloat(getComputedStyle(this.shifted).marginTop) || 0;
-      const gap = this._top(this.target) - this._top(this.anchor);
-      const next = Math.max(0, Math.round(current + gap));
-      style.setProperty(this.variable, `${next}px`);
+      const gap = this._middle(this.anchor) - this._middle(this.target);
+      style.setProperty(this.variable, `${Math.max(0, Math.round(current + gap))}px`);
     }
 
     if (style.getPropertyValue(this.variable) !== before) this.onChange?.();
+  }
+
+  /** The vertical middle of an element's (first) line, inside the container. */
+  _middle(el) {
+    const line = parseFloat(getComputedStyle(el).lineHeight) || el.offsetHeight;
+    return this._top(el) + line / 2;
   }
 
   /** An element's top inside the container, from layout (ignores transforms). */

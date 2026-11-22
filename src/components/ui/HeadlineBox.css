@@ -1,5 +1,5 @@
 /* ---------- a headline's detection box (HeadlineBox.jsx) ----------
-   Same look as the hero name's box (Hero.css .detect-box): a 1px accent frame
+   Same family as the hero's detection box (Hero.css .det-box): a 1px accent frame
    8px around the text, nearly square corners, a small mono label on top.
    Shown once: it draws in when the heading first scrolls into view, holds,
    then fades away; and only on the first page of a visit (html.boxes-seen,

@@ -23,11 +23,29 @@ export class ThemeToggle extends Component {
     super(props);
     this.state = { dark: false };
     this.toggle = this.toggle.bind(this);
+    this.sync = this.sync.bind(this);
+  }
+
+  // The theme lives on <html>, not in this button: there can be more than one
+  // toggle on a page (hero and footer), and each follows whichever was pressed.
+  componentDidMount() {
+    this.sync();
+    this.watcher = new MutationObserver(this.sync);
+    this.watcher.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+
+  componentWillUnmount() {
+    this.watcher?.disconnect();
+  }
+
+  sync() {
+    const dark = document.documentElement.dataset.theme === "dark";
+    if (dark !== this.state.dark) this.setState({ dark });
   }
 
   toggle() {
-    const dark = !this.state.dark;
     const root = document.documentElement;
+    const dark = root.dataset.theme !== "dark";
     const apply = () => {
       root.dataset.theme = dark ? "dark" : "light";
       document
@@ -45,7 +63,6 @@ export class ThemeToggle extends Component {
     } else {
       apply();
     }
-    this.setState({ dark });
   }
 
   render() {

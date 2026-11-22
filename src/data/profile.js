@@ -36,9 +36,37 @@ export const seo = {
   image: "/og-image.png",
 };
 
+// The hero's text (Hero.jsx). All lowercase on purpose. `headline` and
+// `subline` are lists of pieces: a plain string, or { text, label } for a
+// phrase the hero's detection box visits (in order, after the name).
+export const heroText = {
+  role: "machine learning engineer",
+  nameLabel: "ml_engineer 0.90",
+  headline: [
+    { text: "computer vision", label: "computer_vision 0.97" },
+    ", ",
+    { text: "llms/rag", label: "llm_rag 0.93" },
+    " and ",
+    { text: "mlops", label: "mlops 0.95" },
+    ". i build models you can deploy, measure and ",
+    { text: "trust", label: "production 0.90" },
+    ".",
+  ],
+  subline: [
+    "lately, computer vision on a ",
+    { text: "production line", label: "factory 0.94" },
+    ". i care more about how models behave in production than how they ",
+    { text: "train", label: "training 0.91" },
+    ".",
+  ],
+  // Read by screen readers instead of the status line's changing numbers.
+  statusText: "training run, loss 0.03",
+};
+
+// The info card on the right of the hero.
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
-  // `anchor`: on desktop the card moves so this row lines up with the hero's tagline.
+  // `anchor`: on desktop the hero's text lines up with this row.
   { label: "latest", value: "data science intern, STMicroelectronics.", anchor: true },
   { label: "stack", value: "Python, PyTorch, TensorFlow, OpenCV, Docker, MLflow." },
   { label: "status", value: "open to work.", status: true },

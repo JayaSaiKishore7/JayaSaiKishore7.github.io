@@ -3,7 +3,7 @@
 // build time. Every component stylesheet uses those variables, never raw values.
 //
 // Light is the default theme (every visit starts in it); dark is the
-// alternative the navbar toggle switches to.
+// alternative the theme toggle (hero status line, footer) switches to.
 export const theme = {
   colors: {
     // Black and orange: near-black ink on a light page (light theme) or X-ray
@@ -26,6 +26,8 @@ export const theme = {
       muted: "#8796A4",
       // Decorative only (bullets, scrollbar): too low contrast for text.
       mutedSoft: "#4A5B6C",
+      // Graphics only: the high ground of the hero's loss landscape.
+      neutral: "#5E7286",
       accent: "#FF8A3D",
       onAccent: "#0E1822",
       status: "#6fd88f",
@@ -47,6 +49,8 @@ export const theme = {
       muted: "#5A5A5A",
       // Decorative only, like dark's mutedSoft.
       mutedSoft: "#B5B5B0",
+      // Graphics only, like dark's neutral: a mid grey from the same family.
+      neutral: "#8A8A86",
       accent: "#A84300",
       onAccent: "#FFFFFF",
       // Graphics only (the status dot): below the 4.5:1 needed for text.
@@ -81,8 +85,7 @@ export const theme = {
   },
 
   effects: {
-    // Strength of the hero's 3D network background (NeuralNet), light and dark.
-    // Text contrast behind it is protected by NeuralNet's calm masks (measured).
+    // Strength of the 3D network on the loading screen (NeuralNet), light and dark.
     netOpacity: "1",
   },
 

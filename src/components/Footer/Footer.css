@@ -107,6 +107,12 @@
   font-size: 0.75rem;
 }
 
+.footer-bar-end {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .footer-links {
   display: flex;
   flex-wrap: wrap;

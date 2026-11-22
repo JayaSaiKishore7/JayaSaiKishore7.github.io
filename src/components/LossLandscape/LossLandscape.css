@@ -1,0 +1,15 @@
+/* Fills its positioned parent, behind the content. Before the first frame
+   (and without JavaScript) it is simply empty: the theme background shows. */
+.loss {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loss-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

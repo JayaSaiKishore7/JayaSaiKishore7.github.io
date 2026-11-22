@@ -1,88 +1,59 @@
-/* The bar floats above the page; only the pill itself catches clicks. */
+/* The menu bar: sticky, a see-through strip of the page background with a
+   faint accent line under it. --nav-height is also used by the hero. */
+:root {
+  --nav-height: 64px;
+}
+
+@media (max-width: 999.98px) {
+  :root {
+    --nav-height: 56px;
+  }
+}
+
 .nav {
-  position: fixed;
-  top: 14px;
-  right: 0;
-  left: 0;
+  position: sticky;
+  top: 0;
   z-index: 50;
-  display: flex;
-  justify-content: center;
-  padding-inline: 14px;
-  pointer-events: none;
-  transition: transform var(--dur-move) var(--ease);
-}
-
-/* Hiding is leaving: the exit curve. Coming back uses the soft --ease above. */
-.nav.is-hidden {
-  /* Far enough above the top that its soft shadow (about 40px) is gone too. */
-  transform: translateY(calc(-100% - 60px));
-  transition-timing-function: var(--ease-exit);
-}
-
-.nav-pill {
-  position: relative;
-  z-index: 2;
-  max-width: 100%;
-  padding: 6px 6px 6px 18px;
+  height: var(--nav-height);
+  padding: 0 48px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface) 85%, transparent);
-  box-shadow: var(--shadow-nav);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  pointer-events: auto;
-  transition:
-    background-color var(--dur-colour) var(--ease),
-    border-color var(--dur-colour) var(--ease);
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.nav-brand {
+.nav-name {
   flex-shrink: 0;
   color: var(--text);
-  font-size: var(--size-ui);
+  font-family: var(--font-display);
+  font-size: 18px;
   font-weight: var(--weight-strong);
-  letter-spacing: var(--tracking-title);
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 
-.nav-brand span {
-  color: var(--accent);
-}
-
-/* ---------- section links and the gliding marker ---------- */
+/* ---------- section links (desktop) ---------- */
 
 .nav-links {
-  position: relative;
   display: flex;
+  align-self: stretch;
+  gap: 28px;
   font-size: var(--size-ui);
 }
 
-.nav-marker {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-pill);
-  background: var(--surface-soft);
-  clip-path: inset(0 100% 0 0 round 999px);
-  opacity: 0;
-  transition:
-    clip-path var(--dur-move) var(--ease),
-    opacity var(--dur-colour) var(--ease);
-}
-
-.nav-marker.is-shown {
-  opacity: 1;
-}
-
+/* Full bar height, so the active underline sits on the bar's bottom edge. */
 .nav-links a {
-  position: relative; /* above the marker */
-  padding: 7px 13px;
-  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
   color: var(--muted);
   text-decoration: none;
-  transition: color var(--dur-colour) var(--ease);
+  transition:
+    color var(--dur-colour) var(--ease),
+    box-shadow var(--dur-colour) var(--ease);
 }
 
 .nav-links a:hover,
@@ -90,128 +61,107 @@
   color: var(--text);
 }
 
-.nav-time {
-  flex-shrink: 0;
-  color: var(--muted);
-  font-size: var(--size-small);
-  white-space: nowrap;
+.nav-links a.is-active {
+  box-shadow: inset 0 -2px 0 var(--accent);
 }
 
-/* No tabular-nums on the clock: in this font it also widens ":" and ",". */
-.nav-time span {
-  color: var(--text);
-}
+/* ---------- phones: menu button and panel ---------- */
 
-.nav-menu-button {
+.nav-menu-button,
+.nav-panel {
   display: none;
 }
 
-/* ---------- phone menu sheet ---------- */
-
-.nav-sheet {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  padding: 110px 28px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: var(--bg);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  /* Closing: the exit curve (the open state below uses the soft --ease). */
-  transition:
-    opacity var(--dur-move) var(--ease-exit),
-    visibility 0s linear var(--dur-move);
-}
-
-.nav.is-menu-open .nav-sheet {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition: opacity var(--dur-move) var(--ease);
-}
-
-.nav-sheet li {
-  overflow: hidden;
-}
-
-.nav-sheet a {
-  display: inline-block;
-  padding: 6px 0;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 11vw, 3.6rem);
-  letter-spacing: var(--tracking-heading);
-  line-height: 1.1;
-  text-decoration: none;
-  transform: translateY(100%);
-  transition: transform var(--dur-move) var(--ease-exit);
-}
-
-/* Links rise in one after another when the sheet opens. */
-.nav.is-menu-open .nav-sheet a {
-  transform: none;
-  transition-timing-function: var(--ease);
-  transition-delay: calc(80ms + var(--i, 0) * 60ms);
-}
-
-.nav-sheet a:hover {
-  color: var(--accent);
-}
-
-.nav-sheet-close {
-  align-self: flex-start;
-  padding: 8px 16px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  font-size: var(--size-ui);
-  cursor: pointer;
-  transition: scale var(--dur-quick) var(--ease);
-}
-
-/* A soft press on the phone menu's buttons. */
-.nav-sheet-close:active,
-.nav-menu-button:active {
-  scale: 0.97;
-}
-
-/* ---------- phones and small tablets ---------- */
-
-@media (max-width: 899.98px) {
-  .nav-pill {
-    width: 100%;
-    padding-left: 16px;
-    justify-content: space-between;
-    gap: 10px;
+@media (max-width: 999.98px) {
+  .nav {
+    padding: 0 16px;
   }
 
-  .nav-links,
-  .nav-time {
+  .nav-name {
+    font-size: 16px;
+  }
+
+  .nav-links {
     display: none;
-  }
-
-  .nav-brand {
-    margin-right: auto;
   }
 
   .nav-menu-button {
-    display: block;
-    padding: 7px 14px;
-    border: 1px solid var(--border-strong);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
     border-radius: var(--radius-pill);
-    background: var(--text);
-    color: var(--bg);
-    font-size: var(--size-ui);
+    background: transparent;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
     cursor: pointer;
-    transition: scale var(--dur-quick) var(--ease);
+    transition:
+      scale var(--dur-quick) var(--ease),
+      border-color var(--dur-colour) var(--ease);
   }
-}
 
-@media (min-width: 900px) {
-  .nav-sheet {
-    display: none;
+  .nav-menu-button:hover {
+    border-color: var(--accent);
+  }
+
+  .nav-menu-button:active {
+    scale: 0.94; /* a soft press */
+  }
+
+  /* Full height under the bar. Fades in; closing uses the exit curve. */
+  .nav-panel {
+    position: fixed;
+    top: var(--nav-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 49; /* just under the bar */
+    padding: 28px 16px 40px;
+    display: block;
+    overflow-y: auto;
+    background: color-mix(in srgb, var(--bg) 97%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-move) var(--ease-exit),
+      visibility 0s linear var(--dur-move);
+  }
+
+  .nav-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--dur-move) var(--ease);
+  }
+
+  .nav-panel-prompt {
+    margin-bottom: 14px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .nav-panel li + li {
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-panel a {
+    display: block;
+    padding: 14px 0;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: var(--weight-strong);
+    letter-spacing: var(--tracking-title);
+    line-height: 1.2;
+    text-decoration: none;
+    transition: color var(--dur-colour) var(--ease);
+  }
+
+  .nav-panel a:hover,
+  .nav-panel a[aria-current] {
+    color: var(--accent);
   }
 }

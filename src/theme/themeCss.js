@@ -5,7 +5,7 @@
  * stylesheet the browser loads.
  *
  * Themes: light is the default and every visit starts in it (also without
- * JavaScript). The navbar toggle switches to dark by setting data-theme="dark"
+ * JavaScript). The theme toggle switches to dark by setting data-theme="dark"
  * on <html>, for the rest of that visit.
  */
 const kebab = (name) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
