@@ -119,7 +119,7 @@ export class Hero extends Component {
                 the masks (a space inside an inline-block would collapse), and the
                 aria-label gives screen readers the plain name. */}
             <h1 className="hero-name" aria-label={profile.name.toLowerCase()}>
-              <span className="det" data-label={heroText.nameLabel}>
+              <span className="det" data-label={heroText.nameLabel} data-tag="below">
                 {words.map((word, i) => (
                   <span key={word}>
                     <span className="hero-word" aria-hidden="true">

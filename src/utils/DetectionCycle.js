@@ -2,7 +2,8 @@
  * One "detection" box that hops from phrase to phrase, like an object
  * detector's output moving over the text. The phrases are the container's
  * elements matching `selector`, visited in document order and looping
- * forever; each one's `data-label` shows in the tag on the box's top-left.
+ * forever; each one's `data-label` shows in the tag on the box's top-left
+ * (under its bottom-left for a phrase with data-tag="below").
  * The glide itself is a CSS transition (.det-box in Hero.css).
  *
  * `still: true` (reduced motion) parks the box on the first phrase instead.
@@ -95,6 +96,8 @@ export class DetectionCycle {
     box.style.width = `${rect.width + PAD_X * 2}px`;
     box.style.height = `${rect.height + PAD_Y * 2}px`;
     this.tag.textContent = el.dataset.label ?? "";
+    // data-tag="below" on a phrase puts the tag under the box instead of above.
+    this.box.dataset.tag = el.dataset.tag ?? "above";
     if (!glide) {
       void box.offsetWidth; // apply the jump before turning the glide back on
       box.style.transition = "";

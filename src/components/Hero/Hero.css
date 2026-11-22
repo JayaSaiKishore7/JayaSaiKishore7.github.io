@@ -80,9 +80,11 @@
   line-height: 1.5;
 }
 
-/* The top margin leaves room for the detection tag above the name. */
+/* Close under the role line: just enough that the detection box's top edge
+   clears it. (The name's tag sits under its box, data-tag="below", so it
+   never covers the role line.) */
 .hero-name {
-  margin: 22px 0 0 -0.04em;
+  margin: 10px 0 0 -0.04em;
   color: var(--text);
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 7vw, 5rem);
@@ -308,6 +310,14 @@
   font-weight: 500;
   line-height: 1.2;
   white-space: nowrap;
+}
+
+/* On the name: the tag under the box's bottom-left corner (in the gap before
+   the headline), clear of the role line just above. */
+.det-box[data-tag="below"] .det-tag {
+  top: 100%;
+  bottom: auto;
+  border-radius: 0 0 3px 3px;
 }
 
 /* ---------- phones and tablets ---------- */

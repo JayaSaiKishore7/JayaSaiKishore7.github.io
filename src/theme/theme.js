@@ -106,7 +106,7 @@ export const theme = {
   },
 
   spacing: {
-    section: "clamp(24px, 3vw, 40px)", // top and bottom padding of every section (kept tight)
+    section: "0px", // top and bottom padding of every section: none, sections follow straight on
     gutter: "24px",
   },
 
