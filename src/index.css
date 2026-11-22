@@ -105,6 +105,16 @@ button {
   padding-bottom: var(--space-gap);
 }
 
+/* A thin line at the top of a section: the divider between it and the one
+   before. As wide as the content (the container), with room under it. */
+.section--ruled > .container::before {
+  display: block;
+  height: 1px;
+  margin-bottom: clamp(14px, 2vw, 24px);
+  background: var(--border);
+  content: "";
+}
+
 /* 12-column grid; children place themselves with grid-column. */
 .grid-12 {
   display: grid;

@@ -1,10 +1,10 @@
 /* ---------- contact: the "inference terminal" card (ContactCard.jsx) ----------
    The last thing on every page (it is the page footer). In the theme's own
    colours: the surface with a faint accent glow from the top-left corner. */
+/* Space before the card (above its divider line), the same gap the other
+   sections leave after themselves. */
 .contact {
-  /* No space between sections, but the card (which has no heading above it)
-     must not touch the section before it, like education's arrow buttons. */
-  padding-top: 12px;
+  padding-top: var(--space-gap);
 }
 
 .contact-card {

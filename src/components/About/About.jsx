@@ -14,7 +14,7 @@ import "./About.css";
 export class About extends Component {
   render() {
     return (
-      <section id="about" className="section section--gap-after">
+      <section id="about" className="section section--ruled section--gap-after">
         <span id="hello" className="about-alias" aria-hidden="true" />
         <div className="container">
           <Reveal as="div">

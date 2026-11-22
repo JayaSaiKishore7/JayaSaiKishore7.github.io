@@ -49,7 +49,7 @@ export class Resume extends Component {
     const { open } = this.state;
 
     return (
-      <section id="experience" className="section section--gap-after">
+      <section id="experience" className="section section--ruled section--gap-after">
         <div className="container">
           <Reveal as="div">
             <SectionHeader

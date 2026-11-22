@@ -121,7 +121,7 @@ export class Education extends Component {
     const atEnd = active === LAST;
 
     return (
-      <section id="education" className="section">
+      <section id="education" className="section section--ruled">
         <div className="container">
           <Reveal as="div">
             {/* No separate title: the word "education" is the section's heading. */}
