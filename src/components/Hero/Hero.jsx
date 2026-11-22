@@ -31,7 +31,7 @@ function Phrases({ pieces }) {
  * name, headline, subline, buttons) and the info card.
  *
  * Desktop: the text's first line ("machine learning engineer") sits level
- * with the card's "latest" row (AlignToAnchor sets --hero-text-top). One
+ * with the card's first row, "focus" (AlignToAnchor sets --hero-text-top). One
  * detection box hops between the labelled phrases (DetectionCycle).
  *
  * Visible immediately: the reveal is a CSS animation that starts with the
@@ -61,8 +61,8 @@ export class Hero extends Component {
       observe: [hero.querySelector(".hero-main")],
     });
 
-    // Desktop: move the text down until its first line is level with the
-    // card's "latest" row. The detection box follows.
+    // Desktop: move the text until its first line is level with the card's
+    // anchor row ("focus"). The detection box follows.
     const card = hero.querySelector(".hero-card");
     this.aligner = new AlignToAnchor({
       container: hero,

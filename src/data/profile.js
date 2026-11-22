@@ -65,9 +65,9 @@ export const heroText = {
 
 // The info card on the right of the hero.
 export const heroInfo = [
-  { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
-  // `anchor`: on desktop the hero's text lines up with this row.
-  { label: "latest", value: "data science intern, STMicroelectronics.", anchor: true },
+  // `anchor`: on desktop the hero's text starts level with this row.
+  { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps.", anchor: true },
+  { label: "latest", value: "data science intern, STMicroelectronics." },
   { label: "stack", value: "Python, PyTorch, TensorFlow, OpenCV, Docker, MLflow." },
   { label: "status", value: "open to work.", status: true },
   // `href` renders the value as a link; `download` makes the browser save the file.

@@ -60,16 +60,16 @@
 }
 
 /* ---------- text ----------
-   Desktop: the first line (the role) is moved level with the card's "latest"
-   row. AlignToAnchor (Hero.jsx) sets the exact --hero-text-top; before that
-   (prerender, no JavaScript) the fallback puts it within a few pixels:
-   the row's middle sits about 98px below the card's top. */
+   Desktop: the first line (the role) is moved level with the card's first
+   row, "focus" (the row marked `anchor` in profile.js). AlignToAnchor
+   (Hero.jsx) sets the exact --hero-text-top; before that (prerender, no
+   JavaScript) the fallback puts it within a few pixels. */
 
 .hero-main {
   position: relative;
   z-index: 2;
   width: min(640px, 100% - var(--hero-card-w) - 64px);
-  margin-top: var(--hero-text-top, calc(var(--hero-card-top) + 98px));
+  margin-top: var(--hero-text-top, calc(var(--hero-card-top) + 24px));
 }
 
 .hero-role {
