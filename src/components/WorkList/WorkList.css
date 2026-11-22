@@ -177,8 +177,8 @@
 }
 
 /* ---------- the file tree ----------
-   ├── ▸ pipeline/
-   │   [face] → [OpenCV crop] → … → [reviews]   (when open)
+   ├── ▾ pipeline/
+   │   [face] → [OpenCV crop] → … → [reviews]   (always shown)
    ├── case_study/ →
    └── github ↗                                (branches are decoration) */
 
@@ -195,10 +195,9 @@
   white-space: pre;
 }
 
-/* Links and the pipeline/ button: the hover background grows around the
-   text (padding cancelled by the negative margin), so nothing moves. */
-.work-tree a,
-.work-pipeline {
+/* Links: the hover background grows around the text (padding cancelled by
+   the negative margin), so nothing moves. */
+.work-tree a {
   margin: 0 -4px;
   padding: 1px 4px;
   border-radius: 4px;
@@ -209,21 +208,13 @@
     background-color var(--dur-colour) var(--ease);
 }
 
+/* pipeline/: a label (its steps are always shown under it). */
 .work-pipeline {
-  border: 0;
-  background: transparent;
-  font: inherit;
-  cursor: pointer;
+  color: var(--text);
 }
 
 .work-chevron {
-  display: inline-block;
   color: var(--accent);
-  transition: transform 200ms var(--ease);
-}
-
-.work-pipeline[aria-expanded="true"] .work-chevron {
-  transform: rotate(90deg);
 }
 
 .work-arrow {
@@ -232,9 +223,7 @@
 }
 
 .work-tree a:hover,
-.work-tree a:focus-visible,
-.work-pipeline:hover,
-.work-pipeline:focus-visible {
+.work-tree a:focus-visible {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--accent);
 }
@@ -244,8 +233,7 @@
   color: var(--accent);
 }
 
-.work-row a:focus-visible,
-.work-pipeline:focus-visible {
+.work-row a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
@@ -254,10 +242,6 @@
 .work-steps {
   display: flex;
   align-items: baseline;
-}
-
-.work-steps[hidden] {
-  display: none;
 }
 
 .work-step-list {
@@ -365,8 +349,7 @@
 /* Reduced motion: the colours still change, but nothing moves or fades. */
 @media (prefers-reduced-motion: reduce) {
   .work-row,
-  .work-frame,
-  .work-chevron {
+  .work-frame {
     transition: none;
   }
 

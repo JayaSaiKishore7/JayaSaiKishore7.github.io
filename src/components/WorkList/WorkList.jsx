@@ -33,8 +33,8 @@ function rowLinks(project) {
  * The home page's work section: filter chips, then one card per project in
  * the order of src/data/projects.js. Each card: domain · where it runs, the
  * title (links to its case study), a one-line description with no metrics,
- * up to three tech tags and a file tree (pipeline/ opens the project's steps
- * from data to deployment; then its links). Beside it, the project's real
+ * up to three tech tags and a file tree (pipeline/ with the project's steps
+ * from data to deployment, always shown; then its links). Beside it, the project's real
  * picture in a window frame: its screenshot, or its code fragment
  * (ProjectThumb). Desktop: text left, picture right. Phones: picture first.
  *
@@ -43,7 +43,6 @@ function rowLinks(project) {
  *
  * State
  *   filter    the chosen chip ("all" by default; kept in the URL as #work-<key>)
- *   open      { [project id]: true } for the rows whose pipeline/ is open
  *   now       null until mounted (the prerendered page trusts the build's
  *             check), then the time the 7-day window is measured from
  *   announce  the aria-live line after a filter change ("2 projects shown")
@@ -51,7 +50,7 @@ function rowLinks(project) {
 export class WorkList extends Component {
   constructor(props) {
     super(props);
-    this.state = { filter: "all", open: {}, now: null, announce: "", filtered: false };
+    this.state = { filter: "all", now: null, announce: "", filtered: false };
     this.readHash = this.readHash.bind(this);
   }
 
@@ -92,10 +91,6 @@ export class WorkList extends Component {
     }
   }
 
-  togglePipeline(id) {
-    this.setState(({ open }) => ({ open: { ...open, [id]: !open[id] } }));
-  }
-
   isOnline(id) {
     const { now } = this.state;
     return now === null ? Boolean(demoStatus[id]?.ok) : demoOnline(id, now);
@@ -126,8 +121,6 @@ export class WorkList extends Component {
 
   renderTree(project) {
     const links = rowLinks(project);
-    const open = Boolean(this.state.open[project.id]);
-    const stepsId = `pipeline-${project.id}`;
     const last = links.length - 1;
 
     return (
@@ -136,20 +129,14 @@ export class WorkList extends Component {
           <span className="work-branch" aria-hidden="true">
             {"├── "}
           </span>
-          <button
-            type="button"
-            className="work-pipeline"
-            aria-expanded={open}
-            aria-controls={stepsId}
-            onClick={() => this.togglePipeline(project.id)}
-          >
+          <span className="work-pipeline">
             <span className="work-chevron" aria-hidden="true">
-              ▸
+              ▾
             </span>{" "}
             pipeline/
-          </button>
-          {/* The steps, from data to deployment. In the HTML, hidden until opened. */}
-          <div className="work-steps" id={stepsId} hidden={!open}>
+          </span>
+          {/* The steps, from data to deployment: always shown. */}
+          <div className="work-steps">
             <span className="work-branch" aria-hidden="true">
               {"│   "}
             </span>
