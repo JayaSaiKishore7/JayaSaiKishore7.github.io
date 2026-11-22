@@ -10,6 +10,7 @@ export class DetectionBoxes {
     this.startDelay = startDelay;
     this.gap = gap;
     this.timers = [];
+    this.live = new Map(); // box element → its target, while it is on screen
   }
 
   start() {
@@ -26,11 +27,37 @@ export class DetectionBoxes {
     this.timers.forEach(clearTimeout);
     this.timers = [];
     this.container?.querySelectorAll(".detect-box").forEach((box) => box.remove());
+    this.live.clear();
   }
 
-  _drawBox({ selector, label, tight }) {
+  /** Move any box still on screen back onto its element (after the layout shifts). */
+  reposition() {
+    this.live.forEach((target, box) => this._place(box, target));
+  }
+
+  _drawBox(target) {
+    const box = document.createElement("div");
+    box.className = "detect-box";
+    box.setAttribute("aria-hidden", "true");
+    if (!this._place(box, target)) return;
+
+    const tag = document.createElement("span");
+    tag.className = "detect-label";
+    tag.textContent = target.label;
+    box.appendChild(tag);
+
+    box.addEventListener("animationend", () => {
+      box.remove();
+      this.live.delete(box);
+    });
+    this.live.set(box, target);
+    this.container.appendChild(box);
+  }
+
+  /** Size and position a box around its element; false if the element is gone. */
+  _place(box, { selector, tight }) {
     const el = this.container.querySelector(selector);
-    if (!el) return;
+    if (!el) return false;
 
     let rect;
     if (tight) {
@@ -44,20 +71,10 @@ export class DetectionBoxes {
     const home = this.container.getBoundingClientRect();
     const pad = 8;
 
-    const box = document.createElement("div");
-    box.className = "detect-box";
-    box.setAttribute("aria-hidden", "true");
     box.style.left = `${rect.left - home.left - pad}px`;
     box.style.top = `${rect.top - home.top - pad}px`;
     box.style.width = `${rect.width + pad * 2}px`;
     box.style.height = `${rect.height + pad * 2}px`;
-
-    const tag = document.createElement("span");
-    tag.className = "detect-label";
-    tag.textContent = label;
-    box.appendChild(tag);
-
-    box.addEventListener("animationend", () => box.remove());
-    this.container.appendChild(box);
+    return true;
   }
 }

@@ -1,10 +1,14 @@
 import { Component, createRef } from "react";
 import { profile, heroInfo } from "../../data/profile";
+import { AlignToAnchor } from "../../utils/AlignToAnchor";
 import { Clock } from "../../utils/Clock";
 import { DetectionBoxes } from "../../utils/DetectionBoxes";
 import { Magnetic } from "../../utils/Magnetic";
 import { NeuralNet } from "./NeuralNet";
 import "./Hero.css";
+
+// Two columns side by side; must match the desktop media query in Hero.css.
+const HERO_DESKTOP = "(min-width: 1000.02px)";
 
 /**
  * The opening section: location and time, the name, the tagline, two buttons
@@ -38,6 +42,20 @@ export class Hero extends Component {
         { selector: ".hero-card", label: "info 0.95" },
       ],
     });
+    // Desktop: push the card down until its "latest" row sits level with the
+    // tagline (the CSS uses --hero-card-shift). Boxes on screen follow it.
+    const hero = this.heroRef.current;
+    this.aligner = new AlignToAnchor({
+      container: hero,
+      target: hero.querySelector(".hero-tagline"),
+      anchor: hero.querySelector("[data-hero-anchor]"),
+      shifted: hero.querySelector(".hero-card"),
+      variable: "--hero-card-shift",
+      media: HERO_DESKTOP,
+      onChange: () => this.boxes.reposition(),
+    });
+    this.aligner.start();
+
     // While the loading screen shows, wait for it: the boxes then start their
     // usual countdown when the hero becomes visible.
     this.startBoxes = () => this.boxes.start();
@@ -52,6 +70,7 @@ export class Hero extends Component {
     this.clock?.stop();
     this.magnets?.forEach((magnet) => magnet.stop());
     this.boxes?.stop();
+    this.aligner?.stop();
     window.removeEventListener("loader:done", this.startBoxes);
   }
 
@@ -115,7 +134,7 @@ export class Hero extends Component {
             <dl>
               {heroInfo.map((row) => (
                 <div className="hero-row" key={row.label}>
-                  <dt>{row.label}</dt>
+                  <dt data-hero-anchor={row.anchor ? "true" : undefined}>{row.label}</dt>
                   <dd>
                     {row.status ? <span className="hero-status-dot" aria-hidden="true" /> : null}
                     {row.href ? (

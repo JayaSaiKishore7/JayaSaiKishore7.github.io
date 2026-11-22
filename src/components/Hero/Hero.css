@@ -24,6 +24,28 @@
   align-self: center;
 }
 
+/* Desktop: both columns start at the top, and the card is pushed down until
+   its "latest" row is level with the tagline. AlignToAnchor (Hero.jsx)
+   measures the exact shift and sets --hero-card-shift on .hero; the fallback
+   here (tagline offset minus the row's offset in the card, about 82–102px at
+   1100–1440px) is what the prerendered page uses before that. */
+@media (min-width: 1000.02px) {
+  /* The shifted card now reaches the hero's bottom: more room under it, so it
+     clears the network's pause button (NeuralNet.css, ~36px from the bottom). */
+  .hero {
+    padding-bottom: 52px;
+  }
+
+  .hero-main {
+    align-self: start;
+  }
+
+  .hero-card {
+    align-self: start;
+    margin-top: var(--hero-card-shift, calc(var(--size-name) * 1.03 - 13px));
+  }
+}
+
 /* ---------- reveal ----------
    CSS animations that start with the first paint, so the hero is never
    waiting on JavaScript. Only while html.js is set; without JavaScript, or once

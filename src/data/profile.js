@@ -38,7 +38,8 @@ export const seo = {
 
 export const heroInfo = [
   { label: "focus", value: "ML, DL, computer vision, LLMs/RAG, MLOps." },
-  { label: "latest", value: "data science intern, STMicroelectronics." },
+  // `anchor`: on desktop the card moves so this row lines up with the hero's tagline.
+  { label: "latest", value: "data science intern, STMicroelectronics.", anchor: true },
   { label: "stack", value: "Python, PyTorch, TensorFlow, OpenCV, Docker, MLflow." },
   { label: "status", value: "open to work.", status: true },
   // `href` renders the value as a link; `download` makes the browser save the file.
