@@ -1,5 +1,4 @@
-import { createRef, PureComponent } from "react";
-import { MotionBudget } from "../../utils/MotionBudget";
+import { PureComponent } from "react";
 import { Chip } from "../ui/Chip";
 import "./SkillCards.css";
 
@@ -14,26 +13,11 @@ const DRIFT_STAGGER_S = 1.7;
  * track by -50% (one set) loops without a jump; the copy is aria-hidden, so
  * screen readers hear every skill once.
  *
- * Motion budget (MotionBudget): it moves for its first 6 s in view, then only
- * while hovered or focused (`moving`); the rest of the time it rests where it
- * is. The button pauses it altogether (WCAG 2.2.2). Without JavaScript it
- * simply stands still. Reduced motion: one still set, wrapping.
+ * It always moves, hovered or not; only the button pauses it (WCAG 2.2.2).
+ * Reduced motion: one still set, wrapping.
  */
 export class SkillCards extends PureComponent {
-  state = { paused: false, moving: false };
-  rootRef = createRef();
-
-  componentDidMount() {
-    this.budget = new MotionBudget({ element: this.rootRef.current, onChange: this.handleBudget });
-    this.budget.start();
-  }
-
-  /** From the motion budget: whether the belt may move right now. */
-  handleBudget = (moving) => this.setState({ moving });
-
-  componentWillUnmount() {
-    this.budget?.stop();
-  }
+  state = { paused: false };
 
   toggle = () => this.setState(({ paused }) => ({ paused: !paused }));
 
@@ -58,10 +42,9 @@ export class SkillCards extends PureComponent {
   }
 
   render() {
-    const { paused, moving } = this.state;
-    const classes = ["skill-cards", moving && !paused ? "is-moving" : "", paused ? "is-paused" : ""];
+    const { paused } = this.state;
     return (
-      <section ref={this.rootRef} className={classes.filter(Boolean).join(" ")} aria-label="skills">
+      <section className={paused ? "skill-cards is-paused" : "skill-cards"} aria-label="skills">
         <div className="skill-cards-viewport">
           <div className="skill-cards-track">
             {this.renderSet(false)}
