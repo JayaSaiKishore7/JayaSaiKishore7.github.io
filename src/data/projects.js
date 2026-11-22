@@ -1,5 +1,5 @@
-// Projects, in display order. Each one appears in the home page's split view
-// (ProjectSplit) and gets a case study page (/work/<id>/, see src/routes.js)
+// Projects, in display order. Each one is a row in the home page's work list
+// (WorkList) and gets a case study page (/work/<id>/, see src/routes.js)
 // built from `notes`, `proof` and `aside`.
 //
 // Every case study answers four points:
@@ -9,7 +9,9 @@
 //   proof           the headline result (also the page's meta description)
 //   notes.tested    what testing showed: surprises, failures, what changed
 //
-// Fields: what = the one-line description; tech = tools shown as tags;
+// Fields: domain = the small mono line above the title in the work list;
+// listLine = the work list's one-line description (no metrics or percentages);
+// what = the one-line description on the case study page; tech = tools shown as tags;
 // thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
 // from `frag`; demo = live demo URL, if any; huggingface = the project's page on
 // Hugging Face (a Space, model or dataset), if any; team = built as a team.
@@ -18,6 +20,8 @@
 export const projects = [
   {
     id: "air-quality",
+    domain: "forecasting · mlops",
+    listLine: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
     title: "Air Quality Forecasting Platform",
     what: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
     tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face", "MLflow", "Docker", "Streamlit", "LSTM", "GRU"],
@@ -90,6 +94,8 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
   },
   {
     id: "emotion-rag",
+    domain: "computer vision · rag",
+    listLine: "detects the emotion on a face, then retrieves the closest matching reviews and scores their sentiment.",
     title: "Emotion-Aware Insight Generator",
     what: "reads the emotion on a face, then finds the customer reviews that explain it and scores their sentiment.",
     tech: ["ResNet-50", "OpenCV", "FAISS", "LangChain", "RoBERTa", "Streamlit"],
@@ -121,6 +127,8 @@ answer = llm.invoke(prompt)`,
   },
   {
     id: "brain-tumor",
+    domain: "computer vision",
+    listLine: "a CNN that runs in your browser, so scans never leave your device.",
     title: "Brain Tumor MRI Classifier",
     what: "97.53% test accuracy, after augmentation first made it worse. it runs in your browser, so scans never leave your device.",
     tech: ["TensorFlow", "Keras", "ONNX Runtime Web", "Flask", "Playwright", "Hugging Face"],
@@ -152,6 +160,8 @@ ww += w;`,
   },
   {
     id: "rag-pdf",
+    domain: "llms · rag",
+    listLine: "answers questions about an uploaded PDF from the passages it retrieves, not from memory.",
     title: "PDF Question Answering with RAG",
     what: "answers questions about an uploaded PDF from the passages it retrieves, not from memory.",
     tech: ["LangChain", "ChromaDB", "MiniLM", "Gemini", "Flask"],
@@ -181,6 +191,8 @@ results = vector_store.similarity_search(query, k=3)`,
   },
   {
     id: "electricity-forecast",
+    domain: "forecasting",
+    listLine: "forecasts a full day of 15-minute load (96 steps), and rebuilds a research algorithm as an R package.",
     title: "Electricity Load Forecasting (Time Series)",
     what: "forecasts a full day of 15-minute load (96 steps), and rebuilds a research algorithm as an R package.",
     tech: ["scikit-learn", "XGBoost", "SARIMA", "LSTM", "R"],
@@ -209,6 +221,8 @@ sum(weights * model$y[idx])`,
   },
   {
     id: "diabetes",
+    domain: "classic ml",
+    listLine: "risk prediction with a web form to act on it.",
     team: true,
     title: "Machine Learning for Diabetes Risk Prediction",
     what: "96% accuracy, 0.993 AUC, and a web form to act on it.",
