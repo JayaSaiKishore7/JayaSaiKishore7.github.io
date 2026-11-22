@@ -113,8 +113,6 @@ export class ContactCard extends PureComponent {
     return (
       <footer id="contact" className="section contact">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
-
           <Reveal as="div">
             <div className="contact-card" ref={this.setCardRef}>
               {/* The run: its lines and exit line on the left; the loss curve with

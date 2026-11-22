@@ -51,8 +51,6 @@ export class Resume extends Component {
     return (
       <section id="experience" className="section">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
-
           <Reveal as="div">
             <SectionHeader
               id="experience"

@@ -122,12 +122,6 @@ button {
   font-weight: var(--weight-strong);
 }
 
-.section-rule {
-  height: 1px;
-  margin-bottom: clamp(14px, 2vw, 24px);
-  background: var(--border);
-}
-
 /* ---------- scroll reveal ----------
    Visible by default; hidden only while the app runs (html.js, see index.html)
    and the element hasn't scrolled into view. Staggered by --i: a short rise

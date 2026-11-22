@@ -10,8 +10,6 @@ export class Projects extends Component {
     return (
       <section id="work" className="section">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
-
           <Reveal as="div">
             <SectionHeader id="work" title="models that made it out of the notebook." />
           </Reveal>

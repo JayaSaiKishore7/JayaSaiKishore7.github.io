@@ -2,6 +2,9 @@
    The last thing on every page (it is the page footer). In the theme's own
    colours: the surface with a faint accent glow from the top-left corner. */
 .contact {
+  /* No space between sections, but the card (which has no heading above it)
+     must not touch the section before it, like education's arrow buttons. */
+  padding-top: 12px;
   padding-bottom: clamp(16px, 3vw, 32px);
 }
 

@@ -17,8 +17,6 @@ export class About extends Component {
       <section id="about" className="section">
         <span id="hello" className="about-alias" aria-hidden="true" />
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
-
           <Reveal as="div">
             <SectionHeader id="about" title={aboutInfo.statement} />
           </Reveal>

@@ -123,8 +123,6 @@ export class Education extends Component {
     return (
       <section id="education" className="section">
         <div className="container">
-          <Reveal as="div" className="section-rule" aria-hidden="true" />
-
           <Reveal as="div">
             {/* No separate title: the word "education" is the section's heading. */}
             <SectionHeader id="education" />
