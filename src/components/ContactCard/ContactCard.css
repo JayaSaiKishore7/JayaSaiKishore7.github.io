@@ -111,6 +111,22 @@
   transition: opacity var(--dur-reveal) var(--ease);
 }
 
+/* Wide enough: the loss curve and its numbers move to the top-right corner,
+   level with the run lines (out of the flow, so the left side keeps its
+   height and nothing else moves). */
+@media (min-width: 760px) {
+  .contact-top {
+    position: relative;
+  }
+
+  .contact-top .log-run {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    margin-top: 0;
+  }
+}
+
 /* While the two lines above type: hidden, but still taking its space,
    so nothing below moves when it appears. */
 .contact-log.is-waiting {

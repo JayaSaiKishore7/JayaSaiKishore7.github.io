@@ -24,9 +24,9 @@ const LINES = contactInfo.terminal;
 /**
  * The contact section (#contact) and the page's footer, on every page: an
  * "inference terminal" card in the theme's colours. It opens with the run
- * ("$ python contact.py" → "match found") and its training log right after
- * (exit line, loss curve: TrainingLog), then the contact details, and ends
- * with the © line.
+ * ("$ python contact.py" → "match found") and its training log (TrainingLog):
+ * the exit line under the run lines, the loss curve with epoch and loss in
+ * the top-right corner. Then the contact details, and the © line.
  *
  * The two opening lines are typed once when the card scrolls into view;
  * everything real (intro, buttons) is in the
@@ -120,14 +120,18 @@ export class ContactCard extends PureComponent {
 
           <Reveal as="div">
             <div className="contact-card" ref={this.setCardRef}>
-              <div className="contact-lines" aria-hidden="true">
-                {LINES.map((line, i) => this.renderLine(line, i))}
-              </div>
+              {/* The run: its lines and exit line on the left; the loss curve with
+                  epoch, loss and tagline on the right (stacked on narrow screens). */}
+              <div className="contact-top">
+                <div className="contact-lines" aria-hidden="true">
+                  {LINES.map((line, i) => this.renderLine(line, i))}
+                </div>
 
-              {/* The run's result: exit line, loss curve, epoch and loss. Shown in full
-                  unless the lines above are typing (typed set, not done yet). */}
-              <div className={typing ? "contact-log is-waiting" : "contact-log"}>
-                <TrainingLog />
+                {/* The run's result: exit line, loss curve, epoch and loss. Shown in full
+                    unless the lines above are typing (typed set, not done yet). */}
+                <div className={typing ? "contact-log is-waiting" : "contact-log"}>
+                  <TrainingLog />
+                </div>
               </div>
 
               {/* No visible heading; screen readers still get one for the section. */}
