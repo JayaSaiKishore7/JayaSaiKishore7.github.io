@@ -245,8 +245,7 @@ sum(weights * model$y[idx])`,
       file: "diabetes-prediction / models/XGBClassifier.ipynb",
       code: `xgb_model = XGBClassifier()
 xgb_model.fit(X_train, y_train)
-y_proba = xgb_model.predict_proba(X_test)[:, 1]
-# test AUC: 0.993`,
+y_proba = xgb_model.predict_proba(X_test)[:, 1]`,
     },
   },
 ];
