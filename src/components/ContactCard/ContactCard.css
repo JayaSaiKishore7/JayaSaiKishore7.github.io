@@ -104,10 +104,14 @@
   height: 14px;
 }
 
-/* ---------- the training log (right under the two run lines) and the © line ---------- */
+/* ---------- the training log (exit line under the run lines) and the © line ---------- */
 
 .contact-log {
   margin-top: 4px;
+}
+
+/* The loss curve and its numbers fade in once the typing is done. */
+.contact-log .log-run {
   transition: opacity var(--dur-reveal) var(--ease);
 }
 
@@ -127,9 +131,9 @@
   }
 }
 
-/* While the two lines above type: hidden, but still taking its space,
-   so nothing below moves when it appears. */
-.contact-log.is-waiting {
+/* While the lines type: hidden, but still taking its space,
+   so nothing moves when it appears. */
+.contact-log.is-waiting .log-run {
   opacity: 0;
   visibility: hidden;
   transition: none; /* hides at once; only the appearance fades */

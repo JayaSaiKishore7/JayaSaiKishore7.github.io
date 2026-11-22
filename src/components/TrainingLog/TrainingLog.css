@@ -23,6 +23,11 @@
   color: var(--accent);
 }
 
+/* The part of the exit line not typed yet: keeps its space, invisible. */
+.log-ghost {
+  visibility: hidden;
+}
+
 .log-cursor.is-blinking {
   animation: log-blink 1s steps(1) infinite;
 }

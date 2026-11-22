@@ -4,6 +4,9 @@ import "./TrainingLog.css";
 
 const { log } = contactInfo;
 
+/** The exit line's text after "$ ", as it is typed (the final "0" in the accent). */
+export const EXIT_TEXT = `${log.exitLine} 0`;
+
 // ---------- the loss curve (an SVG 120 × 40) ----------
 const WIDTH = 120;
 const POINTS = 24;
@@ -181,19 +184,40 @@ export class TrainingLog extends PureComponent {
     }
   }
 
+  /**
+   * The exit line, `exitChars` characters of it (null: all). The cursor sits
+   * right after the typed part; the rest stays in place, invisible, so the
+   * line never changes size while it types.
+   */
+  renderExit() {
+    const { exitChars = null } = this.props;
+    const shown = exitChars ?? EXIT_TEXT.length;
+    const complete = shown >= EXIT_TEXT.length;
+    return (
+      <p className="log-exit">
+        <span className="log-muted" aria-hidden="true">
+          ${" "}
+        </span>
+        {complete ? (
+          <>
+            {log.exitLine} <span className="log-accent">0</span>
+          </>
+        ) : (
+          EXIT_TEXT.slice(0, shown)
+        )}
+        <span className="log-cursor" ref={this.cursorRef} aria-hidden="true">
+          {complete ? " ▋" : "▋"}
+        </span>
+        {complete ? null : <span className="log-ghost">{EXIT_TEXT.slice(shown)}</span>}
+      </p>
+    );
+  }
+
   render() {
     return (
       <div className="log" ref={this.rootRef}>
         {/* The exit line. "$" and the cursor are decoration. */}
-        <p className="log-exit">
-          <span className="log-muted" aria-hidden="true">
-            ${" "}
-          </span>
-          {log.exitLine} <span className="log-accent">0</span>
-          <span className="log-cursor" ref={this.cursorRef} aria-hidden="true">
-            {" "}▋
-          </span>
-        </p>
+        {this.renderExit()}
 
         {/* The loss curve and its numbers. */}
         <div className="log-run">
