@@ -11,10 +11,12 @@ const POINTS = 24;
 const STATIC_POINTS = "0,4 12,12 24,10 36,20 48,22 60,27 72,29 84,32 96,33 108,34 120,35";
 const STATIC_DOT = [120, 35];
 
-// One run: draw 5 s, hold 1.6 s, fade 0.6 s (≈ 7.2 s), then a new run.
-const DRAW_S = 5;
-const HOLD_S = 1.6;
-const FADE_S = 0.6;
+// One run at a calm pace: draw 15 s, hold 4 s, fade 1 s (20 s), then a new run.
+const DRAW_S = 15;
+const HOLD_S = 4;
+const FADE_S = 1;
+// The epoch and loss change 4 times a second (not every frame), so they stay readable.
+const NUMBER_STEP_S = 0.25;
 const CYCLE_S = DRAW_S + HOLD_S + FADE_S;
 const MAX_STEP_S = 0.1; // returning to the tab never jumps ahead
 const BLINK_MS = 5000; // the exit line's cursor blinks this long the first time
@@ -70,6 +72,7 @@ export class TrainingLog extends PureComponent {
   frame = null;
   last = null;
   t = 0; // seconds into the current run
+  numberBeat = null; // which 0.25 s beat the shown numbers belong to (-1: final values)
   run = 0;
   curve = null;
   onScreen = false;
@@ -168,8 +171,14 @@ export class TrainingLog extends PureComponent {
     this.dotRef.current.setAttribute("cx", dotX.toFixed(1));
     this.dotRef.current.setAttribute("cy", dotY.toFixed(1));
     this.curveRef.current.style.opacity = Math.max(0, fade).toFixed(3);
-    this.epochRef.current.textContent = epochAt(e);
-    this.lossRef.current.textContent = lossAt(e);
+
+    // The numbers: on a 0.25 s beat while drawing, and the final values once it's done.
+    const beat = p >= 1 ? -1 : Math.floor(t / NUMBER_STEP_S);
+    if (beat !== this.numberBeat) {
+      this.numberBeat = beat;
+      this.epochRef.current.textContent = epochAt(e);
+      this.lossRef.current.textContent = lossAt(e);
+    }
   }
 
   render() {
