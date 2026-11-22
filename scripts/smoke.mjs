@@ -18,8 +18,8 @@ const args = process.argv.slice(2);
 const baseUrl = args.find((arg) => !arg.startsWith("--")) ?? profile.siteUrl;
 const expectDist = args.includes("--expect-dist");
 
-// The four points every case study page must show (see CaseStudy.jsx).
-const CASE_STUDY_LABELS = ["the problem", "what i built", "key decision", "result"];
+// The 8 sections every case study page must show, as <section id> (see CaseStudy.jsx).
+const CASE_STUDY_SECTIONS = ["problem", "users", "solution", "architecture", "decisions", "evaluation", "limitations", "outcome"];
 const viewports = { phone: { width: 390, height: 844 }, laptop: { width: 1280, height: 800 } };
 
 const paths = allPaths(projects);
@@ -83,9 +83,12 @@ try {
       check(overflow <= 0, `${where}: no sideways scrolling${overflow > 0 ? ` (${overflow}px too wide)` : ""}`);
 
       if (path !== "/") {
-        const labels = await page.$$eval(".case-note dt", (dts) => dts.map((dt) => dt.textContent.trim()));
-        const missing = CASE_STUDY_LABELS.filter((label) => !labels.includes(label));
-        check(!missing.length, `${where}: shows all four case study points${missing.length ? ` (missing: ${missing.join(", ")})` : ""}`);
+        // Each section present, with a heading and some content.
+        const present = await page.$$eval(".case-part", (parts) =>
+          parts.filter((p) => p.querySelector("h2") && p.textContent.trim().length > 40).map((p) => p.id),
+        );
+        const missing = CASE_STUDY_SECTIONS.filter((id) => !present.includes(id));
+        check(!missing.length, `${where}: shows all 8 case study sections${missing.length ? ` (missing: ${missing.join(", ")})` : ""}`);
       }
     }
 
