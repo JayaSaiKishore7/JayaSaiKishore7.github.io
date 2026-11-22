@@ -332,9 +332,10 @@
 /* ---------- desktop: text and tree left, picture right ---------- */
 
 @media (min-width: 1000px) {
+  /* The picture column grows with the screen: 360px at 1000px wide, 420px from about 1310px. */
   .work-row {
     padding: 26px 14px;
-    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-columns: minmax(0, 1fr) clamp(360px, 32vw, 420px);
     gap: 36px;
     align-items: start;
   }
@@ -342,7 +343,7 @@
   /* On the right, a little in from the card's edge. */
   .work-frame {
     order: 0;
-    margin-right: 24px;
+    margin-right: 40px;
   }
 }
 
