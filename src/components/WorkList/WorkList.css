@@ -1,8 +1,8 @@
-/* ---------- the work section: a terminal eyebrow and a plain list ----------
-   Theme tokens only. Each row: text and a file tree of links, and the
-   project's picture in a small window frame. */
+/* ---------- the work section: eyebrow, filter chips, project cards ----------
+   Theme tokens only. Each card: text and a file tree of links, and the
+   project's real picture in a small window frame. */
 
-/* "$ mlflow runs list" above the heading; only the "$" in the accent. */
+/* "$ mlflow runs list --runs 6": the "$" in the accent, the flag softer. */
 .work-eyebrow {
   color: var(--muted);
   font-family: var(--font-mono);
@@ -14,20 +14,119 @@
   color: var(--accent);
 }
 
-/* ---------- rows ---------- */
-
-.work-list {
-  border-top: 1px solid var(--border);
+.work-eyebrow-flag {
+  opacity: 0.7;
 }
 
-/* Phones and tablets: the picture first, then the text and the tree. */
+/* ---------- filter chips ---------- */
+
+.work-chips {
+  margin: -12px 0 20px; /* the heading's own bottom margin is generous */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.work-chip {
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.work-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.work-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.work-chip-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.work-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- cards ---------- */
+
+/* Phones and tablets: the picture first, then the text and the tree.
+   The transparent border on all four sides keeps the size the same when the
+   accent border appears on hover. */
 .work-row {
+  margin-bottom: 12px;
   padding: 20px 8px;
   display: grid;
   gap: 14px;
-  border-bottom: 1px solid var(--border);
-  transition: background-color var(--dur-colour) var(--ease);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition:
+    border-color 200ms var(--ease),
+    background-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
 }
+
+.work-row[hidden] {
+  display: none;
+}
+
+/* After a filter change, the rows that (re)appear fade in. */
+.work-list.has-filtered .work-row {
+  animation: work-in 350ms var(--ease) both;
+}
+
+@keyframes work-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Hover / focus inside: the accent on all four sides, the surface, a soft glow. */
+.work-row:focus-within,
+.work-row:active {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent),
+    0 12px 32px -18px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+@media (hover: hover) {
+  .work-row:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent),
+      0 12px 32px -18px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .work-row:hover .work-frame {
+    transform: translateY(-3px);
+  }
+}
+
+.work-row:focus-within .work-frame {
+  transform: translateY(-3px);
+}
+
+/* ---------- text ---------- */
 
 .work-frame {
   order: -1;
@@ -40,6 +139,10 @@
   font-size: 11px;
   font-weight: 500;
   line-height: 1.4;
+}
+
+.work-runs {
+  opacity: 0.75;
 }
 
 .work-title {
@@ -73,10 +176,11 @@
   margin-top: 12px;
 }
 
-/* ---------- the link tree ----------
+/* ---------- the file tree ----------
+   ├── ▸ pipeline/
+   │   [face] → [OpenCV crop] → … → [reviews]   (when open)
    ├── case_study/ →
-   ├── live_demo ↗
-   └── github ↗        (the branches are decoration) */
+   └── github ↗                                (branches are decoration) */
 
 .work-tree {
   margin-top: 14px;
@@ -91,9 +195,10 @@
   white-space: pre;
 }
 
-.work-tree a {
-  /* The padding is cancelled by the negative margin, so the hover
-     background grows around the text without moving anything. */
+/* Links and the pipeline/ button: the hover background grows around the
+   text (padding cancelled by the negative margin), so nothing moves. */
+.work-tree a,
+.work-pipeline {
   margin: 0 -4px;
   padding: 1px 4px;
   border-radius: 4px;
@@ -104,13 +209,32 @@
     background-color var(--dur-colour) var(--ease);
 }
 
+.work-pipeline {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.work-chevron {
+  display: inline-block;
+  color: var(--accent);
+  transition: transform 200ms var(--ease);
+}
+
+.work-pipeline[aria-expanded="true"] .work-chevron {
+  transform: rotate(90deg);
+}
+
 .work-arrow {
   color: var(--muted);
   transition: color var(--dur-colour) var(--ease);
 }
 
 .work-tree a:hover,
-.work-tree a:focus-visible {
+.work-tree a:focus-visible,
+.work-pipeline:hover,
+.work-pipeline:focus-visible {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--accent);
 }
@@ -120,9 +244,65 @@
   color: var(--accent);
 }
 
-.work-row a:focus-visible {
+.work-row a:focus-visible,
+.work-pipeline:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+/* The pipeline steps, on the line under pipeline/. */
+.work-steps {
+  display: flex;
+  align-items: baseline;
+}
+
+.work-steps[hidden] {
+  display: none;
+}
+
+.work-step-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+}
+
+.work-step-list li {
+  display: flex;
+  align-items: center;
+}
+
+.work-step-arrow {
+  margin: 0 5px;
+  color: var(--muted);
+}
+
+.work-step {
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.work-step--last {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* "● online" beside live_demo: the dot in the status green; the word stays
+   muted, because the status green is too light for small text in the light
+   theme (theme.js: graphics only). */
+.work-online {
+  margin-left: 8px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.work-online-dot {
+  color: var(--status);
 }
 
 /* ---------- the picture's window frame ---------- */
@@ -132,10 +312,10 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
-  transition: transform 250ms var(--ease);
+  transition: transform 200ms var(--ease);
 }
 
-/* A thin title bar with three dots (decoration). */
+/* A thin title bar: three dots, then the project id (decoration). */
 .work-frame-bar {
   height: 18px;
   padding: 0 8px;
@@ -145,11 +325,19 @@
   border-bottom: 1px solid var(--border);
 }
 
-.work-frame-bar span {
+.work-frame-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--border);
+}
+
+.work-frame-id {
+  margin-left: 6px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
 }
 
 /* Inside the frame the picture needs no border of its own. */
@@ -165,37 +353,29 @@
     grid-template-columns: minmax(0, 1fr) 340px;
     gap: 36px;
     align-items: start;
-    border-radius: 12px; /* only seen on hover, with the surface behind it */
   }
 
-  /* A little in from the row's right edge. */
+  /* On the right, a little in from the card's edge. */
   .work-frame {
     order: 0;
     margin-right: 24px;
   }
-
-  /* Hover / focus inside: the surface, and the accent outline on all four
-     sides (an inset shadow, so nothing moves or overlaps the next row). */
-  .work-row {
-    transition:
-      background-color var(--dur-colour) var(--ease),
-      box-shadow var(--dur-colour) var(--ease);
-  }
-
-  .work-row:hover,
-  .work-row:focus-within {
-    background: var(--surface);
-    box-shadow: inset 0 0 0 1px var(--accent);
-  }
-
-  /* The frame lifts a little while its row is hovered. */
-  .work-row:hover .work-frame {
-    transform: translateY(-3px);
-  }
 }
 
+/* Reduced motion: the colours still change, but nothing moves or fades. */
 @media (prefers-reduced-motion: reduce) {
-  .work-row:hover .work-frame {
+  .work-row,
+  .work-frame,
+  .work-chevron {
+    transition: none;
+  }
+
+  .work-list.has-filtered .work-row {
+    animation: none;
+  }
+
+  .work-row:hover .work-frame,
+  .work-row:focus-within .work-frame {
     transform: none;
   }
 }

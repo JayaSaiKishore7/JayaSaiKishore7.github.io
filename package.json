@@ -8,7 +8,8 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
-    "deploy": "node scripts/predeploy.mjs && npm run lint && npm run build && wrangler pages deploy dist --project-name jayasaikishore --branch main && npm run smoke -- --expect-dist",
+    "deploy": "node scripts/predeploy.mjs && npm run check-demos && npm run lint && npm run build && wrangler pages deploy dist --project-name jayasaikishore --branch main && npm run smoke -- --expect-dist",
+    "check-demos": "node scripts/check-demos.mjs",
     "smoke": "node scripts/smoke.mjs",
     "screens": "node scripts/screens.mjs",
     "og-image": "node scripts/og-image.mjs"
