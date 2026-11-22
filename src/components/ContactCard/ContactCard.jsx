@@ -31,19 +31,18 @@ const TYPED = [...LINES, EXIT_TEXT]; // everything that types, in order
  * the top-right corner. Then the contact details, and the © line.
  *
  * When the card scrolls into view, the two run lines and then the exit line
- * type out, once, at an easy reading pace; then the loss curve and its numbers
- * fade in (keeping their space meanwhile, so nothing moves). Everything real
- * (intro, buttons) is in the prerendered HTML and visible from the start.
- * Without JavaScript, or with reduced motion, it all simply shows in full.
+ * type out, once, at an easy reading pace; the loss curve beside them runs
+ * from the start. Everything real (intro, buttons) is in the prerendered HTML
+ * and visible from the start. Without JavaScript, or with reduced motion, the
+ * lines simply show in full.
  *
  * State
  *   typed   null = every line in full; otherwise characters shown per TYPED line
- *   done    the typing has finished
  */
 export class ContactCard extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { typed: null, done: false };
+    this.state = { typed: null };
     this.cardRef = null;
     this.timers = [];
   }
@@ -78,7 +77,7 @@ export class ContactCard extends PureComponent {
     this.timers.push(setTimeout(fn, ms));
   }
 
-  /** Types line `index` one character at a time, then the next line; then the curve appears. */
+  /** Types line `index` one character at a time, then the next line. */
   typeLine(index) {
     const text = TYPED[index];
     const step = (count) => {
@@ -89,7 +88,6 @@ export class ContactCard extends PureComponent {
       });
       if (count < text.length) this.later(() => step(count + 1), TYPE_MS);
       else if (index + 1 < TYPED.length) this.typeLine(index + 1);
-      else this.setState({ done: true }); // the loss curve fades in
     };
     this.later(() => step(1), LINE_PAUSE_MS);
   }
@@ -109,8 +107,7 @@ export class ContactCard extends PureComponent {
   render() {
     const mailto = `mailto:${contactInfo.email}`;
     const year = new Date().getFullYear();
-    const { typed, done } = this.state;
-    const typing = typed !== null && !done;
+    const { typed } = this.state;
     const exitChars = typed === null ? null : typed[TYPED.length - 1];
 
     return (
@@ -127,9 +124,9 @@ export class ContactCard extends PureComponent {
                   {LINES.map((line, i) => this.renderLine(line, i))}
                 </div>
 
-                {/* The run's result: the exit line (typed third), then the loss curve,
-                    epoch and loss, which wait until all the typing is done. */}
-                <div className={typing ? "contact-log is-waiting" : "contact-log"}>
+                {/* The run's result: the exit line (typed third) and the loss curve
+                    with epoch and loss, which runs from the start. */}
+                <div className="contact-log">
                   <TrainingLog exitChars={exitChars} />
                 </div>
               </div>
