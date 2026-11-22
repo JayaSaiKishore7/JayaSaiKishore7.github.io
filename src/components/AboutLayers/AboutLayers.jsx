@@ -1,5 +1,4 @@
 import { createRef, PureComponent } from "react";
-import { MotionBudget } from "../../utils/MotionBudget";
 import { whenIdleAfterLoader } from "../../utils/webglUpgrade";
 import "./AboutLayers.css";
 
@@ -72,17 +71,14 @@ const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)"
  * glowing signals flowing from the input layer to the output layer. Each
  * layer drifts on its own, only left/right and up/down; nothing rotates.
  * Decoration (aria-hidden). Animates only on screen, with the tab visible,
- * after the loading screen and when not paused (WCAG 2.2.2), and within its
- * motion budget (MotionBudget: its first 6 s in view, then only while hovered
- * or focused; otherwise it rests on its current frame). Reduced motion and
- * slow devices get one still frame. Nothing runs during pre-rendering.
+ * after the loading screen and when not paused (WCAG 2.2.2): it keeps moving
+ * the whole time it's on screen. Reduced motion and slow devices get one
+ * still frame. Nothing runs during pre-rendering.
  */
 export class AboutLayers extends PureComponent {
   state = { paused: false, still: false };
 
-  rootRef = createRef();
   canvasRef = createRef();
-  budgetActive = false; // MotionBudget: first 6 s in view, then only while hovered/focused
   frame = null;
   timeBase = null;
   onScreen = false;
@@ -117,22 +113,9 @@ export class AboutLayers extends PureComponent {
     this.intersectionObserver.observe(canvas);
     document.addEventListener("visibilitychange", this.sync);
 
-    // Motion budget: it moves for its first 6 s on screen, then rests unless
-    // hovered or focused. The 6 s only start once it can actually move.
-    this.budget = new MotionBudget({
-      element: this.rootRef.current,
-      ready: () => this.started,
-      onChange: (active) => {
-        this.budgetActive = active;
-        this.sync();
-      },
-    });
-    this.budget.start();
-
     // Like the hero: nothing moves until the loading screen is gone and the browser is idle.
     this.cancelStart = whenIdleAfterLoader(() => {
       this.started = true;
-      this.budget.check();
       this.sync();
     });
   }
@@ -140,7 +123,6 @@ export class AboutLayers extends PureComponent {
   componentWillUnmount() {
     this.stopLoop();
     this.cancelStart?.();
-    this.budget?.stop();
     this.resizeObserver?.disconnect();
     this.themeObserver?.disconnect();
     this.intersectionObserver?.disconnect();
@@ -194,7 +176,6 @@ export class AboutLayers extends PureComponent {
   shouldAnimate() {
     return (
       this.started &&
-      this.budgetActive &&
       this.onScreen &&
       document.visibilityState === "visible" &&
       !this.state.paused &&
@@ -325,7 +306,7 @@ export class AboutLayers extends PureComponent {
   render() {
     const { paused, still } = this.state;
     return (
-      <div className="about-layers" ref={this.rootRef}>
+      <div className="about-layers">
         <div className="about-layers-canvas" aria-hidden="true">
           <canvas ref={this.canvasRef} />
         </div>
