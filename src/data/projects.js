@@ -9,8 +9,7 @@
 //   proof           the headline result (also the page's meta description)
 //   notes.tested    what testing showed: surprises, failures, what changed
 //
-// Fields: featured = listed under "featured" in the split view (the rest under
-// "more"); what = the one-line description; tech = tools shown as tags;
+// Fields: what = the one-line description; tech = tools shown as tags;
 // thumbnail = image in public/projects/ (960×600 WebP), or null to draw one
 // from `frag`; demo = live demo URL, if any; huggingface = the project's page on
 // Hugging Face (a Space, model or dataset), if any; team = built as a team.
@@ -19,7 +18,6 @@
 export const projects = [
   {
     id: "air-quality",
-    featured: true,
     title: "Air Quality Forecasting Platform",
     what: "forecasts the next 24 hours from live government data every morning, then scores itself against what actually happened.",
     tech: ["Python", "XGBoost", "Evidently", "FastAPI", "GitHub Actions", "Hugging Face", "MLflow", "Docker", "Streamlit", "LSTM", "GRU"],
@@ -92,7 +90,6 @@ g["rolling_3"] = past.rolling(3, min_periods=3).mean()`,
   },
   {
     id: "emotion-rag",
-    featured: true,
     title: "Emotion-Aware Insight Generator",
     what: "reads the emotion on a face, then finds the customer reviews that explain it and scores their sentiment.",
     tech: ["ResNet-50", "OpenCV", "FAISS", "LangChain", "RoBERTa", "Streamlit"],
@@ -124,7 +121,6 @@ answer = llm.invoke(prompt)`,
   },
   {
     id: "brain-tumor",
-    featured: true,
     title: "Brain Tumor MRI Classifier",
     what: "97.53% test accuracy, after augmentation first made it worse. it runs in your browser, so scans never leave your device.",
     tech: ["TensorFlow", "Keras", "ONNX Runtime Web", "Flask", "Playwright", "Hugging Face"],
@@ -156,7 +152,6 @@ ww += w;`,
   },
   {
     id: "rag-pdf",
-    featured: true,
     title: "PDF Question Answering with RAG",
     what: "answers questions about an uploaded PDF from the passages it retrieves, not from memory.",
     tech: ["LangChain", "ChromaDB", "MiniLM", "Gemini", "Flask"],

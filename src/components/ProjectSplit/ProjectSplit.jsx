@@ -83,7 +83,7 @@ class ProjectPreview extends Component {
 }
 
 /**
- * Projects as a split view on desktop (a grouped list on the left, a sticky
+ * Projects as a split view on desktop (one list of every project on the left, a sticky
  * slide stage on the right that auto-plays through the projects) and as a
  * swipeable snap gallery on phones.
  *
@@ -378,12 +378,11 @@ export class ProjectSplit extends Component {
     );
   }
 
-  renderGroup(label, items) {
+  /** Every project in one list, in display order. */
+  renderList(items) {
     const { active } = this.state;
-    if (!items.length) return null;
     return (
       <div className="ps-group">
-        <p className="ps-group-label">{label}</p>
         <ul className="ps-list">
           {items.map(({ project, index }) => (
             <li key={project.id} className={`ps-item${index === active ? " is-active" : ""}`}>
@@ -438,17 +437,10 @@ export class ProjectSplit extends Component {
           {announce}
         </p>
 
-        {/* ---------- desktop: grouped list + slide stage ---------- */}
+        {/* ---------- desktop: project list + slide stage ---------- */}
         <div className="ps-split">
           <div className="ps-nav" onKeyDown={this.handleListKeyDown}>
-            {this.renderGroup(
-              "featured",
-              indexed.filter(({ project }) => project.featured)
-            )}
-            {this.renderGroup(
-              "more",
-              indexed.filter(({ project }) => !project.featured)
-            )}
+            {this.renderList(indexed)}
           </div>
 
           <div className="ps-stage" id={STAGE_ID} style={{ "--dir": direction }}>

@@ -8,17 +8,7 @@
   align-items: start;
 }
 
-/* ================= left: grouped project list ================= */
-
-.ps-group + .ps-group {
-  margin-top: 22px;
-}
-
-.ps-group-label {
-  margin: 0 0 6px 20px;
-  color: var(--muted);
-  font-size: var(--size-small);
-}
+/* ================= left: the project list (every project, no groups) ================= */
 
 .ps-select {
   width: 100%;
