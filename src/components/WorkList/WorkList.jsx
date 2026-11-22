@@ -22,7 +22,7 @@ const matches = (project, filter) => filter === "all" || project.filters?.includ
 /** A row's tree, in order: pipeline/, then the case study, live demo, github and hugging face where they exist. */
 function rowLinks(project) {
   return [
-    { label: "case_study/", arrow: "→", href: caseStudyPath(project.id) },
+    { label: "case_study/", arrow: "→", href: caseStudyPath(project.id), primary: true },
     project.demo && { label: "live_demo", arrow: "↗", href: project.demo, external: true, demo: true },
     project.link && { label: "github", arrow: "↗", href: project.link, external: true },
     project.huggingface && { label: "hugging_face", arrow: "↗", href: project.huggingface, external: true },
@@ -164,6 +164,7 @@ export class WorkList extends Component {
             </span>
             <a
               href={link.href}
+              className={link.primary ? "work-primary" : undefined}
               {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               {link.label} <span className="work-arrow">{link.arrow}</span>

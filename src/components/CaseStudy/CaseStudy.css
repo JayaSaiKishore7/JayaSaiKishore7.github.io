@@ -12,6 +12,8 @@
   color: var(--accent);
 }
 
+/* ---------- header (title, summary, tags, links, 3D visual) ---------- */
+
 .case-head {
   max-width: 46em;
   margin-top: clamp(20px, 3vw, 36px);
@@ -50,19 +52,19 @@
 
 .case-title {
   margin-top: 40px; /* room for the detection box's label under "case study 01" */
-  font-family: var(--font-display);
-  font-size: clamp(30px, 4.6vw, 60px);
-  font-weight: var(--weight-strong);
-  letter-spacing: var(--tracking-name);
-  line-height: 1.02;
   color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--weight-strong);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .case-what {
   margin: 14px 0 18px;
-  color: var(--soft);
+  color: var(--text-secondary);
   font-size: clamp(16px, 1.6vw, 19px);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .case-links {
@@ -85,83 +87,239 @@
   color: var(--accent);
 }
 
+/* ---------- table of contents ----------
+   Phones/tablets: a scrollable row of chips under the header.
+   Desktop (≥1100px): a sticky list on the left of the body. */
+
+.case-toc ol {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.case-toc a {
+  display: block;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease);
+}
+
+.case-toc a:hover,
+.case-toc a[aria-current] {
+  color: var(--accent);
+}
+
+.case-toc a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.case-toc-num {
+  opacity: 0.7;
+}
+
+.case-toc--chips {
+  margin-top: var(--space-8);
+  padding: 4px 4px var(--space-2); /* room for the focus outline */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.case-toc--chips a {
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+
+.case-toc--chips a[aria-current] {
+  border-color: var(--accent);
+}
+
+.case-toc-rail {
+  display: none;
+}
+
+/* ---------- body: 8 sections ---------- */
+
+.case-body {
+  margin-top: var(--space-8);
+}
+
+.case-part + .case-part {
+  margin-top: var(--space-12);
+}
+
+.case-part-title {
+  margin-bottom: var(--space-4);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: var(--weight-strong);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.case-part-num {
+  margin-right: 0.3em;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.6em;
+  font-weight: 500;
+  letter-spacing: 0;
+  vertical-align: 0.25em;
+}
+
+/* Supporting text: the secondary text colour, readable line length. */
+.case-text,
+.case-lead,
+.case-points,
+.case-limits {
+  max-width: 68ch;
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.case-lead {
+  color: var(--text);
+}
+
+.case-points,
+.case-limits {
+  margin-top: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.case-points li,
+.case-limits li {
+  position: relative;
+  padding-left: 20px;
+}
+
+/* A quiet marker for both lists: honest, not alarming. */
+.case-points li::before,
+.case-limits li::before {
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+  content: "–";
+}
+
+/* architecture: a vertical flow of small step cards. */
+.case-flow {
+  max-width: 68ch;
+}
+
+.case-flow li {
+  display: grid;
+}
+
+.case-flow-arrow {
+  margin-left: 18px;
+  padding: 2px 0 2px 10px;
+  border-left: 1px solid var(--border);
+  color: var(--muted);
+  font-size: var(--fs-micro);
+  line-height: 1.6;
+}
+
+.case-flow-step {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.case-flow-name {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+}
+
+.case-flow-detail {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* evaluation: up to two stat cards, the only big numbers on the page. */
+.case-stats {
+  margin-bottom: var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  max-width: 68ch;
+}
+
+.case-stat {
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.case-stat-value {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.case-stat-label {
+  max-width: 28ch;
+  margin-top: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+}
+
+@media (max-width: 599.98px) {
+  .case-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* outcome: one short paragraph in a card, an accent edge on the left. */
+.case-outcome {
+  max-width: 68ch;
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--border);
+  border-left-color: var(--accent);
+  border-radius: 0 12px 12px 0;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+/* ---------- figures ---------- */
+
 .case-figure {
   max-width: 960px;
-  margin: clamp(28px, 4vw, 48px) 0 0;
+  margin: var(--space-6) 0 0;
 }
 
 .case-figure figcaption,
 .case-code figcaption {
   margin-top: 8px;
   color: var(--muted);
-  font-size: var(--size-small);
-}
-
-.case-notes {
-  margin-top: clamp(32px, 4vw, 56px);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 var(--gut);
-}
-
-.case-note {
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-
-.case-note dt {
-  color: var(--muted);
-  font-size: var(--size-small);
-}
-
-.case-note dd {
-  margin-top: 6px;
-  color: var(--soft);
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.case-note--proof {
-  grid-column: 1 / -1;
-  margin-top: 28px;
-}
-
-.case-note--proof dd {
-  max-width: 46em;
-  color: var(--text);
-  font-size: 17px;
-}
-
-/* What testing showed: secondary to the headline result above it. */
-.case-note--proof .case-tested {
-  margin-top: 10px;
-  color: var(--soft);
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.case-aside {
-  margin-top: 18px;
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-style: italic;
-  font-weight: 300;
-}
-
-.case-section {
-  margin-top: clamp(36px, 5vw, 64px);
-}
-
-.case-section-title {
-  margin-bottom: 12px;
-  color: var(--accent);
-  font-size: var(--size-small);
-  font-weight: var(--weight-strong);
+  font-size: var(--fs-micro);
+  line-height: 1.5;
 }
 
 .case-code {
-  margin: clamp(28px, 4vw, 44px) 0 0;
+  max-width: 960px;
+  margin: var(--space-6) 0 0;
   padding: 16px 18px;
   overflow-x: auto;
   border: 1px solid var(--border);
@@ -177,6 +335,8 @@
   color: var(--soft);
   font: 500 12.5px/1.7 var(--font-mono); /* code stays monospace */
 }
+
+/* ---------- next case study ---------- */
 
 .case-next {
   margin-top: clamp(40px, 5vw, 72px);
@@ -203,13 +363,33 @@
   color: var(--accent);
 }
 
-@media (max-width: 900px) {
-  .case-notes {
-    grid-template-columns: 1fr;
-    gap: 18px;
+/* ---------- desktop: sticky contents on the left ---------- */
+
+@media (min-width: 1100px) {
+  .case-toc--chips {
+    display: none;
   }
 
-  .case-note--proof {
-    margin-top: 10px;
+  .case-body {
+    margin-top: var(--space-12);
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .case-toc-rail {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-6));
+    display: block;
+  }
+
+  .case-toc--rail ol {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .case-toc--rail a {
+    padding: 3px 0;
   }
 }

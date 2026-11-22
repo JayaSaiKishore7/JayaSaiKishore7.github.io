@@ -6,8 +6,16 @@
 .work-eyebrow {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: var(--fs-meta);
+  font-weight: 400;
+}
+
+/* The section heading on the display size (type scale in theme.js). */
+#work .section-header-title {
+  font-size: var(--fs-display);
+  font-weight: var(--weight-strong);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .work-eyebrow-prompt {
@@ -55,7 +63,7 @@
 
 .work-chip-count {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-micro);
   opacity: 0.7;
 }
 
@@ -70,10 +78,10 @@
    The transparent border on all four sides keeps the size the same when the
    accent border appears on hover. */
 .work-row {
-  margin-bottom: 12px;
-  padding: 20px 8px;
+  margin-bottom: var(--space-3);
+  padding: var(--space-4);
   display: grid;
-  gap: 14px;
+  gap: var(--space-4);
   border: 1px solid transparent;
   border-radius: 14px;
   transition:
@@ -132,12 +140,14 @@
   order: -1;
 }
 
+/* Rhythm inside a card: metadata → title 6px · title → line 8px ·
+   line → tags 12px · tags → tree 12px. */
 .work-domain {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: var(--fs-meta);
+  font-weight: 400;
   line-height: 1.4;
 }
 
@@ -145,13 +155,14 @@
   opacity: 0.75;
 }
 
+/* The strongest thing in a card. */
 .work-title {
   color: var(--text);
   font-family: var(--font-display);
-  font-size: clamp(18px, 1.7vw, 20px);
+  font-size: var(--fs-title);
   font-weight: var(--weight-strong);
-  letter-spacing: var(--tracking-title);
-  line-height: 1.3;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .work-title a {
@@ -166,14 +177,25 @@
 
 .work-line {
   max-width: 64ch;
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+  margin-top: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 .work-main .tech-list {
-  margin-top: 12px;
+  margin-top: var(--space-3);
+}
+
+/* Tags are metadata here: mono, small, an outline with no fill. */
+.work-main .chip {
+  padding: 2px 9px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 400;
 }
 
 /* ---------- the file tree ----------
@@ -183,10 +205,10 @@
    └── github ↗                                (branches are decoration) */
 
 .work-tree {
-  margin-top: 14px;
+  margin-top: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 12.5px;
-  font-weight: 500;
+  font-size: var(--fs-meta);
+  font-weight: 400;
   line-height: 1.95;
 }
 
@@ -201,16 +223,21 @@
   margin: 0 -4px;
   padding: 1px 4px;
   border-radius: 4px;
-  color: var(--text);
+  color: var(--muted);
   text-decoration: none;
   transition:
     color var(--dur-colour) var(--ease),
     background-color var(--dur-colour) var(--ease);
 }
 
+/* The primary action keeps the text colour at rest; the rest stay muted. */
+.work-tree a.work-primary {
+  color: var(--text);
+}
+
 /* pipeline/: a label (its steps are always shown under it). */
 .work-pipeline {
-  color: var(--text);
+  color: var(--muted);
 }
 
 .work-chevron {
@@ -267,7 +294,7 @@
   border-radius: 6px;
   background: var(--bg);
   color: var(--text);
-  font-size: 11px;
+  font-size: var(--fs-micro);
   line-height: 1.5;
 }
 
@@ -282,7 +309,7 @@
 .work-online {
   margin-left: 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--fs-micro);
 }
 
 .work-online-dot {
@@ -292,11 +319,28 @@
 /* ---------- the picture's window frame ---------- */
 
 .work-frame {
+  position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
   transition: transform 200ms var(--ease);
+}
+
+/* Dark theme: the picture sits 8% darker until its card is hovered or
+   focused, so it never outshines the title. */
+:root[data-theme="dark"] .work-frame::after {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.08);
+  content: "";
+  pointer-events: none;
+  transition: opacity 200ms var(--ease);
+}
+
+:root[data-theme="dark"] .work-row:hover .work-frame::after,
+:root[data-theme="dark"] .work-row:focus-within .work-frame::after {
+  opacity: 0;
 }
 
 /* A thin title bar: three dots, then the project id (decoration). */
@@ -332,25 +376,28 @@
 /* ---------- desktop: text and tree left, picture right ---------- */
 
 @media (min-width: 1000px) {
-  /* The picture column grows with the screen: 360px at 1000px wide, 420px from about 1310px. */
+  /* The picture is 320px wide (its 336px column less a 16px inset from the
+     card's edge), so it never outweighs the text. One spacing system: the
+     same padding in every card, the same gap between cards. */
   .work-row {
-    padding: 26px 14px;
-    grid-template-columns: minmax(0, 1fr) clamp(360px, 32vw, 420px);
+    margin-bottom: var(--space-4);
+    padding: var(--space-6);
+    grid-template-columns: minmax(0, 1fr) 336px;
     gap: 36px;
     align-items: start;
   }
 
-  /* On the right, a little in from the card's edge. */
   .work-frame {
     order: 0;
-    margin-right: 40px;
+    margin-right: var(--space-4);
   }
 }
 
 /* Reduced motion: the colours still change, but nothing moves or fades. */
 @media (prefers-reduced-motion: reduce) {
   .work-row,
-  .work-frame {
+  .work-frame,
+  .work-frame::after {
     transition: none;
   }
 

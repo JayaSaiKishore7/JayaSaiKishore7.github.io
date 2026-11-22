@@ -23,6 +23,9 @@ export const theme = {
       borderStrong: "#3A4C60",
       text: "#E6ECF1",
       soft: "#B9C4CE",
+      // Supporting paragraphs (work list lines, case-study body): 9.7 / 8.8.
+      textSecondary: "#B4C0CB",
+      // Metadata only (domain, runs-on, tree branches, captions).
       muted: "#8796A4",
       // Decorative only (bullets, scrollbar): too low contrast for text.
       mutedSoft: "#4A5B6C",
@@ -46,6 +49,9 @@ export const theme = {
       borderStrong: "#B5B5B0",
       text: "#111111",
       soft: "#2E2E2E",
+      // Supporting paragraphs (work list lines, case-study body): 9.4 / 10.6.
+      textSecondary: "#3F3F3C",
+      // Metadata only (domain, runs-on, tree branches, captions).
       muted: "#5A5A5A",
       // Decorative only, like dark's mutedSoft.
       mutedSoft: "#B5B5B0",
@@ -82,6 +88,15 @@ export const theme = {
     weightName: "600", // the hero name
     weightDisplay: "400", // headings
     weightStrong: "500", // emphasis without colour: active project, navbar name, case-study title
+    // Type scale for the work section and the case-study pages. Section heading
+    // to body is 2.25×–3.5×; project title to its metadata 1.8×–1.93× (the
+    // title's minimum is 1.35rem, not 1.2rem, to keep that 1.8× everywhere).
+    fsDisplay: "clamp(2.25rem, 5vw, 3.5rem)", // section headings, case-study title
+    fsH2: "clamp(1.5rem, 2.6vw, 2rem)", // case-study section headings
+    fsTitle: "clamp(1.35rem, 1.8vw, 1.45rem)", // project titles in the work list
+    fsBody: "1rem", // paragraphs, list lines
+    fsMeta: "0.75rem", // domain, runs-on, tags, tree links, eyebrow
+    fsMicro: "0.6875rem", // counts, captions
   },
 
   effects: {
@@ -108,6 +123,13 @@ export const theme = {
   spacing: {
     section: "0px", // top and bottom padding of every section: none, sections follow straight on
     sectionGap: "clamp(20px, 3vw, 36px)", // a little room after some sections (.section--gap-after)
+    // A small spacing scale (work cards, case-study sections).
+    s2: "8px",
+    s3: "12px",
+    s4: "16px",
+    s6: "24px",
+    s8: "32px",
+    s12: "48px",
     gutter: "24px",
   },
 
