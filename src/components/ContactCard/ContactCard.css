@@ -40,16 +40,6 @@
   visibility: hidden;
 }
 
-.contact-cursor {
-  margin-left: 2px;
-  animation: contact-blink 1s steps(1) infinite;
-}
-
-@keyframes contact-blink {
-  50% {
-    opacity: 0;
-  }
-}
 
 /* ---------- content ---------- */
 
@@ -69,29 +59,10 @@
   line-height: 1.6;
 }
 
-.contact-email {
-  margin-top: 18px;
-  font: 500 0.875rem/1.6 var(--font-mono);
-  overflow-wrap: anywhere;
-}
-
-.contact-email a {
-  color: var(--accent);
-  text-decoration: none;
-  transition: color var(--dur-colour) var(--ease);
-}
-
-.contact-email a:hover,
-.contact-email a:focus-visible {
-  color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* ---------- pill buttons ---------- */
 
 .contact-actions {
-  margin-top: 14px;
+  margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -159,22 +130,25 @@
   font-weight: 500;
 }
 
-/* ---------- the training log and the © line ---------- */
+/* ---------- the training log (right under the two run lines) and the © line ---------- */
 
-.contact-card .log {
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+.contact-log {
+  margin-top: 4px;
+  transition: opacity var(--dur-reveal) var(--ease);
+}
+
+/* While the two lines above type: hidden, but still taking its space,
+   so nothing below moves when it appears. */
+.contact-log.is-waiting {
+  opacity: 0;
+  visibility: hidden;
+  transition: none; /* hides at once; only the appearance fades */
 }
 
 .contact-copy {
   margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.75rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact-cursor {
-    animation: none !important;
-  }
 }

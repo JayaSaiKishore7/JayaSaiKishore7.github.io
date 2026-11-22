@@ -20,28 +20,31 @@ const LinkedinIcon = () => (
 // Typing the two terminal lines (decoration): like the loading screen's log.
 const TYPE_MS = 28; // per character
 const LINE_PAUSE_MS = 300; // before each line
-const CURSOR_MS = 3000; // the block cursor blinks this long, then goes
 const LINES = contactInfo.terminal;
 
 /**
  * The contact section (#contact) and the page's footer, on every page: an
  * "inference terminal" card in the theme's colours. It opens with the run
- * ("$ python contact.py" → "match found"), then the contact details, and ends
- * with the training log (exit line, loss curve: TrainingLog) and the © line.
+ * ("$ python contact.py" → "match found") and its training log right after
+ * (exit line, loss curve: TrainingLog), then the contact details, and ends
+ * with the © line.
  *
  * The two opening lines are typed once when the card scrolls into view;
- * everything real (heading, intro, email, buttons, closing line) is in the
+ * everything real (heading, intro, buttons, closing line) is in the
  * prerendered HTML and visible from the start. Without JavaScript, or with
  * reduced motion, the lines simply show in full.
  *
+ * The training log under them waits (invisible, keeping its space) while the
+ * lines type, and fades in once they're done: the run finishes, then its log.
+ *
  * State
  *   typed   null = both lines in full; otherwise characters shown per line
- *   cursor  the block cursor after the last line is showing
+ *   done    the typing has finished
  */
 export class ContactCard extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { typed: null, cursor: false };
+    this.state = { typed: null, done: false };
     this.cardRef = null;
     this.timers = [];
   }
@@ -76,7 +79,7 @@ export class ContactCard extends PureComponent {
     this.timers.push(setTimeout(fn, ms));
   }
 
-  /** Types line `index` one character at a time, then the next line, then the cursor. */
+  /** Types line `index` one character at a time, then the next line; then the log appears. */
   typeLine(index) {
     const text = LINES[index];
     const step = (count) => {
@@ -88,21 +91,18 @@ export class ContactCard extends PureComponent {
       if (count < text.length) this.later(() => step(count + 1), TYPE_MS);
       else if (index + 1 < LINES.length) this.typeLine(index + 1);
       else {
-        this.setState({ cursor: true });
-        this.later(() => this.setState({ cursor: false }), CURSOR_MS);
+        this.setState({ done: true }); // the log (with its own cursor) takes over
       }
     };
     this.later(() => step(1), LINE_PAUSE_MS);
   }
 
   renderLine(text, index) {
-    const { typed, cursor } = this.state;
+    const { typed } = this.state;
     const shown = typed === null ? text.length : typed[index];
-    const last = index === LINES.length - 1;
     return (
       <p className={`contact-line contact-line--${index === 0 ? "command" : "result"}`} key={text}>
         {text.slice(0, shown)}
-        {last && cursor ? <span className="contact-cursor">▋</span> : null}
         {/* The rest stays in place, invisible, so the card never changes height while typing. */}
         <span className="contact-ghost">{text.slice(shown)}</span>
       </p>
@@ -112,6 +112,7 @@ export class ContactCard extends PureComponent {
   render() {
     const mailto = `mailto:${contactInfo.email}`;
     const year = new Date().getFullYear();
+    const typing = this.state.typed !== null && !this.state.done;
 
     return (
       <footer id="contact" className="section contact">
@@ -124,14 +125,16 @@ export class ContactCard extends PureComponent {
                 {LINES.map((line, i) => this.renderLine(line, i))}
               </div>
 
+              {/* The run's result: exit line, loss curve, epoch and loss. Shown in full
+                  unless the lines above are typing (typed set, not done yet). */}
+              <div className={typing ? "contact-log is-waiting" : "contact-log"}>
+                <TrainingLog />
+              </div>
+
               <h2 className="contact-heading">
                 <HeadlineBox label="contact">{contactInfo.heading}</HeadlineBox>
               </h2>
               <p className="contact-intro">{contactInfo.intro}</p>
-
-              <p className="contact-email">
-                <a href={mailto}>{contactInfo.email}</a>
-              </p>
 
               <div className="contact-actions">
                 {/* The accessible name starts with the visible words (WCAG 2.5.3). */}
@@ -158,8 +161,6 @@ export class ContactCard extends PureComponent {
                 </span>{" "}
                 {contactInfo.closing}
               </p>
-
-              <TrainingLog />
 
               {/* The year comes from the build; the browser may disagree right after New Year. */}
               <p className="contact-copy" suppressHydrationWarning>
