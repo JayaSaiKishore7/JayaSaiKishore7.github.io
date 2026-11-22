@@ -1,0 +1,162 @@
+/* ---------- contact: the "inference terminal" card (ContactCard.jsx) ----------
+   In the theme's own colours, like the footer's training log below it:
+   the surface with a faint accent glow from the top-left corner. */
+.contact-card {
+  padding: clamp(20px, 4vw, 40px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 50%),
+    var(--surface);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+}
+
+.contact-card :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- the two typed lines (decoration) ---------- */
+
+.contact-line {
+  font: 500 0.8125rem/1.7 var(--font-mono);
+  white-space: pre-wrap;
+}
+
+.contact-line--command {
+  color: var(--muted);
+}
+
+.contact-line--result {
+  color: var(--accent);
+}
+
+.contact-ghost {
+  visibility: hidden;
+}
+
+.contact-cursor {
+  margin-left: 2px;
+  animation: contact-blink 1s steps(1) infinite;
+}
+
+@keyframes contact-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- content ---------- */
+
+.contact-heading {
+  margin: 40px 0 10px; /* room for the detection box's label above it */
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--tracking-title);
+  line-height: 1.2;
+}
+
+.contact-intro {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contact-email {
+  margin-top: 18px;
+  font: 500 0.875rem/1.6 var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.contact-email a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--dur-colour) var(--ease);
+}
+
+.contact-email a:hover,
+.contact-email a:focus-visible {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- pill buttons ---------- */
+
+.contact-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contact-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition:
+    scale var(--dur-quick) var(--ease),
+    background-color var(--dur-colour) var(--ease),
+    border-color var(--dur-colour) var(--ease),
+    color var(--dur-colour) var(--ease);
+}
+
+.contact-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.contact-btn:active {
+  scale: 0.97; /* a soft press */
+}
+
+.contact-btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.contact-btn--primary:hover {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.contact-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- closing line ---------- */
+
+.contact-closing {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.contact-prompt {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-cursor {
+    animation: none !important;
+  }
+}

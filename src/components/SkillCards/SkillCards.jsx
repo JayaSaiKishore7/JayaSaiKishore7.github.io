@@ -43,10 +43,18 @@ export class SkillCards extends PureComponent {
     const { paused } = this.state;
     return (
       <section className={paused ? "skill-cards is-paused" : "skill-cards"} aria-label="skills">
+        <div className="skill-cards-viewport">
+          <div className="skill-cards-track">
+            {this.renderSet(false)}
+            {this.renderSet(true)}
+          </div>
+        </div>
+
+        {/* Under the belt, at its bottom-right corner: this animation's own control. */}
         <button
           type="button"
           className="skill-cards-toggle"
-          aria-label={paused ? "play skills" : "pause skills"}
+          aria-label={paused ? "play skills animation" : "pause skills animation"}
           aria-pressed={paused}
           onClick={this.toggle}
         >
@@ -60,13 +68,6 @@ export class SkillCards extends PureComponent {
             </svg>
           )}
         </button>
-
-        <div className="skill-cards-viewport">
-          <div className="skill-cards-track">
-            {this.renderSet(false)}
-            {this.renderSet(true)}
-          </div>
-        </div>
       </section>
     );
   }

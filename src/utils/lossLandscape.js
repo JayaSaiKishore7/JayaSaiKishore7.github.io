@@ -27,7 +27,8 @@ const ALPHAS = {
 
 // Sizes that differ between desktop and phones.
 const SIZES = {
-  desktop: { line: 0.9, trail: 1.6, ball: 8, glow: 140, scale: 0.105, ox: 0.56, oy: 0.6 },
+  // ox 0.62: the surface (and the ball's trail) sits right of the text column.
+  desktop: { line: 0.9, trail: 1.6, ball: 8, glow: 140, scale: 0.105, ox: 0.62, oy: 0.6 },
   mobile: { line: 0.7, trail: 1.2, ball: 5.5, glow: 70, scale: 0.14, ox: 0.55, oy: 0.76 },
 };
 

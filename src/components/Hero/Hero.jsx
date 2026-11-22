@@ -55,7 +55,11 @@ export class Hero extends Component {
     this.magnets = this.buttonRefs.map((ref) => new Magnetic({ element: ref.current }));
     this.magnets.forEach((magnet) => magnet.start());
 
-    this.boxes = new DetectionCycle({ container: this.stageRef.current, still });
+    this.boxes = new DetectionCycle({
+      container: this.stageRef.current,
+      still,
+      observe: [hero.querySelector(".hero-main")],
+    });
 
     // Desktop: move the text down until its first line is level with the
     // card's "latest" row. The detection box follows.

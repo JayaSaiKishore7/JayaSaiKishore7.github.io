@@ -6,6 +6,7 @@ import { Projects } from "./components/Projects/Projects";
 import { Resume } from "./components/Resume/Resume";
 import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
+import { ContactCard } from "./components/ContactCard/ContactCard";
 import { CaseStudy } from "./components/CaseStudy/CaseStudy";
 import { Footer } from "./components/Footer/Footer";
 import { Loader } from "./components/Loader/Loader";
@@ -84,6 +85,7 @@ class App extends Component {
         <Resume />
         <Education />
         <Contact />
+        <ContactCard />
         <Footer />
       </>
     );

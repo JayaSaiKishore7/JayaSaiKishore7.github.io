@@ -314,7 +314,7 @@ export class AboutLayers extends PureComponent {
           <button
             type="button"
             className="about-layers-toggle"
-            aria-label={paused ? "play network animation" : "pause network animation"}
+            aria-label={paused ? "play about animation" : "pause about animation"}
             aria-pressed={paused}
             onClick={this.toggle}
           >

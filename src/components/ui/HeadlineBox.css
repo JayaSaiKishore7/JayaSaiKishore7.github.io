@@ -1,6 +1,7 @@
 /* ---------- a headline's detection box (HeadlineBox.jsx) ----------
    Same family as the hero's detection box (Hero.css .det-box): a 1px accent frame
-   8px around the text, nearly square corners, a small mono label on top.
+   6px above/below and 10px beside the text, nearly square corners, and a small
+   mono label sitting outside the frame's top-left corner (never on the text).
    Shown once: it draws in when the heading first scrolls into view, holds,
    then fades away; and only on the first page of a visit (html.boxes-seen,
    set in index.html, hides it after that). */
@@ -16,7 +17,7 @@
 /* The frame. */
 .headline-box::before {
   position: absolute;
-  inset: -8px;
+  inset: -6px -10px; /* the box's padding around the text */
   border: 1px solid var(--box-colour);
   border-radius: 4px; /* kept nearly square: a real bounding box */
   pointer-events: none;
@@ -26,8 +27,8 @@
 
 .headline-box-label {
   position: absolute;
-  bottom: calc(100% + 11px); /* 8px frame padding + 3px gap, like the hero's */
-  left: -9px;
+  bottom: calc(100% + 6px); /* sits on the frame's top edge (6px above the text), outside it */
+  left: -11px; /* flush with the frame's outer left edge (10px + its 1px border) */
   padding: 1px 6px;
   border-radius: 4px 4px 4px 0; /* square where it meets its box */
   background: var(--box-colour);

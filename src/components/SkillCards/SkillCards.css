@@ -4,12 +4,11 @@
   position: relative;
 }
 
-/* Pause / play: same look as the hero's .nn-toggle, at the right end of the
-   "skills" heading line just above (heading text ≈ 18–50px above the belt). */
+/* Pause / play (32px, 44px touch area): in the flow just under the belt,
+   pushed to the right, so it sits in the skills block's bottom-right corner. */
 .skill-cards-toggle {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 18px);
+  position: relative; /* for the touch area below */
+  margin: 12px 0 0 auto;
   width: 32px;
   height: 32px;
   display: grid;

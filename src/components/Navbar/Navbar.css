@@ -24,8 +24,18 @@
   align-items: center;
   border-bottom: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
   background: color-mix(in srgb, var(--bg) 55%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* Keep the -webkit- line FIRST. Lightning CSS (Vite's CSS minifier) treats a
+     prefixed declaration written after the standard one as overriding it and
+     drops the standard one, which left Chrome with no blur at all. */
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+}
+
+/* No backdrop blur at all: a nearly solid bar, so the page can't show through. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav {
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+  }
 }
 
 .nav-name {

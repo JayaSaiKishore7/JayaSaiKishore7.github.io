@@ -6,20 +6,27 @@
  * The glide itself is a CSS transition (.det-box in Hero.css).
  *
  * `still: true` (reduced motion) parks the box on the first phrase instead.
- * reposition() puts it back on its current phrase after the layout changes.
+ * reposition() puts it back on its current phrase after the layout changes;
+ * it runs by itself when the container or anything in `observe` resizes,
+ * when fonts load, and on a theme switch (at once, and again once the
+ * theme's cross-fade has finished).
  */
 const PAD_X = 5;
 const PAD_Y = 2;
+const THEME_SETTLE_MS = 450; // the theme cross-fade (--dur-move)
 
 export class DetectionCycle {
-  constructor({ container, selector = ".det", interval = 1350, still = false }) {
+  constructor({ container, selector = ".det", interval = 1350, still = false, observe = [] }) {
     this.container = container;
     this.selector = selector;
     this.interval = interval;
     this.still = still;
+    this.observe = observe;
     this.index = 0;
     this.timer = null;
+    this.settleTimer = null;
     this.reposition = this.reposition.bind(this);
+    this.handleTheme = this.handleTheme.bind(this);
   }
 
   start() {
@@ -40,8 +47,11 @@ export class DetectionCycle {
     this.box.classList.add("is-shown");
 
     this.resizeObserver = new ResizeObserver(this.reposition);
-    this.resizeObserver.observe(this.container);
+    [this.container, ...this.observe].forEach((el) => el && this.resizeObserver.observe(el));
     document.fonts?.ready.then(() => this.box && this.reposition());
+
+    this.themeObserver = new MutationObserver(this.handleTheme);
+    this.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     if (!this.still) {
       this.timer = setInterval(() => {
@@ -53,8 +63,10 @@ export class DetectionCycle {
 
   stop() {
     clearInterval(this.timer);
+    clearTimeout(this.settleTimer);
     this.timer = null;
     this.resizeObserver?.disconnect();
+    this.themeObserver?.disconnect();
     this.box?.remove();
     this.box = null;
   }
@@ -62,6 +74,13 @@ export class DetectionCycle {
   /** Back onto the current phrase at once (no glide), e.g. after a resize. */
   reposition() {
     if (this.box) this._place(false);
+  }
+
+  /** Theme switch: re-place now, and again when the cross-fade has settled. */
+  handleTheme() {
+    this.reposition();
+    clearTimeout(this.settleTimer);
+    this.settleTimer = setTimeout(this.reposition, THEME_SETTLE_MS);
   }
 
   _place(glide) {
