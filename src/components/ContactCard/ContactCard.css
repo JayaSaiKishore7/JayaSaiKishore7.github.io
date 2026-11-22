@@ -113,23 +113,6 @@
   height: 14px;
 }
 
-/* ---------- closing line ---------- */
-
-.contact-closing {
-  margin-top: 22px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--border);
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-.contact-prompt {
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-weight: 500;
-}
-
 /* ---------- the training log (right under the two run lines) and the © line ---------- */
 
 .contact-log {
@@ -146,7 +129,7 @@
 }
 
 .contact-copy {
-  margin-top: 16px;
+  margin-top: 22px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
   color: var(--muted);

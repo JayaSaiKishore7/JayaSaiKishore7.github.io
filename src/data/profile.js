@@ -17,10 +17,9 @@ export const contactInfo = {
   // Decoration typed in when the card scrolls into view (echoes the loading screen).
   terminal: ["$ python contact.py", "running inference… match found"],
   heading: "got a model that needs to leave the notebook?",
-  intro: "i'm open to data scientist and computer vision roles.",
+  intro: "i'm open to data scientist and computer vision roles across france and europe.",
   email: profile.email,
   emailLabel: "say hi",
-  closing: "send me the interesting problem. machine learning, computer vision, mlops, anything worth building",
   // The training log at the end of the card (TrainingLog.jsx).
   log: {
     exitLine: "process finished with exit code",

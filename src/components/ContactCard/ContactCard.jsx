@@ -30,7 +30,7 @@ const LINES = contactInfo.terminal;
  * with the © line.
  *
  * The two opening lines are typed once when the card scrolls into view;
- * everything real (heading, intro, buttons, closing line) is in the
+ * everything real (heading, intro, buttons) is in the
  * prerendered HTML and visible from the start. Without JavaScript, or with
  * reduced motion, the lines simply show in full.
  *
@@ -155,12 +155,6 @@ export class ContactCard extends PureComponent {
                 </a>
               </div>
 
-              <p className="contact-closing">
-                <span className="contact-prompt" aria-hidden="true">
-                  &gt;
-                </span>{" "}
-                {contactInfo.closing}
-              </p>
 
               {/* The year comes from the build; the browser may disagree right after New Year. */}
               <p className="contact-copy" suppressHydrationWarning>
