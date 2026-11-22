@@ -1,23 +1,29 @@
+/* The old #hello anchor: an empty marker at the section's top, so links to
+   #hello land where #about does. */
+.about-alias {
+  position: absolute;
+}
+
 /* The about text, with the "signal flow" network (AboutLayers) beside it on
    laptops and below it on phones. */
-.hello-about-grid {
+.about-grid {
   display: grid;
   gap: clamp(24px, 4vw, 56px);
 }
 
 @media (min-width: 900px) {
-  .hello-about-grid {
+  .about-grid {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     align-items: center;
   }
 }
 
-.hello-skills {
+.about-skills {
   margin-top: 32px;
 }
 
-.hello-about .k,
-.hello-skills .k {
+.about-text .k,
+.about-skills .k {
   margin-bottom: 14px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
@@ -27,17 +33,17 @@
 }
 
 /* About paragraphs: the first in the normal text colour, the rest muted. */
-.hello-para {
+.about-para {
   max-width: 60ch;
   color: var(--muted);
   font-size: 1.0625rem;
   line-height: 1.7;
 }
 
-.hello-para + .hello-para {
+.about-para + .about-para {
   margin-top: 14px;
 }
 
-.hello-para--lead {
+.about-para--lead {
   color: var(--text);
 }

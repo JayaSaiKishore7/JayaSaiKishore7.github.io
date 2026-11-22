@@ -1,10 +1,11 @@
 // Page sections in order: the navbar links, and the heading of a section with
-// no separate title (education).
+// no separate title (education). "about" was called "hello"; its section keeps
+// a #hello anchor for old links.
 export const navLinks = [
   { id: "work", label: "work" },
   { id: "experience", label: "experience" },
+  { id: "about", label: "about" },
   { id: "education", label: "education" },
-  { id: "hello", label: "hello" },
   { id: "contact", label: "contact" },
 ];
 

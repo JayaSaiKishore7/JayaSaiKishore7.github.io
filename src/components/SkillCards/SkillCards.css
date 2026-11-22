@@ -115,14 +115,17 @@
   }
 }
 
-/* Paused: while hovered or focused, and with the button. */
-.skill-cards-viewport:hover .skill-cards-track,
-.skill-cards-viewport:hover .skill-card-chips,
-.skill-cards-viewport:focus-within .skill-cards-track,
-.skill-cards-viewport:focus-within .skill-card-chips,
-.skill-cards.is-paused .skill-cards-track,
-.skill-cards.is-paused .skill-card-chips {
+/* Resting by default; it moves only while .is-moving (its motion budget, set
+   by SkillCards.jsx: the first 6 s in view, then while hovered or focused)
+   and not paused with the button. */
+.skill-cards-track,
+.skill-card-chips {
   animation-play-state: paused;
+}
+
+.skill-cards.is-moving .skill-cards-track,
+.skill-cards.is-moving .skill-card-chips {
+  animation-play-state: running;
 }
 
 @media (max-width: 600px) {

@@ -30,15 +30,24 @@ class ProjectPreview extends Component {
         aria-hidden={hidden ? "true" : undefined}
         inert={hidden}
       >
-        <a href={href} className="ps-window" tabIndex={-1} aria-hidden="true">
-          <span className="ps-window-bar">
+        {/* The screenshot links to the case study too. Out of the Tab order (the
+            title link right below goes to the same page), but screen readers
+            reach it and read the screenshot's description. A code-fragment
+            thumbnail (no screenshot) stays hidden; the link is named instead. */}
+        <a
+          href={href}
+          className="ps-window"
+          tabIndex={-1}
+          aria-label={project.thumbnail ? undefined : `${project.title}, case study`}
+        >
+          <span className="ps-window-bar" aria-hidden="true">
             <span className="ps-window-dots" />
             <span className="ps-window-id">{project.id}</span>
           </span>
           <span className="ps-window-body">
             <span className="ps-wipe">
               <span className="ps-settle">
-                <ProjectThumb project={project} decorative />
+                <ProjectThumb project={project} decorative={!project.thumbnail} />
               </span>
             </span>
           </span>

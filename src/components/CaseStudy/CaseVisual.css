@@ -9,6 +9,12 @@
   margin: 0;
 }
 
+/* The picture and its pause button; the button is placed against this, so it
+   sits in the picture's corner, not the caption's. */
+.case-visual-frame {
+  position: relative;
+}
+
 .case-visual-box {
   position: relative;
   aspect-ratio: 16 / 10;
@@ -59,12 +65,12 @@
   text-wrap: pretty;
 }
 
-/* ---------- pause / play (same look as the hero's .nn-toggle) ----------
+/* ---------- pause / play: in the picture's bottom-right corner ----------
    32px button, 44px touch area (the ::before), a soft press. */
 .case-visual-toggle {
   position: absolute;
-  top: 8px;
   right: 8px;
+  bottom: 8px;
   width: 32px;
   height: 32px;
   display: grid;

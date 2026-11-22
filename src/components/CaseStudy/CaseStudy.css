@@ -26,6 +26,15 @@
   gap: clamp(20px, 3vw, 32px);
 }
 
+/* Tablets and small laptops: the visual under the title block, centred and
+   a little larger. */
+@media (min-width: 768px) and (max-width: 1099.98px) {
+  .case-top--visual .case-visual {
+    justify-self: center;
+    max-width: 720px;
+  }
+}
+
 @media (min-width: 1100px) {
   .case-top--visual {
     grid-template-columns: minmax(0, 46em) minmax(0, 1fr);

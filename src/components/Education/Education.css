@@ -1,47 +1,20 @@
-/* ---------- education: a 3D coverflow carousel ---------- */
+/* ---------- education: two cards, side by side (stacked on phones) ---------- */
 
-/* Side cards peek out to the screen edges, but never make the page scroll sideways.
-   clip (not hidden) keeps the vertical direction free for shadows and the float. */
-#education {
-  overflow-x: clip;
-}
-
-.edu-carousel {
-  --edu-card: min(420px, 78vw);
-  --edu-step: calc(var(--edu-card) * 0.68);
-  --edu-move: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  border-radius: var(--radius-card);
-}
-
-/* All cards share one grid cell, so the carousel is as tall as the tallest card. */
-.edu-stage {
+.edu-grid {
   display: grid;
-  justify-items: center;
-  padding-block: 8px 4px; /* room for the float and the shadow */
-  perspective: 1200px;
-  touch-action: pan-y; /* vertical swipes still scroll the page */
-  cursor: grab;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gut);
 }
 
-.edu-stage.is-dragging {
-  cursor: grabbing;
-  user-select: none;
+@media (min-width: 760px) {
+  .edu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.edu-slide {
-  grid-area: 1 / 1;
-  width: var(--edu-card);
-  display: grid; /* the card inside stretches to the slide's height */
-  /* transform, opacity, z-index and visibility are inline styles (set in render). */
-  transition:
-    transform var(--edu-move),
-    opacity var(--edu-move),
-    visibility var(--edu-move);
-}
-
-.edu-stage.is-dragging .edu-slide {
-  transition: none;
+/* Each cell holds one card; both cards of a row are equally tall. */
+.edu-cell {
+  display: grid;
 }
 
 .edu-card {
@@ -53,27 +26,8 @@
   transition: border-color var(--dur-colour) var(--ease);
 }
 
-.edu-slide:not(.is-active) .edu-card {
-  cursor: pointer;
-}
-
 .edu-card:hover {
   border-color: var(--accent);
-}
-
-/* Only the card facing you floats, gently. */
-.edu-slide.is-active .edu-card {
-  animation: edu-float 6s ease-in-out infinite;
-}
-
-@keyframes edu-float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -4px;
-  }
 }
 
 .edu-kind {
@@ -119,98 +73,4 @@
   height: 1px;
   background: var(--muted);
   content: "";
-}
-
-/* ---------- arrows and dots under the cards ---------- */
-
-.edu-controls {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-
-.edu-arrow {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  transition:
-    scale var(--dur-quick) var(--ease),
-    opacity var(--dur-colour) var(--ease),
-    border-color var(--dur-colour) var(--ease),
-    color var(--dur-colour) var(--ease);
-}
-
-.edu-arrow:hover:not([aria-disabled="true"]) {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.edu-arrow:active:not([aria-disabled="true"]) {
-  scale: 0.94; /* a soft press */
-}
-
-.edu-arrow[aria-disabled="true"] {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.edu-arrow svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-}
-
-.edu-dots {
-  display: flex;
-}
-
-/* Each dot is a 44px touch target; the visible dot is the ::before. */
-.edu-dot {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.edu-dot::before {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background: var(--muted);
-  content: "";
-  transition:
-    width var(--dur-move) var(--ease),
-    background-color var(--dur-colour) var(--ease);
-}
-
-.edu-dot[aria-current="true"]::before {
-  width: 24px;
-  background: var(--accent);
-}
-
-/* ---------- reduced motion: cards switch instantly, nothing floats ---------- */
-
-@media (prefers-reduced-motion: reduce) {
-  /* !important: beats the site-wide 150ms reduced-motion fade (index.css). */
-  .edu-slide,
-  .edu-dot::before {
-    transition: none !important;
-  }
-
-  .edu-slide.is-active .edu-card {
-    animation: none;
-  }
 }

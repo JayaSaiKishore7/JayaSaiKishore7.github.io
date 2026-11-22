@@ -4,7 +4,8 @@ import "./ProjectThumb.css";
 /**
  * A project's 16:10 thumbnail: its screenshot when it has one, otherwise its
  * code fragment drawn as a small editor window (nothing faked).
- * `decorative` hides it from screen readers where the title already says it all.
+ * A screenshot always has its description (alt). `decorative` hides a code
+ * fragment from screen readers where something else already names it.
  *
  * Screenshots fade in once loaded (`is-loaded`), so they never pop in.
  */
@@ -36,7 +37,7 @@ export class ProjectThumb extends Component {
           ref={this.imgRef}
           className={`project-thumb${this.state.loaded ? " is-loaded" : ""}`}
           src={thumbnail.src}
-          alt={decorative ? "" : thumbnail.alt}
+          alt={thumbnail.alt}
           width="960"
           height="600"
           loading={eager ? "eager" : "lazy"}

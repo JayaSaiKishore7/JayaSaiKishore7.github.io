@@ -30,7 +30,7 @@ const viewports = {
 
 // Pages to shoot, and where to scroll before each shot: the top, a section id, or the page bottom.
 const pages = [
-  { name: "home", path: "/", stops: ["top", "work", "experience", "hello", "bottom"] },
+  { name: "home", path: "/", stops: ["top", "work", "experience", "about", "education", "bottom"] },
   { name: "case", path: "/work/air-quality/", stops: ["top", "bottom"] },
 ];
 

@@ -208,31 +208,35 @@ export class CaseVisual extends PureComponent {
 
     return (
       <figure className={`case-visual${live ? " is-live" : ""}`}>
-        <div ref={this.boxRef} className="case-visual-box" aria-hidden="true">
-          <img className="case-visual-still case-visual-still--light" src={visual.still.light} alt="" width="880" height="550" decoding="async" />
-          <img className="case-visual-still case-visual-still--dark" src={visual.still.dark} alt="" width="880" height="550" decoding="async" />
-          <canvas ref={this.canvasRef} className="case-visual-canvas" />
+        {/* The frame holds the picture and its pause button (bottom-right corner). */}
+        <div className="case-visual-frame">
+          {/* Decoration: the caption below describes the illustration. */}
+          <div ref={this.boxRef} className="case-visual-box" aria-hidden="true">
+            <img className="case-visual-still case-visual-still--light" src={visual.still.light} alt="" width="880" height="550" decoding="async" />
+            <img className="case-visual-still case-visual-still--dark" src={visual.still.dark} alt="" width="880" height="550" decoding="async" />
+            <canvas ref={this.canvasRef} className="case-visual-canvas" />
+          </div>
+          {/* WCAG 2.2.2: motion that runs for more than 5 s can be paused. Only while it moves. */}
+          {live ? (
+            <button
+              type="button"
+              className="case-visual-toggle"
+              aria-label={paused ? "play animation" : "pause animation"}
+              aria-pressed={paused}
+              onClick={this.toggle}
+            >
+              {paused ? (
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M5 3.5v9l7.5-4.5z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M5 3.5v9M11 3.5v9" />
+                </svg>
+              )}
+            </button>
+          ) : null}
         </div>
-        {/* WCAG 2.2.2: motion that runs for more than 5 s can be paused. Only while it moves. */}
-        {live ? (
-          <button
-            type="button"
-            className="case-visual-toggle"
-            aria-label={paused ? "play animation" : "pause animation"}
-            aria-pressed={paused}
-            onClick={this.toggle}
-          >
-            {paused ? (
-              <svg viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M5 3.5v9l7.5-4.5z" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M5 3.5v9M11 3.5v9" />
-              </svg>
-            )}
-          </button>
-        ) : null}
         <figcaption>{visual.caption}</figcaption>
       </figure>
     );

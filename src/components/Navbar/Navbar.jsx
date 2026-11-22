@@ -105,8 +105,9 @@ export class Navbar extends PureComponent {
     return (
       <>
         <header className="nav">
+          {/* Lowercase, like the hero's name. */}
           <a href={onHome ? "#home" : "/"} className="nav-name">
-            {profile.name}
+            {profile.name.toLowerCase()}
           </a>
 
           <nav className="nav-links" aria-label="Sections">

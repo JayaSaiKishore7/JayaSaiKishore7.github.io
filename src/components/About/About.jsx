@@ -4,37 +4,42 @@ import { AboutLayers } from "../AboutLayers/AboutLayers";
 import { Reveal } from "../Reveal";
 import { SkillCards } from "../SkillCards/SkillCards";
 import { SectionHeader } from "../ui/SectionHeader";
-import "./Contact.css";
+import "./About.css";
 
-
-export class Contact extends Component {
+/**
+ * The about section (#about): the statement, the about text beside the
+ * "signal flow" network, and the skills belt. It used to be called "hello":
+ * an empty #hello anchor at its top keeps old links working.
+ */
+export class About extends Component {
   render() {
     return (
-      <section id="hello" className="section">
+      <section id="about" className="section">
+        <span id="hello" className="about-alias" aria-hidden="true" />
         <div className="container">
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
           <Reveal as="div">
-            <SectionHeader id="hello" title={aboutInfo.statement} />
+            <SectionHeader id="about" title={aboutInfo.statement} />
           </Reveal>
 
           {/* The about text on the left, the "signal flow" network on the right (below on phones). */}
-          <div className="hello-about-grid">
-            <Reveal as="div" className="hello-about" style={{ "--i": 1 }}>
+          <div className="about-grid">
+            <Reveal as="div" className="about-text" style={{ "--i": 1 }}>
               <p className="k">about</p>
               {aboutInfo.paragraphs.map((line, i) => (
-                <p className={i === 0 ? "hello-para hello-para--lead" : "hello-para"} key={line}>
+                <p className={i === 0 ? "about-para about-para--lead" : "about-para"} key={line}>
                   {line}
                 </p>
               ))}
             </Reveal>
-            <Reveal as="div" className="hello-about-visual" style={{ "--i": 2 }}>
+            <Reveal as="div" className="about-visual" style={{ "--i": 2 }}>
               <AboutLayers />
             </Reveal>
           </div>
 
           {/* A slow belt of cards, one per skill group (SkillCards). */}
-          <Reveal as="div" className="hello-skills" style={{ "--i": 2 }}>
+          <Reveal as="div" className="about-skills" style={{ "--i": 2 }}>
             <h3 className="k">skills</h3>
             <SkillCards groups={aboutInfo.skillGroups} />
           </Reveal>

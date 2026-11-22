@@ -32,7 +32,7 @@ export const seo = {
   title: "Jaya Sai Kishore Neerukonda | Machine Learning Engineer",
   jobTitle: "Machine Learning Engineer",
   description:
-    "Machine learning engineer in Marseille, France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
+    "Machine learning engineer in France: computer vision, MLOps, forecasting and LLM/RAG. Took a YOLO-based X-ray inspection system at STMicroelectronics from prototype to production, raising its accuracy from 70% to 90%.",
   image: "/og-image.png",
 };
 
