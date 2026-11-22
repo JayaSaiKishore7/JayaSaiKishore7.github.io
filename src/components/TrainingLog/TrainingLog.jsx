@@ -1,6 +1,8 @@
 import { createRef, PureComponent } from "react";
-import { footerInfo } from "../../data/profile";
-import "./Footer.css";
+import { contactInfo } from "../../data/profile";
+import "./TrainingLog.css";
+
+const { log } = contactInfo;
 
 // ---------- the loss curve (an SVG 120 × 40) ----------
 const WIDTH = 120;
@@ -50,14 +52,14 @@ const lossAt = (e) => (0.03 + (0.89 * (Math.exp(-3.6 * e) - Math.exp(-3.6))) / (
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
- * The "training log" footer: a dark panel like the contact card, with a loss
- * curve that keeps training in a loop. The pre-rendered page (and reduced
- * motion) shows the finished curve; the loop updates the SVG and the numbers
- * directly (no re-render per frame). It pauses off screen, in a hidden tab,
- * and while the pointer or keyboard focus is inside the footer.
+ * The "training log" at the end of the contact card: the exit line, then a
+ * loss curve that keeps training in a loop, with its epoch and loss. The
+ * prerendered page (and reduced motion) shows the finished curve; the loop
+ * updates the SVG and the numbers directly (no re-render per frame). It pauses
+ * off screen, in a hidden tab, and while the pointer or keyboard focus is on it.
  */
-export class Footer extends PureComponent {
-  footerRef = createRef();
+export class TrainingLog extends PureComponent {
+  rootRef = createRef();
   curveRef = createRef();
   lineRef = createRef();
   dotRef = createRef();
@@ -72,23 +74,20 @@ export class Footer extends PureComponent {
   curve = null;
   onScreen = false;
   hovered = false;
-  focused = false;
 
   componentDidMount() {
-    const footer = this.footerRef.current;
-    if (!footer || reducedMotion()) return; // reduced motion: keep the finished curve, no blinking
+    const root = this.rootRef.current;
+    if (!root || reducedMotion()) return; // reduced motion: keep the finished curve, no blinking
 
     this.observer = new IntersectionObserver(([entry]) => {
       this.onScreen = entry.isIntersecting;
       if (this.onScreen && !this.blinked) this.blinkCursor();
       this.sync();
     });
-    this.observer.observe(footer);
+    this.observer.observe(root);
     document.addEventListener("visibilitychange", this.sync);
-    footer.addEventListener("pointerenter", this.handleEnter);
-    footer.addEventListener("pointerleave", this.handleLeave);
-    footer.addEventListener("focusin", this.handleFocus);
-    footer.addEventListener("focusout", this.handleBlur);
+    root.addEventListener("pointerenter", this.handleEnter);
+    root.addEventListener("pointerleave", this.handleLeave);
   }
 
   componentWillUnmount() {
@@ -96,11 +95,9 @@ export class Footer extends PureComponent {
     clearTimeout(this.blinkTimer);
     this.observer?.disconnect();
     document.removeEventListener("visibilitychange", this.sync);
-    const footer = this.footerRef.current;
-    footer?.removeEventListener("pointerenter", this.handleEnter);
-    footer?.removeEventListener("pointerleave", this.handleLeave);
-    footer?.removeEventListener("focusin", this.handleFocus);
-    footer?.removeEventListener("focusout", this.handleBlur);
+    const root = this.rootRef.current;
+    root?.removeEventListener("pointerenter", this.handleEnter);
+    root?.removeEventListener("pointerleave", this.handleLeave);
   }
 
   handleEnter = () => {
@@ -113,17 +110,7 @@ export class Footer extends PureComponent {
     this.sync();
   };
 
-  handleFocus = () => {
-    this.focused = true;
-    this.sync();
-  };
-
-  handleBlur = (event) => {
-    this.focused = this.footerRef.current.contains(event.relatedTarget);
-    this.sync();
-  };
-
-  /** The first time the footer is seen: the cursor blinks for 5 s, then stays still. */
+  /** The first time the log is seen: the cursor blinks for 5 s, then stays still. */
   blinkCursor() {
     this.blinked = true;
     const cursor = this.cursorRef.current;
@@ -132,7 +119,7 @@ export class Footer extends PureComponent {
   }
 
   sync = () => {
-    const run = this.onScreen && document.visibilityState === "visible" && !this.hovered && !this.focused;
+    const run = this.onScreen && document.visibilityState === "visible" && !this.hovered;
     if (run && this.frame === null) {
       this.last = null; // resume where it left off
       this.frame = requestAnimationFrame(this.tick);
@@ -186,71 +173,45 @@ export class Footer extends PureComponent {
   }
 
   render() {
-    const year = new Date().getFullYear();
     return (
-      // The contact section itself is the card above (ContactCard, #contact).
-      <footer className="footer" ref={this.footerRef}>
-        <div className="container">
-          <div className="footer-panel">
-            {/* Row 1: the exit line. "$" and the cursor are decoration. */}
-            <p className="footer-exit">
-              <span className="footer-muted" aria-hidden="true">
-                ${" "}
+      <div className="log" ref={this.rootRef}>
+        {/* The exit line. "$" and the cursor are decoration. */}
+        <p className="log-exit">
+          <span className="log-muted" aria-hidden="true">
+            ${" "}
+          </span>
+          {log.exitLine} <span className="log-accent">0</span>
+          <span className="log-cursor" ref={this.cursorRef} aria-hidden="true">
+            {" "}▋
+          </span>
+        </p>
+
+        {/* The loss curve and its numbers. */}
+        <div className="log-run">
+          <svg className="log-curve" width="120" height="40" viewBox="0 0 120 40" aria-hidden="true">
+            <line className="log-curve-base" x1="0" y1="39" x2="120" y2="39" />
+            <g ref={this.curveRef}>
+              <polyline className="log-curve-line" ref={this.lineRef} points={STATIC_POINTS} />
+              <circle className="log-curve-dot" ref={this.dotRef} cx={STATIC_DOT[0]} cy={STATIC_DOT[1]} r="2.8" />
+            </g>
+          </svg>
+          <div className="log-text">
+            {/* The numbers change many times a second: screen readers get the final values once. */}
+            <p aria-hidden="true">
+              <span className="log-muted">epoch </span>
+              <span className="log-value" ref={this.epochRef}>
+                2026
               </span>
-              {footerInfo.exitLine} <span className="footer-accent">0</span>
-              <span className="footer-cursor" ref={this.cursorRef} aria-hidden="true">
-                {" "}▋
+              <span className="log-muted"> · loss </span>
+              <span className="log-accent" ref={this.lossRef}>
+                0.03
               </span>
             </p>
-
-            {/* Row 2: the loss curve and the log. */}
-            <div className="footer-run">
-              <svg className="footer-curve" width="120" height="40" viewBox="0 0 120 40" aria-hidden="true">
-                <line className="footer-curve-base" x1="0" y1="39" x2="120" y2="39" />
-                <g ref={this.curveRef}>
-                  <polyline className="footer-curve-line" ref={this.lineRef} points={STATIC_POINTS} />
-                  <circle className="footer-curve-dot" ref={this.dotRef} cx={STATIC_DOT[0]} cy={STATIC_DOT[1]} r="2.8" />
-                </g>
-              </svg>
-              <div className="footer-log">
-                {/* The numbers change many times a second: screen readers get the final values once. */}
-                <p aria-hidden="true">
-                  <span className="footer-muted">epoch </span>
-                  <span className="footer-value" ref={this.epochRef}>
-                    2026
-                  </span>
-                  <span className="footer-muted"> · loss </span>
-                  <span className="footer-accent" ref={this.lossRef}>
-                    0.03
-                  </span>
-                </p>
-                <p className="sr-only">epoch 2026, loss 0.03</p>
-                <p className="footer-tagline">{footerInfo.tagline}</p>
-              </div>
-            </div>
-
-            {/* Row 3: copyright and links. */}
-            <div className="footer-bar">
-              {/* The year comes from the build; the browser may disagree right after New Year. */}
-              <p className="footer-copy" suppressHydrationWarning>
-                {footerInfo.copyright(year)}
-              </p>
-              <ul className="footer-links">
-                {footerInfo.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p className="sr-only">epoch 2026, loss 0.03</p>
+            <p className="log-tagline">{log.tagline}</p>
           </div>
         </div>
-      </footer>
+      </div>
     );
   }
 }

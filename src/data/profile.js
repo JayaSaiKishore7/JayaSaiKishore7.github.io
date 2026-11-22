@@ -12,7 +12,7 @@ export const profile = {
   siteUrl: "https://jayasaikishore.pages.dev/",
 };
 
-// The contact section's "inference terminal" card (ContactCard.jsx). All lowercase on purpose.
+// The "inference terminal" contact card that ends every page (ContactCard.jsx). All lowercase on purpose.
 export const contactInfo = {
   // Decoration typed in when the card scrolls into view (echoes the loading screen).
   terminal: ["$ python contact.py", "running inference… match found"],
@@ -21,18 +21,12 @@ export const contactInfo = {
   email: profile.email,
   emailLabel: "say hi",
   closing: "send me the interesting problem. machine learning, computer vision, mlops, anything worth building",
-};
-
-// The "training log" footer (Footer.jsx), below the contact card. All lowercase on purpose.
-export const footerInfo = {
-  exitLine: "process finished with exit code",
-  tagline: "still learning, always shipping",
+  // The training log at the end of the card (TrainingLog.jsx).
+  log: {
+    exitLine: "process finished with exit code",
+    tagline: "still learning, always shipping",
+  },
   copyright: (year) => `© ${year} ${profile.fullName.toLowerCase()}`,
-  links: [
-    { label: "github", href: profile.github, external: true },
-    { label: "linkedin", href: profile.linkedin, external: true },
-    { label: "email", href: `mailto:${profile.email}` },
-  ],
 };
 
 // Page title, description and link-preview data (rendered by src/data/head.js).

@@ -1,6 +1,6 @@
 /* Theme tokens only. The sticky menu bar takes its own space, so only the
    usual section padding on top; the page fills most of the screen, so the
-   footer doesn't jump up under the text. */
+   contact card doesn't jump up under the text. */
 .not-found {
   min-height: 70vh;
   padding-top: calc(var(--space-section) + 24px);

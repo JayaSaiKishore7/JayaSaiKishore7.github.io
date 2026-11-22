@@ -1,0 +1,76 @@
+/* ---------- the "training log" (TrainingLog.jsx) ----------
+   The end of the contact card: the exit line, then the loss curve with its
+   epoch and loss. Theme colours only; mono, as real program output. */
+
+.log-muted {
+  color: var(--muted);
+}
+
+.log-accent {
+  color: var(--accent);
+}
+
+.log-value {
+  color: var(--text);
+}
+
+.log-exit,
+.log-text {
+  font: 500 0.78125rem/1.6 var(--font-mono); /* 12.5px */
+}
+
+.log-cursor {
+  color: var(--accent);
+}
+
+.log-cursor.is-blinking {
+  animation: log-blink 1s steps(1) infinite;
+}
+
+@keyframes log-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.log-run {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.log-curve {
+  flex: none;
+  overflow: visible; /* the dot's glow may reach past the chart */
+}
+
+.log-curve-base {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.log-curve-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.log-curve-dot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+
+.log-tagline {
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-cursor.is-blinking {
+    animation: none !important;
+  }
+}

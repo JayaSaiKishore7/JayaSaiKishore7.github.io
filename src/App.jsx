@@ -8,7 +8,6 @@ import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
 import { ContactCard } from "./components/ContactCard/ContactCard";
 import { CaseStudy } from "./components/CaseStudy/CaseStudy";
-import { Footer } from "./components/Footer/Footer";
 import { Loader } from "./components/Loader/Loader";
 import { NotFound } from "./components/NotFound/NotFound";
 import { navLinks } from "./data/nav";
@@ -58,7 +57,7 @@ class App extends Component {
         <>
           <Navbar onHome={false} />
           <NotFound />
-          <Footer />
+          <ContactCard />
         </>
       );
     }
@@ -70,7 +69,7 @@ class App extends Component {
           <ScrollProgress />
           <Navbar onHome={false} />
           <CaseStudy project={route.project} />
-          <Footer />
+          <ContactCard />
         </>
       );
     }
@@ -86,7 +85,6 @@ class App extends Component {
         <Education />
         <Contact />
         <ContactCard />
-        <Footer />
       </>
     );
   }

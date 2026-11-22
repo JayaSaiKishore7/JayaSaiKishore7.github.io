@@ -1,6 +1,7 @@
 import { PureComponent } from "react";
 import { contactInfo, profile } from "../../data/profile";
 import { Reveal } from "../Reveal";
+import { TrainingLog } from "../TrainingLog/TrainingLog";
 import { HeadlineBox } from "../ui/HeadlineBox";
 import "./ContactCard.css";
 
@@ -23,11 +24,15 @@ const CURSOR_MS = 3000; // the block cursor blinks this long, then goes
 const LINES = contactInfo.terminal;
 
 /**
- * The contact section (#contact): an "inference terminal" card in the theme's
- * colours, above the footer. The two terminal lines are typed once when the
- * card scrolls into view; everything real (heading, intro, email, buttons,
- * closing line) is in the prerendered HTML and visible from the start.
- * Without JavaScript, or with reduced motion, the lines simply show in full.
+ * The contact section (#contact) and the page's footer, on every page: an
+ * "inference terminal" card in the theme's colours. It opens with the run
+ * ("$ python contact.py" → "match found"), then the contact details, and ends
+ * with the training log (exit line, loss curve: TrainingLog) and the © line.
+ *
+ * The two opening lines are typed once when the card scrolls into view;
+ * everything real (heading, intro, email, buttons, closing line) is in the
+ * prerendered HTML and visible from the start. Without JavaScript, or with
+ * reduced motion, the lines simply show in full.
  *
  * State
  *   typed   null = both lines in full; otherwise characters shown per line
@@ -106,9 +111,10 @@ export class ContactCard extends PureComponent {
 
   render() {
     const mailto = `mailto:${contactInfo.email}`;
+    const year = new Date().getFullYear();
 
     return (
-      <section id="contact" className="section">
+      <footer id="contact" className="section contact">
         <div className="container">
           <Reveal as="div" className="section-rule" aria-hidden="true" />
 
@@ -152,10 +158,17 @@ export class ContactCard extends PureComponent {
                 </span>{" "}
                 {contactInfo.closing}
               </p>
+
+              <TrainingLog />
+
+              {/* The year comes from the build; the browser may disagree right after New Year. */}
+              <p className="contact-copy" suppressHydrationWarning>
+                {contactInfo.copyright(year)}
+              </p>
             </div>
           </Reveal>
         </div>
-      </section>
+      </footer>
     );
   }
 }
