@@ -26,8 +26,8 @@ export class ThemeToggle extends Component {
     this.sync = this.sync.bind(this);
   }
 
-  // The theme lives on <html>, not in this button: there can be more than one
-  // toggle on a page (hero and footer), and each follows whichever was pressed.
+  // The theme lives on <html>, not in this button: the button only mirrors it,
+  // so it stays right whatever changes data-theme (and if a page ever has two).
   componentDidMount() {
     this.sync();
     this.watcher = new MutationObserver(this.sync);

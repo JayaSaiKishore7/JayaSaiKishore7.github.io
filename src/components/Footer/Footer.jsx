@@ -1,6 +1,5 @@
 import { createRef, PureComponent } from "react";
 import { footerInfo } from "../../data/profile";
-import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import "./Footer.css";
 
 // ---------- the loss curve (an SVG 120 × 40) ----------
@@ -244,22 +243,18 @@ export class Footer extends PureComponent {
               <p className="footer-copy" suppressHydrationWarning>
                 {footerInfo.copyright(year)}
               </p>
-              {/* The links, then the theme toggle: on every page, including case studies and 404. */}
-              <div className="footer-bar-end">
-                <ul className="footer-links">
-                  {footerInfo.links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <ThemeToggle />
-              </div>
+              <ul className="footer-links">
+                {footerInfo.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

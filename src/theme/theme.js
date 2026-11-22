@@ -3,7 +3,7 @@
 // build time. Every component stylesheet uses those variables, never raw values.
 //
 // Light is the default theme (every visit starts in it); dark is the
-// alternative the theme toggle (hero status line, footer) switches to.
+// alternative the menu bar's theme toggle switches to.
 export const theme = {
   colors: {
     // Black and orange: near-black ink on a light page (light theme) or X-ray

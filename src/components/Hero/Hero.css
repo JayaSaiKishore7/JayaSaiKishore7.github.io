@@ -54,12 +54,6 @@
   color: var(--muted);
 }
 
-.hero-status-end {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .hero-status-loss {
   color: var(--accent);
 }

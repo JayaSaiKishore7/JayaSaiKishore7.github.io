@@ -1,29 +1,41 @@
 import { PureComponent, createRef } from "react";
 import { navLinks } from "../../data/nav";
 import { profile } from "../../data/profile";
+import { Clock } from "../../utils/Clock";
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import "./Navbar.css";
 
 /**
  * The menu bar: sticky at the top, a see-through strip of the page
  * background. The name on the left is the home link.
  *
- * Desktop: the section links on the right; the one in view (`active`, from
- * App's ScrollSpy) is underlined in the accent.
- * Phones (< 1000px): a menu button opens a full-height panel under the bar.
+ * Desktop: the section links start at the page's centre line; the one in
+ * view (`active`, from App's ScrollSpy) is underlined in the accent. At the
+ * right end: Marseille and its local time, then the theme toggle (the site's
+ * only one).
+ * Phones (< 1000px): name, theme toggle and a menu button that opens a
+ * full-height panel under the bar (with the location and time on top).
  * While it's open, Tab stays inside it; Escape or a link closes it and focus
  * returns to the button.
  *
- * State: `menuOpen`, the phone panel is open.
+ * State
+ *   time      clock text, null until mounted (the prerendered page can't know it)
+ *   menuOpen  the phone panel is open
  */
 export class Navbar extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { menuOpen: false };
+    this.state = { time: null, menuOpen: false };
     this.menuButtonRef = createRef();
     this.panelRef = createRef();
-    for (const name of ["toggleMenu", "closeMenu", "handleKeyDown"]) {
+    for (const name of ["toggleMenu", "closeMenu", "handleKeyDown", "handleTick"]) {
       this[name] = this[name].bind(this);
     }
+  }
+
+  componentDidMount() {
+    this.clock = new Clock({ timeZone: profile.timeZone, onTick: this.handleTick });
+    this.clock.start();
   }
 
   componentDidUpdate(previousProps, previousState) {
@@ -31,8 +43,13 @@ export class Navbar extends PureComponent {
   }
 
   componentWillUnmount() {
+    this.clock?.stop();
     document.removeEventListener("keydown", this.handleKeyDown);
     document.documentElement.style.overflow = "";
+  }
+
+  handleTick(time) {
+    this.setState({ time });
   }
 
   toggleMenu() {
@@ -80,8 +97,10 @@ export class Navbar extends PureComponent {
   render() {
     // On case study pages the links lead back to the home page's sections.
     const { active = null, onHome = true } = this.props;
-    const { menuOpen } = this.state;
+    const { menuOpen, time } = this.state;
     const home = onHome ? "" : "/";
+    const city = profile.city.toLowerCase();
+    const clock = time ?? "--:--";
 
     return (
       <>
@@ -103,17 +122,25 @@ export class Navbar extends PureComponent {
             ))}
           </nav>
 
-          <button
-            ref={this.menuButtonRef}
-            type="button"
-            className="nav-menu-button"
-            aria-expanded={menuOpen}
-            aria-controls="nav-panel"
-            aria-label={menuOpen ? "close menu" : "open menu"}
-            onClick={this.toggleMenu}
-          >
-            <span aria-hidden="true">{menuOpen ? "✕" : "☰"}</span>
-          </button>
+          <div className="nav-end">
+            {/* Location and local time (desktop; on phones they're in the menu panel). */}
+            <p className="nav-time">
+              <span className="nav-city">{city} · </span>
+              <span className="nav-clock">{clock}</span>
+            </p>
+            <ThemeToggle />
+            <button
+              ref={this.menuButtonRef}
+              type="button"
+              className="nav-menu-button"
+              aria-expanded={menuOpen}
+              aria-controls="nav-panel"
+              aria-label={menuOpen ? "close menu" : "open menu"}
+              onClick={this.toggleMenu}
+            >
+              <span aria-hidden="true">{menuOpen ? "✕" : "☰"}</span>
+            </button>
+          </div>
         </header>
 
         {/* Phones: the menu panel. Out of reach (inert) while closed. A sibling of
@@ -125,6 +152,9 @@ export class Navbar extends PureComponent {
           className={`nav-panel${menuOpen ? " is-open" : ""}`}
           inert={!menuOpen}
         >
+          <p className="nav-panel-time">
+            {city} · {clock} local time
+          </p>
           <p className="nav-panel-prompt" aria-hidden="true">
             $ ls ./portfolio
           </p>

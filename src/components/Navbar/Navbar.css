@@ -10,16 +10,18 @@
   }
 }
 
+/* Three columns: the name fills the left half (the padding is equal on both
+   sides, so 50% of the content box is the page's centre line), the links
+   start right at that line, and the location, time and toggle take the rest. */
 .nav {
   position: sticky;
   top: 0;
   z-index: 50;
   height: var(--nav-height);
   padding: 0 48px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 50% auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
   border-bottom: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
   background: color-mix(in srgb, var(--bg) 55%, transparent);
   backdrop-filter: blur(10px);
@@ -65,6 +67,39 @@
   box-shadow: inset 0 -2px 0 var(--accent);
 }
 
+/* ---------- right end: location, time, theme toggle ---------- */
+
+.nav-end {
+  justify-self: end;
+  padding-left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-time {
+  color: var(--muted);
+  font-size: var(--size-small);
+  white-space: nowrap;
+}
+
+/* No tabular-nums on the clock: in this font it also widens ":" and ",". */
+.nav-clock {
+  color: var(--text);
+}
+
+/* Narrow desktops: just the time, and the links a little closer, so
+   everything still fits in the right half. */
+@media (max-width: 1199.98px) {
+  .nav-links {
+    gap: 20px;
+  }
+
+  .nav-city {
+    display: none;
+  }
+}
+
 /* ---------- phones: menu button and panel ---------- */
 
 .nav-menu-button,
@@ -75,6 +110,15 @@
 @media (max-width: 999.98px) {
   .nav {
     padding: 0 16px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .nav-time {
+    display: none;
+  }
+
+  .nav-end {
+    gap: 10px;
   }
 
   .nav-name {
@@ -133,6 +177,12 @@
     opacity: 1;
     visibility: visible;
     transition: opacity var(--dur-move) var(--ease);
+  }
+
+  .nav-panel-time {
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: var(--size-small);
   }
 
   .nav-panel-prompt {

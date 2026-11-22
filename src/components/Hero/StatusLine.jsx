@@ -1,10 +1,9 @@
 import { PureComponent } from "react";
 import { heroText } from "../../data/profile";
-import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 /**
  * The hero's training-log line: "run N · epoch E" on the left, "loss X.XX"
- * and the theme toggle on the right. The numbers follow the loss landscape
+ * on the right. The numbers follow the loss landscape
  * (Hero passes them to show()); screen readers get one fixed sentence
  * instead of numbers that change every frame.
  *
@@ -32,12 +31,9 @@ export class StatusLine extends PureComponent {
             run {run} · epoch {epoch}
           </span>
         </p>
-        <div className="hero-status-end">
-          <p className="hero-status-loss" aria-hidden="true">
-            loss {loss}
-          </p>
-          <ThemeToggle />
-        </div>
+        <p className="hero-status-loss" aria-hidden="true">
+          loss {loss}
+        </p>
       </div>
     );
   }
