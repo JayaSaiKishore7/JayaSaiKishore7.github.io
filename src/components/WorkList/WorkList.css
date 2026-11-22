@@ -168,13 +168,24 @@
     border-radius: 12px; /* only seen on hover, with the surface behind it */
   }
 
+  /* A little in from the row's right edge. */
   .work-frame {
     order: 0;
+    margin-right: 24px;
+  }
+
+  /* Hover / focus inside: the surface, and the accent outline on all four
+     sides (an inset shadow, so nothing moves or overlaps the next row). */
+  .work-row {
+    transition:
+      background-color var(--dur-colour) var(--ease),
+      box-shadow var(--dur-colour) var(--ease);
   }
 
   .work-row:hover,
   .work-row:focus-within {
     background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--accent);
   }
 
   /* The frame lifts a little while its row is hovered. */
