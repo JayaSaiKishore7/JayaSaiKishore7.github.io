@@ -27,10 +27,10 @@ export const experience = [
     ],
   },
   {
-    role: "Data Science Intern",
+    role: "Data Scientist Junior",
     company: "Digital Lync",
     location: "Hyderabad, India",
-    date: "Jun 2019 – Apr 2020",
+    date: "Jun 2019 – Nov 2021",
     summary: "Supported end-to-end ML experiments from datasets to model evaluation.",
     points: [
       "Built structured preprocessing, feature extraction and validation steps.",
